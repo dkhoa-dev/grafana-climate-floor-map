@@ -22,7 +22,16 @@ You do not have to write SVG by hand. Under **Floor plan** in the panel options:
   - by tracing an image or PDF of an existing floor plan, or
   - with **Fix format**, by rewriting a pasted SVG into the format the panel expects (rooms as `rect`/`polygon` with `data-room`, no transforms or text labels).
 
-  The result replaces the canvas, and Ctrl+Z brings the previous plan back. The assistant calls the Anthropic API directly from your browser with your own API key. The key is kept only in your browser (optionally remembered in local storage) and is never written to the dashboard. If your Grafana sets a content security policy, it must allow `connect-src https://api.anthropic.com`.
+  The result replaces the canvas, and Ctrl+Z brings the previous plan back. Pick the provider under **Settings** in the assistant:
+
+  | Provider                    | Reads             | Notes                                                                                                                                                    |
+  | --------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | Claude (Anthropic API)      | text, images, PDF | Default, `claude-opus-5-5`. Refused requests are retried on a fallback model.                                                                            |
+  | Claude on Microsoft Foundry | text, images, PDF | Your Foundry resource name and model deployment.                                                                                                         |
+  | OpenAI-compatible           | text, images      | Presets for OpenAI, OpenRouter and DeepSeek (text only), or any custom base URL such as Ollama or LM Studio. The model list is loaded from the endpoint. |
+  | Grafana LLM app             | text              | Uses the provider your Grafana admin configured in the [Grafana LLM app](https://grafana.com/grafana/plugins/grafana-llm-app/). Keys stay on the server. |
+
+  The first three call the provider directly from your browser with your own API key. The key stays in your browser (remembered in local storage only if you tick the box) and is never written to the dashboard. The endpoint must accept browser requests (CORS), and if Grafana sets a content security policy, `connect-src` must allow it. OpenAI and OpenRouter accept browser requests. If an endpoint does not, use the Grafana LLM app.
 
 - **SVG source** still accepts pasted markup.
 

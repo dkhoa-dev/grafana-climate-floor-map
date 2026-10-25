@@ -1,4 +1,4 @@
-import { extractSvg, SYSTEM_PROMPT } from './generatePlan';
+import { extractSvg, SYSTEM_PROMPT } from './prompt';
 
 describe('extractSvg', () => {
   it('reads a fenced SVG and keeps the surrounding text as notes', () => {

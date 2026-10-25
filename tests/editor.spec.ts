@@ -103,3 +103,52 @@ test('generates a plan with the AI assistant', async ({ gotoPanelEditPage, readP
   await expect(plan.locator('[data-cfm-room="Kitchen"]')).toHaveAttribute('data-status', 'unbound');
   await expect(plan.locator('[data-cfm-room="Lobby"]')).toHaveCount(0);
 });
+
+test('generates a plan through an OpenAI-compatible provider', async ({
+  gotoPanelEditPage,
+  readProvisionedDashboard,
+  page,
+}) => {
+  const svg =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">' +
+    '<rect data-room="Lab 1" x="0" y="0" width="200" height="200"/>' +
+    '<rect data-room="Lab 2" x="200" y="0" width="200" height="200"/></svg>';
+  const chunks = ['```svg\n', svg, '\n```'].map(
+    (content) => `data: ${JSON.stringify({ choices: [{ delta: { content } }] })}\n\n`
+  );
+  let body: Record<string, unknown> | undefined;
+  let auth: string | undefined;
+  await page.route('https://openrouter.ai/api/v1/**', async (route) => {
+    if (route.request().method() === 'OPTIONS') {
+      return route.fulfill({
+        status: 204,
+        headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*' },
+      });
+    }
+    body = route.request().postDataJSON();
+    auth = (await route.request().allHeaders())['authorization'];
+    await route.fulfill({
+      status: 200,
+      headers: { 'content-type': 'text/event-stream', 'access-control-allow-origin': '*' },
+      body: chunks.join('') + 'data: [DONE]\n\n',
+    });
+  });
+
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
+  await gotoPanelEditPage({ dashboard, id: '1' });
+  await page.getByTestId('floor-plan-open-editor').click();
+  const ai = page.getByTestId('floor-plan-ai');
+  const settings = ai.getByTestId('floor-plan-ai-settings');
+  await settings.getByRole('radio', { name: 'OpenAI-compatible' }).click();
+  await settings.getByRole('radio', { name: 'OpenRouter' }).click();
+  await settings.getByLabel(/API key/).fill('or-test');
+  await settings.getByPlaceholder('Model id').fill('some/vision-model');
+  await settings.getByPlaceholder('Model id').press('Enter');
+  await ai.getByPlaceholder(/Describe the floor/).fill('Two labs side by side');
+  await ai.getByText('Start from the current plan').click();
+  await ai.getByRole('button', { name: 'Generate' }).click();
+
+  await expect(page.getByTestId('floor-plan-canvas').locator('[data-shape-id]')).toHaveCount(2);
+  expect(auth).toBe('Bearer or-test');
+  expect(body).toMatchObject({ model: 'some/vision-model', stream: true });
+});

@@ -10,4 +10,4 @@ First version of Climate Floor Map.
 - Auto-binding by name and a per-room sensor picker.
 - Hover tooltip, in-room values, legend and a configurable click-through link.
 - Floor plan editor: draw and edit rectangle and polygon rooms with grid snapping and undo, or generate rooms from the sensor locations in the data.
-- AI assistant in the editor: draw a plan from a description, trace an image or PDF, or fix an SVG's format, using Claude with the editor's own API key.
+- AI assistant in the editor: draw a plan from a description, trace an image or PDF, or fix an SVG's format, using Claude (Anthropic API or Microsoft Foundry), an OpenAI-compatible endpoint (OpenAI, OpenRouter, DeepSeek, custom) or the Grafana LLM app.

@@ -1,4 +1,4 @@
-import type { Attachment } from './generatePlan';
+import type { Attachment } from './prompt';
 
 /** Longest image side sent to the model; larger images are scaled down first. */
 const MAX_IMAGE_SIDE = 1568;
