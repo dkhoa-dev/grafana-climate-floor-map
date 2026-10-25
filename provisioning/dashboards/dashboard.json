@@ -1,0 +1,112 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "staleAfter": "",
+        "colorBy": "status",
+        "showValues": true,
+        "showLegend": true,
+        "autoBind": true,
+        "bindings": {}
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "trlxrdZVk"
+          },
+          "refId": "A",
+          "scenarioId": "raw_frame",
+          "rawFrameContent": "[\n  {\n    \"columns\": [\n      {\n        \"text\": \"time\",\n        \"type\": \"time\"\n      },\n      {\n        \"text\": \"sensor\",\n        \"type\": \"string\"\n      },\n      {\n        \"text\": \"location\",\n        \"type\": \"string\"\n      },\n      {\n        \"text\": \"temperature\",\n        \"type\": \"number\"\n      },\n      {\n        \"text\": \"humidity\",\n        \"type\": \"number\"\n      },\n      {\n        \"text\": \"temperature_limits\",\n        \"type\": \"string\"\n      },\n      {\n        \"text\": \"humidity_limits\",\n        \"type\": \"string\"\n      }\n    ],\n    \"rows\": [\n      [\n        1767225600000,\n        \"n-01\",\n        \"Office A\",\n        22.4,\n        44,\n        \"\",\n        \"\"\n      ],\n      [\n        1767225600000,\n        \"n-02\",\n        \"Office B\",\n        26.6,\n        52,\n        \"\",\n        \"\"\n      ],\n      [\n        1767225600000,\n        \"n-03\",\n        \"Meeting room\",\n        24.1,\n        58.5,\n        \"\",\n        \"\"\n      ],\n      [\n        1767225600000,\n        \"n-04\",\n        \"Server room\",\n        31.2,\n        35,\n        \"16-28\",\n        \"20-55\"\n      ],\n      [\n        1767225600000,\n        \"n-05\",\n        \"Lobby\",\n        19.0,\n        38,\n        \"\",\n        \"\"\n      ],\n      [\n        1767225600000,\n        \"n-06\",\n        \"Lab 1\",\n        21.0,\n        47,\n        \"20-22\",\n        \"40-50\"\n      ],\n      [\n        1767225600000,\n        \"n-07\",\n        \"Lab 2\",\n        23.5,\n        71,\n        \"\",\n        \"\"\n      ],\n      [\n        1767218400000,\n        \"n-08\",\n        \"Lab 2\",\n        22.0,\n        50,\n        \"\",\n        \"\"\n      ]\n    ]\n  }\n]"
+        }
+      ],
+      "title": "Status",
+      "type": "dkhoa-climatefloormap-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "staleAfter": "",
+        "colorBy": "temperature",
+        "showValues": true,
+        "showLegend": true,
+        "autoBind": true,
+        "bindings": {
+          "Storage": "n-08"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "trlxrdZVk"
+          },
+          "refId": "A",
+          "scenarioId": "raw_frame",
+          "rawFrameContent": "[\n  {\n    \"columns\": [\n      {\n        \"text\": \"time\",\n        \"type\": \"time\"\n      },\n      {\n        \"text\": \"sensor\",\n        \"type\": \"string\"\n      },\n      {\n        \"text\": \"location\",\n        \"type\": \"string\"\n      },\n      {\n        \"text\": \"temperature\",\n        \"type\": \"number\"\n      },\n      {\n        \"text\": \"humidity\",\n        \"type\": \"number\"\n      },\n      {\n        \"text\": \"temperature_limits\",\n        \"type\": \"string\"\n      },\n      {\n        \"text\": \"humidity_limits\",\n        \"type\": \"string\"\n      }\n    ],\n    \"rows\": [\n      [\n        1767225600000,\n        \"n-01\",\n        \"Office A\",\n        22.4,\n        44,\n        \"\",\n        \"\"\n      ],\n      [\n        1767225600000,\n        \"n-02\",\n        \"Office B\",\n        26.6,\n        52,\n        \"\",\n        \"\"\n      ],\n      [\n        1767225600000,\n        \"n-03\",\n        \"Meeting room\",\n        24.1,\n        58.5,\n        \"\",\n        \"\"\n      ],\n      [\n        1767225600000,\n        \"n-04\",\n        \"Server room\",\n        31.2,\n        35,\n        \"16-28\",\n        \"20-55\"\n      ],\n      [\n        1767225600000,\n        \"n-05\",\n        \"Lobby\",\n        19.0,\n        38,\n        \"\",\n        \"\"\n      ],\n      [\n        1767225600000,\n        \"n-06\",\n        \"Lab 1\",\n        21.0,\n        47,\n        \"20-22\",\n        \"40-50\"\n      ],\n      [\n        1767225600000,\n        \"n-07\",\n        \"Lab 2\",\n        23.5,\n        71,\n        \"\",\n        \"\"\n      ],\n      [\n        1767218400000,\n        \"n-08\",\n        \"Lab 2\",\n        22.0,\n        50,\n        \"\",\n        \"\"\n      ]\n    ]\n  }\n]"
+        }
+      ],
+      "title": "Temperature",
+      "type": "dkhoa-climatefloormap-panel"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2025-12-31T18:00:00.000Z",
+    "to": "2026-01-01T00:05:00.000Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Climate Floor Map demo",
+  "uid": "a538aeff-5a8a-42a5-901c-938d896fdd6f",
+  "version": 1,
+  "weekStart": ""
+}
