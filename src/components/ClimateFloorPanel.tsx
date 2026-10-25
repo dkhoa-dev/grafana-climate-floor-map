@@ -7,7 +7,7 @@ import { ClimateFloorOptions, RoomState } from '../types';
 import { readingsFromFrames } from '../data/readings';
 import { evaluateRoom } from '../data/rooms';
 import { ColorLookup, roomColor } from '../data/colors';
-import { collectRooms, ROOM_ATTR, sanitizeFloorPlan } from '../svg/floorPlan';
+import { collectRooms, ROOM_ATTR, sanitizeFloorPlan, scopeIds } from '../svg/floorPlan';
 import { RoomTooltip } from './RoomTooltip';
 import { Legend, LEGEND_HEIGHT } from './Legend';
 
@@ -43,6 +43,23 @@ export function buildRoomLink(template: string, state: RoomState, replaceVariabl
   return replaceVariables(template, scoped);
 }
 
+const ALLOWED_PROTOCOLS = new Set(['http:', 'https:']);
+
+/**
+ * Only http(s) and relative links may be opened. The browser's URL parser decides, so spellings
+ * such as "java\tscript:" are caught, and a dashboard variable cannot turn the link into one.
+ */
+export function isSafeLink(url: string, base = window.location.href): boolean {
+  if (!url.trim()) {
+    return false;
+  }
+  try {
+    return ALLOWED_PROTOCOLS.has(new URL(url, base).protocol);
+  } catch {
+    return false;
+  }
+}
+
 const openLink = (url: string, newTab: boolean) => {
   if (newTab) {
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -53,7 +70,15 @@ const openLink = (url: string, newTab: boolean) => {
   }
 };
 
-export const ClimateFloorPanel: React.FC<Props> = ({ options, data, width, height, timeZone, replaceVariables }) => {
+export const ClimateFloorPanel: React.FC<Props> = ({
+  id,
+  options,
+  data,
+  width,
+  height,
+  timeZone,
+  replaceVariables,
+}) => {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -81,8 +106,10 @@ export const ClimateFloorPanel: React.FC<Props> = ({ options, data, width, heigh
       svg.querySelectorAll('title').forEach((t) => t.remove());
     }
     roomEls.current = collectRooms(host);
+    // After collecting rooms, since a room can be named by its id.
+    scopeIds(host, `cfm-${id}-`);
     setRoomNames(Array.from(roomEls.current.keys()));
-  }, [markup]);
+  }, [markup, id]);
 
   const readings = useMemo(
     () =>
@@ -218,7 +245,10 @@ export const ClimateFloorPanel: React.FC<Props> = ({ options, data, width, heigh
     if (!clickable || !state || state.status === 'unbound') {
       return;
     }
-    openLink(buildRoomLink(options.linkUrl, state, replaceVariables), options.linkNewTab);
+    const url = buildRoomLink(options.linkUrl, state, replaceVariables).trim();
+    if (isSafeLink(url)) {
+      openLink(url, options.linkNewTab);
+    }
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
