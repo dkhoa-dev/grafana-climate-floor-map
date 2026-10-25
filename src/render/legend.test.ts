@@ -1,4 +1,4 @@
-import { createTheme, ThresholdsMode } from '@grafana/data';
+import { createTheme, FieldColorModeId, ThresholdsMode } from '@grafana/data';
 import { buildLegend, GRADIENT_LABELS } from './legend';
 
 const theme = createTheme();
@@ -34,5 +34,20 @@ describe('buildLegend', () => {
       { color: theme.visualization.getColorByName('orange'), label: 'Watch' },
       { color: theme.visualization.getColorByName('red'), label: '80 and above' },
     ]);
+  });
+
+  it('never puts a resource-loading colour into the swatches or the gradient bar', () => {
+    const loader = "image-set('https://example.invalid/a.png' 1x)";
+    const grey = theme.visualization.getColorByName('');
+    const thresholds = { mode: ThresholdsMode.Absolute, steps: [{ value: -Infinity, color: loader }] };
+    const swatches = buildLegend({ colorMode: 'banded', indexMode: 'position', legendText: [] }, { thresholds }, theme);
+    expect(swatches.items.map((i) => i.color)).toEqual([grey]);
+    const bar = buildLegend(
+      { colorMode: 'continuous', indexMode: 'position', legendText: [] },
+      { color: { mode: FieldColorModeId.Fixed, fixedColor: loader } },
+      theme
+    );
+    expect(bar.gradient).not.toContain('example.invalid');
+    expect(bar.gradient).toContain(grey);
   });
 });

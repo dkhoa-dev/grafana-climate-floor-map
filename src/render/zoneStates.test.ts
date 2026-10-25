@@ -70,6 +70,20 @@ describe('indexColor', () => {
     const config = { color: { mode: FieldColorModeId.Fixed, fixedColor: 'purple' } };
     expect(indexColor(10, 'continuous', config, theme)).toBe(theme.visualization.getColorByName('purple'));
   });
+
+  // Grafana returns unknown colour names unchanged, and the zone fill would make the browser fetch them.
+  const grey = theme.visualization.getColorByName('');
+  const loaders = ["url('https://example.invalid/p.svg#paint')", "image-set('https://example.invalid/a.png' 1x)"];
+
+  it.each(loaders)('falls back to grey for a threshold colour that loads a resource: %s', (color) => {
+    const config = { thresholds: { ...thresholds, steps: [{ value: -Infinity, color }] } };
+    expect(indexColor(50, 'banded', config, theme)).toBe(grey);
+  });
+
+  it.each(loaders)('falls back to grey for a fixed colour that loads a resource: %s', (fixedColor) => {
+    const config = { color: { mode: FieldColorModeId.Fixed, fixedColor } };
+    expect(indexColor(50, 'continuous', config, theme)).toBe(grey);
+  });
 });
 
 describe('zoneVisual', () => {

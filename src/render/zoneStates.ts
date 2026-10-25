@@ -9,6 +9,7 @@ import {
   ThresholdsMode,
 } from '@grafana/data';
 import { zoneIndex, ZoneIndex } from '../climate/statusIndex';
+import { loadsExternalResource } from '../plan/externalRefs';
 import { FloorMapOptions, SensorReading } from '../types';
 import { formatMetric } from './format';
 
@@ -88,6 +89,15 @@ export const DEFAULT_THRESHOLDS: ThresholdsConfig = {
   ],
 };
 
+/**
+ * Resolves a colour from the panel's colour options. Grafana passes unknown names through as-is, so
+ * a value such as url(https://…) would make the browser fetch it; those fall back to Grafana's grey.
+ */
+export function paintColor(name: string, theme: GrafanaTheme2): string {
+  const color = theme.visualization.getColorByName(name);
+  return loadsExternalResource(color) ? theme.visualization.getColorByName('') : color;
+}
+
 /** Colour for a 0–100 index from Grafana's standard colour options. */
 export function indexColor(
   index: number,
@@ -98,7 +108,7 @@ export function indexColor(
   const thresholds = config.thresholds?.steps?.length ? config.thresholds : DEFAULT_THRESHOLDS;
   const threshold = getActiveThreshold(index, thresholds.steps);
   if (colorMode === 'banded') {
-    return theme.visualization.getColorByName(threshold.color);
+    return paintColor(threshold.color, theme);
   }
   const field = {
     name: 'status index',
@@ -107,7 +117,8 @@ export function indexColor(
     config: { ...config, min: 0, max: 100, color: config.color ?? { mode: FieldColorModeId.ContinuousBlYlRd } },
   };
   const calculate = getFieldColorModeForField(field).getCalculator(field, theme);
-  return calculate(index, index / 100, threshold);
+  // The fixed colour mode returns the configured colour name unchecked.
+  return paintColor(calculate(index, index / 100, threshold), theme);
 }
 
 function readoutLines(state: ZoneState, decimals: number): string[] | undefined {

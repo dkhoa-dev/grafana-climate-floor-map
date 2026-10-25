@@ -1,6 +1,6 @@
 import { FieldConfig, GrafanaTheme2, sortThresholds, Threshold } from '@grafana/data';
 import { FloorMapOptions, IndexMode } from '../types';
-import { DEFAULT_THRESHOLDS, indexColor } from './zoneStates';
+import { DEFAULT_THRESHOLDS, indexColor, paintColor } from './zoneStates';
 
 export interface LegendItem {
   color: string;
@@ -43,7 +43,7 @@ export function buildLegend(
     return {
       kind: 'swatches',
       items: steps.map((step, i) => ({
-        color: theme.visualization.getColorByName(step.color),
+        color: paintColor(step.color, theme),
         label: pick(i, bandLabel(steps, i)),
       })),
     };

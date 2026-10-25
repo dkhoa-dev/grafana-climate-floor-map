@@ -1,23 +1,11 @@
 import createDOMPurify from 'dompurify';
+import { loadsExternalResource } from './externalRefs';
 
 /**
  * A private DOMPurify instance, so the hooks below never affect other code on the page.
  * Created lazily because the module is also imported in places without a window.
  */
 let purifier: ReturnType<typeof createDOMPurify> | undefined;
-
-const LOCAL_URL = /url\(\s*(['"]?)\s*#/i;
-const ANY_URL = /url\(/i;
-
-function isExternalReference(value: string): boolean {
-  // Every url(...) in the value must point inside the document (#id).
-  const parts = value.split(ANY_URL).length - 1;
-  if (parts === 0) {
-    return /@import/i.test(value);
-  }
-  const local = value.match(new RegExp(LOCAL_URL.source, 'gi'))?.length ?? 0;
-  return local !== parts;
-}
 
 function getPurifier() {
   if (!purifier) {
@@ -29,7 +17,7 @@ function getPurifier() {
         data.keepAttr = false;
         return;
       }
-      if (isExternalReference(value)) {
+      if (loadsExternalResource(value)) {
         data.keepAttr = false;
       }
     });

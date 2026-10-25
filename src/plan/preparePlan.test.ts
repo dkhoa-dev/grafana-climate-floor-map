@@ -2,6 +2,7 @@ import { ATTRIBUTE_PLAN, INKSCAPE_PLAN } from '../__fixtures__/plans';
 import { preparePlan, READOUT_ATTR, TITLE_ATTR, ZONE_ATTR } from './preparePlan';
 
 const marking = { labelAttribute: 'inkscape:label', zoneTag: 'zone' };
+const NS = 'xmlns="http://www.w3.org/2000/svg"';
 
 function render(svg: string): HTMLElement {
   const host = document.createElement('div');
@@ -92,6 +93,80 @@ describe('preparePlan', () => {
       expect(
         Array.from(host.querySelectorAll('use'), (u) => u.getAttribute('href') ?? u.getAttribute('xlink:href'))
       ).toEqual([null, '#grad']);
+    });
+
+    // Every CSS value that makes the browser load a resource, in the places a plan can carry CSS.
+    const loaders = [
+      "image-set('https://example.invalid/a.png' 1x)",
+      '-webkit-image-set(url(https://example.invalid/b.png) 1x)',
+      "image('https://example.invalid/c.png')",
+      // cross-fade( and element( are dropped whole, even with only local images inside.
+      'cross-fade(url(#grad) 50%, url(#grad))',
+      '-webkit-cross-fade(url(#grad), url(https://example.invalid/e.png), 50%)',
+      'element(#grad)',
+      "src('https://example.invalid/f.png')",
+      '\\75 rl(https://example.invalid/g.png)',
+      "\\69mage-set('https://example.invalid/h.png' 1x)",
+      'u\\72 l(https://example.invalid/i.png)',
+      "image-\\73 et('https://example.invalid/j.png' 1x)",
+      'url(/**/#grad)',
+    ];
+    const places: Array<[string, (value: string) => string]> = [
+      ['style on the root svg', (v) => `<svg ${NS} style="background-image:${v}"><rect data-zone="A"/></svg>`],
+      ['style on a zone shape', (v) => `<svg ${NS}><rect data-zone="A" style="fill:${v}"/></svg>`],
+      ['style on a group', (v) => `<svg ${NS}><g style="mask-image:${v}"><rect data-zone="A"/></g></svg>`],
+      ...['fill', 'stroke', 'filter', 'mask', 'clip-path', 'marker-start'].map(
+        (attr): [string, (value: string) => string] => [
+          `${attr} attribute`,
+          (v) => `<svg ${NS}><rect data-zone="A" ${attr}="${v.replace(/"/g, "'")}"/></svg>`,
+        ]
+      ),
+    ];
+
+    it.each(
+      places.flatMap(([place, build]) =>
+        loaders.map((loader): [string, string, string] => [place, loader, build(loader)])
+      )
+    )('drops a resource load in the %s: %s', (_place, _loader, markup) => {
+      const plan = ready(markup);
+      expect(plan.svg).not.toMatch(/example\.invalid|image-set|image\(|cross-fade|element\(|src\(|\\|url\(\/\*/i);
+      expect(render(plan.svg).querySelector(`[${ZONE_ATTR}="A"]`)).not.toBeNull();
+    });
+
+    it('drops @import and external url() in attributes, and keeps url(#id) next to safe CSS functions', () => {
+      const host = render(
+        ready(`<svg ${NS}>
+          <rect data-zone="A" style="fill:url(#grad);stroke:rgb(1, 2, 3);transform:translate(1px, 2px)"/>
+          <rect data-zone="B" style="@import 'https://example.invalid/x.css'"/>
+          <rect data-zone="C" filter="url(https://example.invalid/f.svg#blur)"/>
+        </svg>`).svg
+      );
+      expect(host.querySelector(`[${ZONE_ATTR}="A"]`)?.getAttribute('style')).toBe(
+        'fill:url(#grad);stroke:rgb(1, 2, 3);transform:translate(1px, 2px)'
+      );
+      expect(host.querySelector(`[${ZONE_ATTR}="B"]`)?.hasAttribute('style')).toBe(false);
+      expect(host.querySelector(`[${ZONE_ATTR}="C"]`)?.hasAttribute('filter')).toBe(false);
+    });
+
+    it('accepts escapes beyond the last code point', () => {
+      const host = render(ready(`<svg ${NS}><rect data-zone="A" style="font-family:'\\110000'"/></svg>`).svg);
+      expect(host.querySelector(`[${ZONE_ATTR}="A"]`)?.getAttribute('style')).toBe("font-family:'\\110000'");
+    });
+
+    it.each([
+      [
+        'an svg:style element',
+        `<svg:style xmlns:svg="http://www.w3.org/2000/svg">rect { fill: url(https://example.invalid/s.svg#p) }</svg:style>`,
+      ],
+      [
+        'a namespaced use href',
+        `<use xmlns:l="http://www.w3.org/1999/xlink" l:href="https://example.invalid/u.svg#i"/>`,
+      ],
+      ['a feImage href', `<filter id="f"><feImage href="https://example.invalid/fe.png"/></filter>`],
+      ['a style element with @import', `<style>@import url(https://example.invalid/i.css);</style>`],
+    ])('drops %s', (_name, inner) => {
+      const svg = ready(`<svg ${NS}><rect data-zone="A"/>${inner}</svg>`).svg;
+      expect(svg).not.toMatch(/example\.invalid/);
     });
   });
 

@@ -44,3 +44,26 @@ test('edge cases dashboard shows one zone per state', async ({ gotoDashboardPage
   await status('Invalid limits').hover({ force: true });
   await expect(page.getByTestId('cfm-tooltip')).toContainText('data limits invalid');
 });
+
+test('a pasted plan cannot make the browser load anything from outside', async ({ gotoPanelEditPage, page }) => {
+  const external: string[] = [];
+  page.on('request', (request) => {
+    if (request.url().includes('example.invalid')) {
+      external.push(request.url());
+    }
+  });
+  const panelEdit = await gotoPanelEditPage({ dashboard: { uid: 'cfm-live-floor' }, id: '1' });
+  const plan = panelEdit.getCustomOptions('Plan drawing');
+  await plan.expand();
+  // Chromium fetches both background layers on the root <svg> unless the sanitiser drops the style.
+  await plan
+    .getTextInput('Plan SVG markup')
+    .fill(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" style="background-image:image-set('https://example.invalid/a.png' 1x), \\75 rl(https://example.invalid/b.png)"><rect data-zone="Probe" width="200" height="100" fill="#ccc"/></svg>`
+    );
+  await page.keyboard.press('Tab');
+  await expect(panelEdit.panel.locator.locator('[data-cfm-zone="Probe"]')).toBeVisible();
+  // Image requests start on first paint; give them time to show up.
+  await page.waitForTimeout(2000);
+  expect(external).toEqual([]);
+});
