@@ -14,8 +14,8 @@ A Grafana panel plugin that draws your floor plan and colours each room by its l
 Requirements: Node.js 22 or later and Docker.
 
 ```sh
-git clone https://github.com/dkhoa-dev/grafana-floor-panel.git
-cd grafana-floor-panel
+git clone https://github.com/dkhoa-dev/grafana-climate-floor-map.git
+cd grafana-climate-floor-map
 npm ci
 npm run build
 npm run server

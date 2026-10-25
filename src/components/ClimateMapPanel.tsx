@@ -14,7 +14,7 @@ import { Legend } from './Legend';
 import { PlanView } from './PlanView';
 import { ZoneTooltip } from './ZoneTooltip';
 
-export const README_PLAN_SECTION = 'https://github.com/dkhoa-dev/grafana-floor-panel#draw-and-mark-a-floor-plan';
+export const README_PLAN_SECTION = 'https://github.com/dkhoa-dev/grafana-climate-floor-map#draw-and-mark-a-floor-plan';
 
 /** How often ages are re-evaluated while a staleness threshold is set or a tooltip is open. */
 const CLOCK_MS = 30_000;

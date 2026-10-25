@@ -8,4 +8,4 @@ Colours the rooms of a floor plan by their live temperature and humidity.
 
 Hover a room for its readings, comfort band and status index. Set a detail link to make rooms clickable.
 
-Full documentation, demo and source: https://github.com/dkhoa-dev/grafana-floor-panel
+Full documentation, demo and source: https://github.com/dkhoa-dev/grafana-climate-floor-map

@@ -17,11 +17,11 @@
     "links": [
       {
         "name": "Source",
-        "url": "https://github.com/dkhoa-dev/grafana-floor-panel"
+        "url": "https://github.com/dkhoa-dev/grafana-climate-floor-map"
       },
       {
         "name": "License",
-        "url": "https://github.com/dkhoa-dev/grafana-floor-panel/blob/main/LICENSE"
+        "url": "https://github.com/dkhoa-dev/grafana-climate-floor-map/blob/main/LICENSE"
       }
     ],
     "screenshots": [],

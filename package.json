@@ -85,6 +85,6 @@
   "description": "Grafana panel plugin that colours floor-plan zones by live temperature and humidity",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dkhoa-dev/grafana-floor-panel.git"
+    "url": "https://github.com/dkhoa-dev/grafana-climate-floor-map.git"
   }
 }
