@@ -48,7 +48,7 @@ Any element with a `data-room` attribute, or an id of the form `room-<name>`, is
 </svg>
 ```
 
-The panel writes the room name and its values at the centre of each shape, so the plan does not need text labels. Scripts, event handlers, `<foreignObject>`, `<use>` and `<style>` are removed, and so is any attribute that would make the browser fetch something: a link to another document, or CSS such as `url(https://…)`, `image-set()` or `@import`. References inside the plan, such as `fill="url(#gradient)"`, are kept. `<title>` elements are dropped so the browser's own tooltip does not cover the panel's tooltip.
+The panel writes the room name and its values at the centre of each shape, so the plan does not need text labels. Scripts, event handlers, `<foreignObject>`, `<style>`, `<image>`, links and animations are removed, and so is any attribute that would make the browser fetch something: a link to another document, or CSS such as `url(https://…)`, `image-set()` or `@import`. References inside the plan, such as `fill="url(#gradient)"` or `<use href="#shape">`, are kept. `<title>` elements are dropped so the browser's own tooltip does not cover the panel's tooltip.
 
 The default plan is a small made-up office, so the panel shows something as soon as it is added.
 
