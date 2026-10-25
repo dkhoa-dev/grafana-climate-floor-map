@@ -1,7 +1,7 @@
 export type ColorBy = 'status' | 'temperature' | 'humidity';
 
 export interface ClimateFloorOptions {
-  /** Floor plan markup. Rooms are elements with `data-room="<name>"` or an id of `room-<name>` / `room:<name>`. */
+  /** Floor plan markup. Rooms are elements with `data-room="<name>"` or an id of `room-<name>`. */
   floorPlan: string;
 
   /** Field names, matched case-insensitively. Blank means auto-detect. */

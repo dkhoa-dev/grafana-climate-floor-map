@@ -22,11 +22,11 @@ describe('readingsFromFrames: table layout', () => {
   const table = createDataFrame({
     fields: [
       { name: 'time', type: FieldType.time, values: [1000, 2000, 1500, 3000] },
-      { name: 'device_code', type: FieldType.string, values: ['s1', 's1', 's2', 's2'] },
-      { name: 'desc', type: FieldType.string, values: ['Lab 1', 'Lab 1', 'Office A', 'Office A'] },
-      { name: 'temp', type: FieldType.number, values: [20, 21, 22, null] },
+      { name: 'Device-ID', type: FieldType.string, values: ['s1', 's1', 's2', 's2'] },
+      { name: 'Place', type: FieldType.string, values: ['Lab 1', 'Lab 1', 'Office A', 'Office A'] },
+      { name: 'TEMPERATURE', type: FieldType.number, values: [20, 21, 22, null] },
       { name: 'Humidity', type: FieldType.number, values: [40, 41, 50, 55] },
-      { name: 'temp_limit', type: FieldType.string, values: ['18-25', '18-25', '20-24', '20-24'] },
+      { name: 'temperature limit', type: FieldType.string, values: ['18-25', '18-25', '20-24', '20-24'] },
     ],
   });
 
@@ -102,14 +102,19 @@ describe('readingsFromFrames: series layout', () => {
             name: '_value',
             type: FieldType.number,
             values: [20.5, 21.5],
-            labels: { _field: 'temp', sensor_id: 'n1', location: 'Lobby' },
+            labels: { _field: 'temperature', sensor_id: 'n1', location: 'Lobby' },
           },
         ],
       }),
       createDataFrame({
         fields: [
           { name: '_time', type: FieldType.time, values: [1000, 2500] },
-          { name: '_value', type: FieldType.number, values: [44, null], labels: { _field: 'hum', sensor_id: 'n1' } },
+          {
+            name: '_value',
+            type: FieldType.number,
+            values: [44, null],
+            labels: { _field: 'humidity', sensor_id: 'n1' },
+          },
         ],
       }),
     ];
@@ -127,5 +132,15 @@ describe('readingsFromFrames: series layout', () => {
       ],
     });
     expect(readingsFromFrames([frame])).toEqual([{ sensor: 'Server room', time: 5, temperature: 30 }]);
+  });
+
+  it('reads the location from a place label', () => {
+    const frame = createDataFrame({
+      fields: [
+        { name: 'time', type: FieldType.time, values: [5] },
+        { name: 'humidity', type: FieldType.number, values: [48], labels: { device: 'd7', Place: 'Archive' } },
+      ],
+    });
+    expect(readingsFromFrames([frame])).toEqual([{ sensor: 'd7', location: 'Archive', time: 5, humidity: 48 }]);
   });
 });

@@ -35,3 +35,32 @@ test('binds a sensor to a room from the options pane', async ({
 
   await expect(storage).not.toHaveAttribute('data-status', 'unbound');
 });
+
+test('a pasted plan cannot make the browser load anything from outside', async ({
+  gotoPanelEditPage,
+  readProvisionedDashboard,
+  page,
+}) => {
+  const external: string[] = [];
+  page.on('request', (request) => {
+    if (request.url().includes('example.invalid')) {
+      external.push(request.url());
+    }
+  });
+  const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
+  const panelEditPage = await gotoPanelEditPage({ dashboard, id: '1' });
+  const options = panelEditPage.getCustomOptions('Plan drawing');
+  await options.expand();
+  await options.element.getByText('SVG source', { exact: true }).click();
+  // Chromium fetches both background layers on the root <svg> unless the sanitiser drops the style.
+  await options.element
+    .getByRole('textbox')
+    .fill(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" style="background-image:image-set('https://example.invalid/a.png' 1x), \\75 rl(https://example.invalid/b.png)"><rect data-room="Probe" width="200" height="100" fill="#ccc"/></svg>`
+    );
+  await page.keyboard.press('Tab');
+  await expect(page.getByTestId('climate-floor-plan').locator('[data-cfm-room="Probe"]')).toBeVisible();
+  // Image requests start on first paint; give them time to show up.
+  await page.waitForTimeout(2000);
+  expect(external).toEqual([]);
+});

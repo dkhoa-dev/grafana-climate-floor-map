@@ -104,7 +104,7 @@ describe('ClimateFloorPanel', () => {
 
   it('asks for a plan when none is set', () => {
     setup({ floorPlan: '' });
-    expect(screen.getByText(/Paste a floor plan SVG/)).toBeInTheDocument();
+    expect(screen.getByText(/No plan yet. Draw one or paste SVG markup under Plan drawing/)).toBeInTheDocument();
   });
 });
 

@@ -265,7 +265,11 @@ export const ClimateFloorPanel: React.FC<Props> = ({
   const hovered = hover ? states.get(hover.room) : undefined;
 
   if (!markup.trim()) {
-    return <div className={styles.message}>Paste a floor plan SVG under Floor plan in the panel options.</div>;
+    return (
+      <div className={styles.message}>
+        No plan yet. Draw one or paste SVG markup under Plan drawing in the panel options.
+      </div>
+    );
   }
 
   return (

@@ -45,9 +45,12 @@ describe('sanitizeFloorPlan', () => {
     '-webkit-image-set(url(https://example.invalid/b.png) 1x)',
     "image('https://example.invalid/c.png')",
     'cross-fade(url(#grad) 50%, url(#grad))',
+    '-webkit-cross-fade(url(#grad), url(https://example.invalid/e.png), 50%)',
     'element(#grad)',
     "src('https://example.invalid/f.png')",
+    'url(https://example.invalid/k.png)',
     '\\75 rl(https://example.invalid/g.png)',
+    "\\69mage-set('https://example.invalid/h.png' 1x)",
     'u\\72 l(https://example.invalid/i.png)',
     "image-\\73 et('https://example.invalid/j.png' 1x)",
     'url(/**/#grad)',
@@ -56,10 +59,12 @@ describe('sanitizeFloorPlan', () => {
     ['style on the root svg', (v) => `<svg ${NS} style="background-image:${v}"><rect data-room="A"/></svg>`],
     ['style on a room', (v) => `<svg ${NS}><rect data-room="A" style="fill:${v}"/></svg>`],
     ['style on a group', (v) => `<svg ${NS}><g style="mask-image:${v}"><rect data-room="A"/></g></svg>`],
-    ...['fill', 'stroke', 'filter', 'mask', 'clip-path'].map((attr): [string, (value: string) => string] => [
-      `${attr} attribute`,
-      (v) => `<svg ${NS}><rect data-room="A" ${attr}="${v.replace(/"/g, "'")}"/></svg>`,
-    ]),
+    ...['fill', 'stroke', 'filter', 'mask', 'clip-path', 'marker-start'].map(
+      (attr): [string, (value: string) => string] => [
+        `${attr} attribute`,
+        (v) => `<svg ${NS}><rect data-room="A" ${attr}="${v.replace(/"/g, "'")}"/></svg>`,
+      ]
+    ),
   ];
 
   it.each(places.flatMap(([place, build]) => loaders.map((l): [string, string, string] => [place, l, build(l)])))(
@@ -79,6 +84,48 @@ describe('sanitizeFloorPlan', () => {
     </svg>`);
     expect(host.querySelector('[data-room="A"]')?.getAttribute('style')).toBe('fill:url(#grad);stroke:rgb(1, 2, 3)');
     expect(host.querySelector('[data-room="B"]')?.hasAttribute('style')).toBe(false);
+  });
+
+  // Every element that fetches what its href or xlink:href names, both spellings of the attribute.
+  const linkers: Array<[string, (attr: string, url: string) => string]> = [
+    ['use', (a, u) => `<use ${a}="${u}"/>`],
+    ['feImage', (a, u) => `<filter id="f"><feImage ${a}="${u}"/></filter>`],
+    ['image', (a, u) => `<image ${a}="${u}" width="10" height="10"/>`],
+    ['pattern', (a, u) => `<pattern id="p" ${a}="${u}"/>`],
+    ['linearGradient', (a, u) => `<linearGradient id="l" ${a}="${u}"/>`],
+    ['radialGradient', (a, u) => `<radialGradient id="r" ${a}="${u}"/>`],
+    ['filter', (a, u) => `<filter id="f2" ${a}="${u}"/>`],
+    ['textPath', (a, u) => `<text><textPath ${a}="${u}">x</textPath></text>`],
+  ];
+  const hrefCases = linkers.flatMap(([tag, build]) =>
+    ['href', 'xlink:href'].map((attr): [string, string, string] => [
+      tag,
+      attr,
+      `<svg ${NS}><rect data-room="A"/>${build(attr, 'https://example.invalid/x.svg#a')}</svg>`,
+    ])
+  );
+
+  it.each(hrefCases)('drops an external %s %s', (_tag, _attr, markup) => {
+    expect(sanitizeFloorPlan(markup)).not.toMatch(/example\.invalid/);
+    expect(listRooms(markup)).toEqual(['A']);
+  });
+
+  it.each(['href', 'xlink:href'])('keeps a #id %s on use and feImage', (attr) => {
+    const host = render(`<svg ${NS}>
+      <rect id="shape" data-room="A"/>
+      <use ${attr}="#shape"/>
+      <filter id="f"><feImage ${attr}="#shape"/></filter>
+    </svg>`);
+    expect(host.querySelector('use')?.getAttribute(attr)).toBe('#shape');
+    expect(host.querySelector('feImage')?.getAttribute(attr)).toBe('#shape');
+  });
+
+  it.each([
+    ['a style element with @import', '<style>@import url(https://example.invalid/i.css);</style>'],
+    ['an svg:style element', '<svg:style xmlns:svg="http://www.w3.org/2000/svg">body { display: none }</svg:style>'],
+  ])('drops %s, which would style the whole page', (_name, inner) => {
+    const host = render(`<svg ${NS}>${inner}<rect data-room="A"/></svg>`);
+    expect(Array.from(host.querySelectorAll('*'), (el) => el.localName)).toEqual(['svg', 'rect']);
   });
 
   it('decodes escapes beyond the last code point without throwing', () => {

@@ -5,7 +5,7 @@ import { RoomBindingsEditor } from './components/RoomBindingsEditor';
 import { FloorPlanOption } from './components/FloorPlanOption';
 import { DEMO_FLOOR_PLAN } from './svg/demoPlan';
 
-const FLOOR = ['Floor plan'];
+const PLAN = ['Plan drawing'];
 const DATA = ['Data'];
 const LIMITS = ['Limits'];
 const DISPLAY = ['Display'];
@@ -23,7 +23,7 @@ export const plugin = new PanelPlugin<ClimateFloorOptions>(ClimateFloorPanel)
         path: 'floorPlan',
         name: 'Plan',
         description: 'Draw rooms in the editor, generate them from the query, or paste SVG under SVG source.',
-        category: FLOOR,
+        category: PLAN,
         defaultValue: DEMO_FLOOR_PLAN,
         editor: FloorPlanOption,
       })
