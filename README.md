@@ -58,6 +58,10 @@ If you leave the field options blank, the panel recognises these names. Matching
 
 ## Options
 
+![The panel's options pane in Grafana 13.2](docs/img/options.png)
+
+The screenshot is from the demo dashboard, which clears _Offline after_ because its readings have fixed timestamps.
+
 | Group      | Option                                           | Default     |
 | ---------- | ------------------------------------------------ | ----------- |
 | Floor plan | SVG markup                                       | demo office |
