@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   width="800"
+   height="380"
+   viewBox="0 0 800 380"
+   version="1.1"
+   id="floor">
+  <title id="floor-title">Edge cases</title>
+  <sodipodi:namedview id="namedview" pagecolor="#ffffff" bordercolor="#666666" inkscape:document-units="px" />
+  <g inkscape:groupmode="layer" id="layer-rooms" inkscape:label="Rooms">
+    <rect
+       id="case-1-area"
+       inkscape:label="Normal [zone]"
+       x="20" y="20" width="180" height="160"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="case-1-name"
+       inkscape:label="Normal [zone title]"
+       x="30" y="43"
+       style="font-size:15px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="case-1-name-line" x="30" y="43">Normal</tspan></text>
+    <text
+       id="case-1-values"
+       inkscape:label="Normal [zone readout]"
+       x="110" y="103"
+       style="font-size:13.5px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="case-1-values-line" x="110" y="103">–</tspan></text>
+    <rect
+       id="case-2-area"
+       inkscape:label="Offline sensor [zone]"
+       x="210" y="20" width="180" height="160"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="case-2-name"
+       inkscape:label="Offline sensor [zone title]"
+       x="220" y="43"
+       style="font-size:15px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="case-2-name-line" x="220" y="43">Offline sensor</tspan></text>
+    <text
+       id="case-2-values"
+       inkscape:label="Offline sensor [zone readout]"
+       x="300" y="103"
+       style="font-size:13.5px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="case-2-values-line" x="300" y="103">–</tspan></text>
+    <rect
+       id="case-3-area"
+       inkscape:label="Stale reading [zone]"
+       x="400" y="20" width="180" height="160"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="case-3-name"
+       inkscape:label="Stale reading [zone title]"
+       x="410" y="43"
+       style="font-size:15px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="case-3-name-line" x="410" y="43">Stale reading</tspan></text>
+    <text
+       id="case-3-values"
+       inkscape:label="Stale reading [zone readout]"
+       x="490" y="103"
+       style="font-size:13.5px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="case-3-values-line" x="490" y="103">–</tspan></text>
+    <rect
+       id="case-4-area"
+       inkscape:label="Humidity only [zone]"
+       x="590" y="20" width="180" height="160"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="case-4-name"
+       inkscape:label="Humidity only [zone title]"
+       x="600" y="43"
+       style="font-size:15px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="case-4-name-line" x="600" y="43">Humidity only</tspan></text>
+    <text
+       id="case-4-values"
+       inkscape:label="Humidity only [zone readout]"
+       x="680" y="103"
+       style="font-size:13.5px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="case-4-values-line" x="680" y="103">–</tspan></text>
+    <rect
+       id="case-5-area"
+       inkscape:label="Invalid limits [zone]"
+       x="20" y="190" width="180" height="160"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="case-5-name"
+       inkscape:label="Invalid limits [zone title]"
+       x="30" y="213"
+       style="font-size:15px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="case-5-name-line" x="30" y="213">Invalid limits</tspan></text>
+    <text
+       id="case-5-values"
+       inkscape:label="Invalid limits [zone readout]"
+       x="110" y="273"
+       style="font-size:13.5px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="case-5-values-line" x="110" y="273">–</tspan></text>
+    <rect
+       id="case-6-area"
+       inkscape:label="Index above 100 [zone]"
+       x="210" y="190" width="180" height="160"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="case-6-name"
+       inkscape:label="Index above 100 [zone title]"
+       x="220" y="213"
+       style="font-size:15px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="case-6-name-line" x="220" y="213">Index above 100</tspan></text>
+    <text
+       id="case-6-values"
+       inkscape:label="Index above 100 [zone readout]"
+       x="300" y="273"
+       style="font-size:13.5px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="case-6-values-line" x="300" y="273">–</tspan></text>
+    <rect
+       id="case-7-area"
+       inkscape:label="Not bound [zone]"
+       x="400" y="190" width="180" height="160"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="case-7-name"
+       inkscape:label="Not bound [zone title]"
+       x="410" y="213"
+       style="font-size:15px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="case-7-name-line" x="410" y="213">Not bound</tspan></text>
+    <text
+       id="case-7-values"
+       inkscape:label="Not bound [zone readout]"
+       x="490" y="273"
+       style="font-size:13.5px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="case-7-values-line" x="490" y="273">–</tspan></text>
+    <rect
+       id="case-8-area"
+       inkscape:label="Text values [zone]"
+       x="590" y="190" width="180" height="160"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="case-8-name"
+       inkscape:label="Text values [zone title]"
+       x="600" y="213"
+       style="font-size:15px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="case-8-name-line" x="600" y="213">Text values</tspan></text>
+    <text
+       id="case-8-values"
+       inkscape:label="Text values [zone readout]"
+       x="680" y="273"
+       style="font-size:13.5px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="case-8-values-line" x="680" y="273">–</tspan></text>
+  </g>
+</svg>

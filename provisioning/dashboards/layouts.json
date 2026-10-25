@@ -1,0 +1,460 @@
+{
+  "uid": "cfm-layouts",
+  "title": "Climate Floor Map: Data layouts",
+  "tags": [
+    "climate-floor-map",
+    "demo"
+  ],
+  "editable": true,
+  "schemaVersion": 41,
+  "refresh": "",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timezone": "browser",
+  "templating": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "dkhoadev-climatefloormap-panel",
+      "title": "Wide layout (CSV, one row per reading), continuous",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 13
+      },
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "cfm-testdata"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "cfm-testdata"
+          },
+          "scenarioId": "csv_content",
+          "csvContent": "sensor,label,temperature,humidity,temperature_low,temperature_high\nsensor-01,Lobby,20.4,37.9,,\nsensor-02,Reception,21.8,37.8,,\nsensor-03,Meeting A,22,46.5,,\nsensor-04,Meeting B,21.1,45.2,,\nsensor-05,Quiet room,20.8,38.6,,\nsensor-06,Server room,27.9,36.4,,\nsensor-07,Open office,23.3,49.4,,\nsensor-08,Kitchen,24.3,60.6,,\nsensor-09,Lab 1,22.3,49,,\nsensor-10,Lab 2,21.4,35,,\nsensor-11,Cold store,11.5,56.4,8,14"
+        }
+      ],
+      "options": {
+        "labelAttribute": "inkscape:label",
+        "zoneTag": "zone",
+        "fields": {},
+        "limits": {
+          "temperature": {
+            "low": 20,
+            "high": 26
+          },
+          "humidity": {
+            "low": 30,
+            "high": 60
+          }
+        },
+        "staleAfterMinutes": 0,
+        "colorMode": "continuous",
+        "indexMode": "position",
+        "decimals": 1,
+        "fillOpacity": 0.8,
+        "animate": true,
+        "showLegend": true,
+        "legendText": [],
+        "linkTemplate": "",
+        "linkNewTab": true,
+        "bindings": {
+          "Lobby": "sensor-01",
+          "Reception": "sensor-02",
+          "Meeting A": "sensor-03",
+          "Meeting B": "sensor-04",
+          "Quiet room": "sensor-05",
+          "Server room": "sensor-06",
+          "Open office": "sensor-07",
+          "Kitchen": "sensor-08",
+          "Lab 1": "sensor-09",
+          "Lab 2": "sensor-10",
+          "Cold store": "sensor-11",
+          "Print room": "sensor-12"
+        },
+        "planMarkup": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg\n   xmlns=\"http://www.w3.org/2000/svg\"\n   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\n   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n   width=\"800\"\n   height=\"520\"\n   viewBox=\"0 0 800 520\"\n   version=\"1.1\"\n   id=\"floor\">\n  <title id=\"floor-title\">Demo office floor</title>\n  <sodipodi:namedview id=\"namedview\" pagecolor=\"#ffffff\" bordercolor=\"#666666\" inkscape:document-units=\"px\" />\n  <g inkscape:groupmode=\"layer\" id=\"layer-structure\" inkscape:label=\"Structure\">\n    <rect id=\"outline\" x=\"20\" y=\"20\" width=\"760\" height=\"480\" style=\"fill:#f7f8f9;stroke:#3c4650;stroke-width:6\" />\n    <rect id=\"corridor\" x=\"20\" y=\"220\" width=\"760\" height=\"60\" style=\"fill:#fbfbfb;stroke:none\" />\n    <text id=\"corridor-label\" x=\"400\" y=\"256\" style=\"font-size:13px;text-anchor:middle;fill:#8a949e;letter-spacing:4px\"><tspan sodipodi:role=\"line\" id=\"corridor-label-line\" x=\"400\" y=\"256\">CORRIDOR</tspan></text>\n  </g>\n  <g inkscape:groupmode=\"layer\" id=\"layer-rooms\" inkscape:label=\"Rooms\">\n    <rect\n       id=\"lobby-area\"\n       inkscape:label=\"Lobby [zone]\"\n       x=\"20\" y=\"20\" width=\"140\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"lobby-name\"\n       inkscape:label=\"Lobby [zone title]\"\n       x=\"30\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lobby-name-line\" x=\"30\" y=\"44\">Lobby</tspan></text>\n    <text\n       id=\"lobby-values\"\n       inkscape:label=\"Lobby [zone readout]\"\n       x=\"90\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lobby-values-line\" x=\"90\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"reception-area\"\n       inkscape:label=\"Reception [zone]\"\n       x=\"160\" y=\"20\" width=\"120\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"reception-name\"\n       inkscape:label=\"Reception [zone title]\"\n       x=\"170\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"reception-name-line\" x=\"170\" y=\"44\">Reception</tspan></text>\n    <text\n       id=\"reception-values\"\n       inkscape:label=\"Reception [zone readout]\"\n       x=\"220\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"reception-values-line\" x=\"220\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"meeting-a-area\"\n       inkscape:label=\"Meeting A [zone]\"\n       x=\"280\" y=\"20\" width=\"120\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"meeting-a-name\"\n       inkscape:label=\"Meeting A [zone title]\"\n       x=\"290\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-a-name-line\" x=\"290\" y=\"44\">Meeting A</tspan></text>\n    <text\n       id=\"meeting-a-values\"\n       inkscape:label=\"Meeting A [zone readout]\"\n       x=\"340\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-a-values-line\" x=\"340\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"meeting-b-area\"\n       inkscape:label=\"Meeting B [zone]\"\n       x=\"400\" y=\"20\" width=\"120\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"meeting-b-name\"\n       inkscape:label=\"Meeting B [zone title]\"\n       x=\"410\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-b-name-line\" x=\"410\" y=\"44\">Meeting B</tspan></text>\n    <text\n       id=\"meeting-b-values\"\n       inkscape:label=\"Meeting B [zone readout]\"\n       x=\"460\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-b-values-line\" x=\"460\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"quiet-area\"\n       inkscape:label=\"Quiet room [zone]\"\n       x=\"520\" y=\"20\" width=\"100\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"quiet-name\"\n       inkscape:label=\"Quiet room [zone title]\"\n       x=\"530\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"quiet-name-line\" x=\"530\" y=\"44\">Quiet room</tspan></text>\n    <text\n       id=\"quiet-values\"\n       inkscape:label=\"Quiet room [zone readout]\"\n       x=\"570\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"quiet-values-line\" x=\"570\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"server-area\"\n       inkscape:label=\"Server room [zone]\"\n       x=\"620\" y=\"20\" width=\"160\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"server-name\"\n       inkscape:label=\"Server room [zone title]\"\n       x=\"630\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"server-name-line\" x=\"630\" y=\"44\">Server room</tspan></text>\n    <text\n       id=\"server-values\"\n       inkscape:label=\"Server room [zone readout]\"\n       x=\"700\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"server-values-line\" x=\"700\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"open-office-area\"\n       inkscape:label=\"Open office [zone]\"\n       x=\"20\" y=\"280\" width=\"280\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"open-office-name\"\n       inkscape:label=\"Open office [zone title]\"\n       x=\"30\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"open-office-name-line\" x=\"30\" y=\"304\">Open office</tspan></text>\n    <text\n       id=\"open-office-values\"\n       inkscape:label=\"Open office [zone readout]\"\n       x=\"160\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"open-office-values-line\" x=\"160\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"kitchen-area\"\n       inkscape:label=\"Kitchen [zone]\"\n       x=\"300\" y=\"280\" width=\"100\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"kitchen-name\"\n       inkscape:label=\"Kitchen [zone title]\"\n       x=\"310\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"kitchen-name-line\" x=\"310\" y=\"304\">Kitchen</tspan></text>\n    <text\n       id=\"kitchen-values\"\n       inkscape:label=\"Kitchen [zone readout]\"\n       x=\"350\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"kitchen-values-line\" x=\"350\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"lab-1-area\"\n       inkscape:label=\"Lab 1 [zone]\"\n       x=\"400\" y=\"280\" width=\"120\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"lab-1-name\"\n       inkscape:label=\"Lab 1 [zone title]\"\n       x=\"410\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-1-name-line\" x=\"410\" y=\"304\">Lab 1</tspan></text>\n    <text\n       id=\"lab-1-values\"\n       inkscape:label=\"Lab 1 [zone readout]\"\n       x=\"460\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-1-values-line\" x=\"460\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"lab-2-area\"\n       inkscape:label=\"Lab 2 [zone]\"\n       x=\"520\" y=\"280\" width=\"120\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"lab-2-name\"\n       inkscape:label=\"Lab 2 [zone title]\"\n       x=\"530\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-2-name-line\" x=\"530\" y=\"304\">Lab 2</tspan></text>\n    <text\n       id=\"lab-2-values\"\n       inkscape:label=\"Lab 2 [zone readout]\"\n       x=\"580\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-2-values-line\" x=\"580\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"cold-store-area\"\n       inkscape:label=\"Cold store [zone]\"\n       x=\"640\" y=\"280\" width=\"140\" height=\"110\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"cold-store-name\"\n       inkscape:label=\"Cold store [zone title]\"\n       x=\"650\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"cold-store-name-line\" x=\"650\" y=\"304\">Cold store</tspan></text>\n    <text\n       id=\"cold-store-values\"\n       inkscape:label=\"Cold store [zone readout]\"\n       x=\"710\" y=\"338.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"cold-store-values-line\" x=\"710\" y=\"338.2\">–</tspan></text>\n    <rect\n       id=\"print-area\"\n       inkscape:label=\"Print room [zone]\"\n       x=\"640\" y=\"390\" width=\"140\" height=\"110\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"print-name\"\n       inkscape:label=\"Print room [zone title]\"\n       x=\"650\" y=\"414\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"print-name-line\" x=\"650\" y=\"414\">Print room</tspan></text>\n    <text\n       id=\"print-values\"\n       inkscape:label=\"Print room [zone readout]\"\n       x=\"710\" y=\"448.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"print-values-line\" x=\"710\" y=\"448.2\">–</tspan></text>\n  </g>\n  <g inkscape:groupmode=\"layer\" id=\"layer-doors\" inkscape:label=\"Doors\">\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 73 220 l 34 0 M 73 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 203 220 l 34 0 M 203 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 323 220 l 34 0 M 323 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 443 220 l 34 0 M 443 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 553 220 l 34 0 M 553 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 683 220 l 34 0 M 683 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 143 280 l 34 0 M 143 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 333 280 l 34 0 M 333 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 443 280 l 34 0 M 443 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 563 280 l 34 0 M 563 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 640 300 l 0 34 M 640 300 a 34 34 0 0 0 34 34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 640 410 l 0 34 M 640 410 a 34 34 0 0 0 34 34\" />\n  </g>\n</svg>\n"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlYlRd"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 2,
+      "type": "dkhoadev-climatefloormap-panel",
+      "title": "Long layout (one series per sensor and metric), deviation index, bands",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 13
+      },
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "cfm-testdata"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "cfm-testdata"
+          },
+          "scenarioId": "predictable_csv_wave",
+          "csvWave": [
+            {
+              "timeStep": 30,
+              "valuesCSV": "21.4,21.5,21.7,21.8,21.8,21.7,22,21.9,22,22.1,22,22.2,22.1,22.2,22.2,22.3,22.4,22.5,22.4,22.6,22.5,22.5,22.7,22.6,22.6,22.8,22.7,22.8,22.7,22.8,22.8,22.6,22.8,22.6,22.8,22.6,22.5,22.7,22.6,22.5,22.4,22.6,22.5,22.4,22.3,22.4,22.2,22.3,22.1,22.1,22.1,22.1,22,21.8,21.9,21.8,21.9,21.6,21.5,21.6,21.6,21.6,21.4,21.3,21.3,21.2,21,21,21.1,21,20.8,20.8,20.8,20.7,20.8,20.8,20.7,20.4,20.4,20.6,20.3,20.5,20.4,20.4,20.4,20.5,20.3,20.2,20.3,20.4,20.3,20.4,20.4,20.3,20.4,20.5,20.5,20.5,20.4,20.3,20.5,20.5,20.6,20.4,20.5,20.5,20.7,20.6,20.7,20.9,20.9,21.1,21.1,21.2,21.1,21.3,21.2,21.4,21.4,21.5",
+              "labels": "sensor=sensor-01, location=Lobby, metric=temperature",
+              "name": "sensor-01 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "45.2,45.8,46.1,45.3,45.6,45.8,46,45.4,46.1,46.2,45.7,45.8,46.6,45.9,46.5,46.5,46.3,46.4,45.9,45.5,45.4,44.9,45.7,45.5,45,44.9,44.4,45.2,44.7,44.8,44.6,44.1,44.1,43.4,43.1,43.7,42.7,42.3,43,42.8,42.1,42.1,41.6,41.9,41.3,41.1,40.9,40.4,40.1,40,39.6,40.2,39.5,40,39,38.7,39.5,38.9,38.6,38.4,38.5,38,38.3,38.6,38.1,37.6,37.8,37.8,38.6,38.3,38.3,37.8,38.2,37.9,38.5,38.1,38.2,38.3,37.7,38.3,38.5,38.8,38.8,39.1,38.8,39.1,39,39.7,39.4,39.1,39.4,39.4,40.2,40,40.4,40.3,41.1,40.6,41.1,41.3,42,42,42.5,42.8,42.6,43.4,43.6,43.2,43.2,43.6,44.1,43.9,44.6,44.4,44.6,44.9,44.4,45.5,45.3,45.4",
+              "labels": "sensor=sensor-01, location=Lobby, metric=humidity",
+              "name": "sensor-01 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "22.7,22.8,23,23,22.9,23,23,23.1,23.1,23,23.1,23.2,23.2,23.2,23.3,23.2,23.2,23.3,23.2,23.3,23.3,23.3,23.2,23.2,23.2,23.4,23.2,23.3,23.4,23.4,23.1,23.3,23.1,23.3,23.2,23.1,23.1,23.2,23,22.9,23,22.8,22.9,23,23,22.8,22.7,22.8,22.8,22.6,22.7,22.5,22.7,22.6,22.5,22.3,22.3,22.4,22.3,22.2,22.2,22.1,22.2,21.9,22,21.9,21.9,21.9,21.8,21.8,21.9,21.7,21.9,21.9,21.8,21.8,21.7,21.8,21.6,21.7,21.6,21.7,21.8,21.6,21.6,21.6,21.6,21.6,21.8,21.7,21.8,21.7,21.9,21.9,21.8,21.9,21.8,22,21.9,21.9,21.9,22.1,22.1,22.2,22.3,22.2,22.2,22.2,22.2,22.2,22.5,22.5,22.5,22.6,22.6,22.5,22.6,22.8,22.8,22.9",
+              "labels": "sensor=sensor-02, location=Reception, metric=temperature",
+              "name": "sensor-02 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "43.1,42.8,42.7,43.4,42.9,42.6,43.6,42.5,43.2,43.1,42.8,43.1,43.3,42.5,42.1,42.4,42.4,42.6,41.9,42.6,42.3,42.3,42,41.3,41.9,41.5,41.6,40.6,41.1,40.4,40.3,41,40.4,39.9,40.1,39.3,40,39.9,39.4,38.5,38.7,39.2,38.2,38.2,38.8,38.4,38.7,38.4,37.9,38.3,37.2,37.5,37.4,37.9,37.3,37,37,36.6,37,37.3,36.5,36.9,36.6,36.8,37.2,37.4,36.9,36.6,37.7,36.7,37.8,37.4,37.9,37.6,37.2,37.3,37.8,37.2,37.9,38.1,38.6,38,38,38.9,38.5,39.2,39.5,38.7,38.7,39.7,39.9,39.5,39.5,40.2,39.9,40.2,41,40.6,41.2,40.9,41.6,41.3,41.8,41.9,42.1,42.3,42,41.6,42.4,42.7,42,42.2,42.2,42.5,42.6,42.9,43,42.7,42.6,43.3",
+              "labels": "sensor=sensor-02, location=Reception, metric=humidity",
+              "name": "sensor-02 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "24.7,24.7,24.7,24.8,24.7,24.9,24.8,24.8,24.9,24.8,24.8,25.1,25,25,24.9,25.1,25,24.9,24.9,25,25.1,24.9,24.9,25,24.9,24.7,24.8,24.7,24.6,24.7,24.4,24.4,24.5,24.4,24.3,24.2,24,24.1,23.9,24,23.9,23.7,23.7,23.7,23.4,23.4,23.5,23.4,23.3,23.3,23.2,22.9,23.1,22.9,22.9,22.9,22.6,22.5,22.5,22.5,22.4,22.5,22.5,22.4,22.1,22.1,22.1,22.2,22,22,21.9,22.1,22.1,22.1,22,21.9,22,22.1,22.1,22.1,22,22,22,22.1,22.2,22.1,22.1,22.3,22.3,22.4,22.4,22.5,22.5,22.8,22.6,22.7,22.9,23,22.9,22.9,23.3,23.1,23.2,23.4,23.5,23.5,23.6,23.6,23.7,23.9,23.8,23.9,24.2,24.3,24.3,24.4,24.5,24.5,24.6,24.6",
+              "labels": "sensor=sensor-03, location=Meeting A, metric=temperature",
+              "name": "sensor-03 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "52.3,52.7,52.6,52.6,52,52.2,52.2,52.3,52.4,52,51.3,51.5,50.7,50.8,51.2,50.8,50.8,49.7,50.4,50,49.5,49.3,49.5,48.4,49,48.6,47.6,48.2,47.6,47.4,46.7,46.5,46.2,46.3,46.1,45.3,45.3,45.5,44.4,44.3,44.3,43.8,43.6,44,44.5,43.2,43.3,43,43.5,42.8,43.5,43.4,42.6,43.5,42.7,42.8,43,42.7,43.6,43.6,43.2,42.9,43.4,43.9,43.4,43.7,43.3,43.4,44.2,44.7,44.2,44.4,44.8,44.5,45.2,45.7,46,45.3,45.7,46.5,46.2,47.1,47.1,47.1,47.6,47.6,47.6,48.5,49,49.2,48.6,49.8,49.3,50,50,50.9,50,51,50.5,51.6,51.8,51.5,51.2,52.4,52.6,52.6,52.1,51.9,52.9,53.2,53.1,52.4,52.8,53,52.4,52.7,53,53.5,53.2,52.9",
+              "labels": "sensor=sensor-03, location=Meeting A, metric=humidity",
+              "name": "sensor-03 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "22.8,23,22.8,23.1,22.9,23,23.1,23,22.9,23,23,22.9,22.9,23,22.8,22.9,23,22.8,22.8,22.9,22.9,22.8,22.7,22.7,22.7,22.7,22.7,22.4,22.3,22.3,22.3,22.2,22.3,22.3,22,22,22.1,21.9,21.8,21.9,21.9,21.9,21.7,21.8,21.7,21.5,21.7,21.4,21.5,21.4,21.5,21.3,21.4,21.2,21.2,21.1,21.2,21,21.2,21.2,20.9,21,21.1,21.1,20.9,20.9,21.1,21.1,21,20.9,20.9,20.9,21,21.1,21,21.2,21.2,21.2,21.2,21.3,21.1,21.3,21.4,21.2,21.3,21.3,21.4,21.5,21.6,21.5,21.5,21.6,21.7,21.6,22,21.9,21.8,21.9,22,22.1,22.2,22.1,22.3,22.2,22.5,22.3,22.5,22.4,22.6,22.7,22.8,22.5,22.8,22.6,22.9,22.8,22.7,22.9,22.9,22.8",
+              "labels": "sensor=sensor-04, location=Meeting B, metric=temperature",
+              "name": "sensor-04 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "47.6,47.9,47.5,48.4,47.9,47.6,47.4,47.3,46.9,47.2,47.1,46.6,45.7,45.5,45.9,45.1,45.3,44.7,45,44.3,45,43.8,44.7,44.4,44,43.3,43.8,43.5,43.1,42.8,42.4,42,42.7,42.6,42.5,41.3,42,41.9,41,41.6,41.9,40.9,41.4,40.7,41.4,41.4,40.6,41.1,41,41.4,40.7,41.3,41.5,40.8,41.4,40.9,41.3,41.3,41.2,41.6,41.3,41.6,42.3,42,42.3,42.9,42.1,43,43.5,43.8,43.5,43.7,43.7,43.7,43.8,44.2,44.9,45.1,45,45.8,44.9,45.6,45.2,46.6,45.8,46.4,46.5,46.9,46.8,46.7,47,48,47.3,48.3,48.4,48,48.2,48.8,48.2,48.8,48.6,48.2,49.3,49.4,48.5,48.8,48.5,48.8,49.4,49.6,49.3,49.4,48.9,48.5,48.8,48.4,48.6,48.8,48,48.2",
+              "labels": "sensor=sensor-04, location=Meeting B, metric=humidity",
+              "name": "sensor-04 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "21.7,21.7,21.5,21.7,21.7,21.7,21.7,21.5,21.6,21.6,21.4,21.5,21.4,21.6,21.5,21.5,21.5,21.3,21.4,21.3,21.2,21.3,21.2,21.3,21.2,21.1,21.2,21.1,21,21,20.9,20.8,20.8,21,20.7,20.7,20.8,20.9,20.8,20.6,20.6,20.8,20.5,20.6,20.7,20.6,20.5,20.5,20.4,20.4,20.4,20.6,20.3,20.6,20.5,20.5,20.4,20.3,20.4,20.4,20.5,20.5,20.4,20.4,20.5,20.5,20.3,20.4,20.3,20.4,20.4,20.5,20.4,20.4,20.6,20.5,20.7,20.6,20.7,20.7,20.8,20.7,20.6,20.8,20.9,20.9,21,20.8,20.8,21.1,21.1,21.1,21,21.2,21.3,21.3,21.3,21.2,21.3,21.4,21.2,21.4,21.4,21.3,21.3,21.5,21.5,21.4,21.5,21.4,21.7,21.5,21.6,21.5,21.6,21.6,21.7,21.5,21.6,21.7",
+              "labels": "sensor=sensor-05, location=Quiet room, metric=temperature",
+              "name": "sensor-05 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "39.6,39.5,39.4,39.2,38.2,38.8,38.6,38.8,37.9,37.7,38.5,37.8,37.9,37.3,37.3,37.6,36.8,37.4,36.8,37.3,36.5,37.3,37.1,36.8,36.1,36.7,37,36.8,36.7,36,35.8,36.4,36.7,36.2,36.3,35.6,35.5,35.8,35.9,36,36.4,35.7,36.2,36.3,36.4,35.8,35.8,35.8,36.5,36.2,36.3,36.2,36.6,36,36.8,36.9,36.2,36.3,37,36.7,37.4,37.4,36.9,37.4,37.3,37.8,37.2,37.2,37.4,37.8,37.5,38.2,38.3,38.2,38.8,38.9,38.4,38.3,39.4,38.3,39.4,39.2,38.6,39.3,38.9,39.9,39.4,39.5,40,40,39.5,40,39.7,39.6,39.5,40.4,39.9,40.3,40.6,40,40,40.5,39.5,40.2,40.1,39.9,39.7,40.4,39.9,40.1,39.5,39.1,39.8,39.9,39,39.8,39.3,38.9,39.4,39.4",
+              "labels": "sensor=sensor-05, location=Quiet room, metric=humidity",
+              "name": "sensor-05 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "24.7,24.8,24.8,24.7,24.5,24.5,24.6,24.5,24.6,24.6,24.6,24.4,24.2,24.3,24.4,24.2,24.4,24.1,24,24,24.1,23.9,24,23.9,24.1,23.9,23.7,23.8,23.9,23.6,23.5,23.7,23.7,23.7,23.4,23.5,23.5,23.4,23.4,23.5,23.2,23.2,23.4,23.4,23.3,23.4,23.1,23.3,23.1,23.1,23.1,23.2,23.3,23.2,23.3,23.3,23.1,23.2,23.2,23.2,23.2,23.2,23.5,23.3,23.4,23.4,23.4,23.3,23.5,23.4,23.6,24.1,24.7,25.1,25.5,26,26.3,26.7,27.2,27.5,27.7,28,28.3,28.4,28.5,28.7,28.7,28.5,28.5,28.3,28.2,28,27.9,27.3,27,26.9,26.3,26,25.6,25.2,24.6,24.6,24.7,24.7,24.7,24.9,24.7,24.7,24.9,24.8,24.7,24.7,24.9,24.7,24.9,24.8,24.7,24.9,24.8,24.7",
+              "labels": "sensor=sensor-06, location=Server room, metric=temperature",
+              "name": "sensor-06 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "35.8,34.9,35.2,35.2,34.8,34.8,34.6,34.9,34.7,34,34.7,33.6,33.6,34.5,33.6,33.4,34,34.1,33.4,33.1,33.7,33.8,33.2,33.4,32.7,32.8,33.5,32.9,33,32.5,32.9,32.5,32.5,32.5,33.1,33.4,32.6,33,33.3,32.9,33.7,33,33.3,32.9,32.9,33.3,33.2,33.8,33.7,33.4,33.2,34.2,34.5,33.5,34.5,34.1,34.7,34.6,34.6,35,34.5,35.4,35.3,35.1,35.5,35.1,35.6,35.3,35.5,35.3,36.3,35.6,36.1,36.1,36.2,35.8,36.2,36.5,36.9,37,36,36.3,36.1,36.9,37.3,36.9,36.7,37,37.4,36.8,36.6,36.8,36.9,37.3,37.1,36.9,36.8,37.3,37.5,36.5,36.9,37,36.9,37.1,36.5,36.4,36.7,36.2,36.9,36.8,36.2,35.7,36.3,35.9,36.3,36.3,36,35.8,35.7,35.9",
+              "labels": "sensor=sensor-06, location=Server room, metric=humidity",
+              "name": "sensor-06 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "23.6,23.8,23.5,23.5,23.5,23.3,23.2,23.3,23.3,23,23.2,23.1,23,22.8,23,22.6,22.8,22.5,22.6,22.5,22.5,22.5,22.3,22.3,22.2,22.2,22,21.9,21.9,21.8,21.9,21.9,21.6,21.6,21.6,21.8,21.5,21.7,21.6,21.5,21.7,21.4,21.4,21.6,21.5,21.5,21.4,21.4,21.4,21.5,21.6,21.6,21.6,21.8,21.6,21.6,21.7,21.7,21.7,22,22.1,21.9,21.9,22.1,22.1,22.2,22.4,22.2,22.3,22.6,22.5,22.6,22.6,22.8,22.7,22.8,22.9,22.8,23.1,23.1,23,23.4,23.4,23.3,23.4,23.4,23.5,23.7,23.6,23.8,23.8,23.9,24,24,24,23.9,24.1,24,23.9,23.9,24.2,24,24.2,24,24.2,24.1,24,24.2,24.2,24.2,24,24.1,23.9,24.1,24,23.9,23.9,23.8,23.6,23.8",
+              "labels": "sensor=sensor-07, location=Open office, metric=temperature",
+              "name": "sensor-07 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "42.6,42.2,41.7,41.7,41.8,41.7,41.7,41.3,41.3,40.3,41,40.1,40.4,40.5,40.3,39.3,39.7,39,38.9,38.9,38.7,39.2,39.5,38.8,38.5,39.1,39.3,39.3,38.5,38.8,39.3,39.7,38.7,39.3,40.1,40.1,39.7,39.9,39.6,39.9,40.2,40.3,41,40.8,41.8,41.7,41.8,41.9,42.1,41.9,42.8,43.4,42.9,42.9,44.3,44.3,44,44.4,45.3,44.4,44.8,45,46.3,46.5,45.7,47,47,46.5,47.6,46.9,46.9,47.7,47.3,47.5,48.3,48.3,48.7,48.7,48.8,48.8,48.3,49.1,48.8,49.2,48.7,49.4,49.1,49.2,48.9,49.3,48.7,49.3,48.2,48.1,49,47.8,48.4,47.7,48.1,48.2,47.5,47,46.6,46.7,46.4,46.4,46.6,45.9,45.9,45.5,44.8,45.3,44.6,44.3,44.4,43.9,43.7,44,43.5,43.1",
+              "labels": "sensor=sensor-07, location=Open office, metric=humidity",
+              "name": "sensor-07 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "23.7,23.5,23.4,23.2,23.3,23.1,23,23,22.8,22.7,22.6,22.5,22.4,22.2,22.2,22,22,22,21.8,21.9,21.7,21.6,21.5,21.5,21.4,21.5,21.2,21.3,21.3,21.1,21,21,21.1,20.9,21,21.1,20.9,20.9,21.1,21.1,21,21.1,21.1,21.1,21.1,21.3,21.2,21.3,21.2,21.5,21.3,21.4,21.7,21.6,21.9,21.9,21.9,22.1,22.2,22.1,22.5,22.5,22.6,22.6,22.6,22.9,22.8,23.1,23.2,23.3,23.2,23.5,23.6,23.6,23.8,24,23.8,24.1,24.1,24.3,24.3,24.5,24.4,24.4,24.7,24.5,24.6,24.7,24.8,24.8,24.9,24.9,25.1,25.1,24.9,25,24.9,24.9,24.9,25.1,25,24.9,24.9,24.9,24.9,24.8,24.8,24.6,24.6,24.5,24.5,24.4,24.4,24.3,24.1,24.1,23.9,23.9,23.8,23.7",
+              "labels": "sensor=sensor-08, location=Kitchen, metric=temperature",
+              "name": "sensor-08 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "50.9,51.4,50.4,50.3,50.9,50.3,49.7,50,49.2,49.4,49,49.6,48.9,48.6,48.7,48.9,49.3,49.5,48.5,49.2,49,48.7,48.6,49.7,49.3,49.2,49.9,49.4,49.4,50.4,50.7,50.8,50.3,50.6,50.7,51.8,51.1,51.9,51.6,52.3,52.5,53.2,53.3,54,53.9,54,55,54.6,55.2,55.2,56.3,56.6,56.9,56.3,57.6,57.9,57.2,58.2,57.8,59,58.4,59.4,59,59.5,59.9,59.3,59.4,60,59.9,60.5,60.4,60.3,60.5,60.9,60.7,61,61.2,61.1,61.3,61.2,60.6,60.7,61.2,60.6,61,60.7,60.9,59.9,59.6,59.8,59.9,59.5,59.1,58.9,58.5,58.4,57.8,58,57.5,57.9,57.2,56.8,56.5,56.5,55.5,56.2,54.9,55.2,55.3,54,53.8,53.5,53.4,53.1,52.8,52.2,52.3,52.2,52,51.5",
+              "labels": "sensor=sensor-08, location=Kitchen, metric=humidity",
+              "name": "sensor-08 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "21.9,21.8,21.8,21.7,21.6,21.7,21.7,21.7,21.5,21.7,21.6,21.6,21.5,21.5,21.4,21.5,21.4,21.4,21.3,21.5,21.5,21.2,21.4,21.2,21.3,21.2,21.2,21.2,21.3,21.3,21.4,21.3,21.4,21.2,21.4,21.3,21.4,21.4,21.4,21.2,21.4,21.3,21.4,21.5,21.3,21.4,21.5,21.6,21.5,21.7,21.7,21.7,21.6,21.6,21.5,21.8,21.7,21.9,21.8,21.7,21.9,21.8,21.8,22,22,21.9,22,22.1,21.9,22.1,22.2,22.2,22.2,22.2,22.1,22.2,22.3,22.3,22.2,22.3,22.4,22.2,22.3,22.3,22.2,22.2,22.2,22.2,22.4,22.3,22.3,22.2,22.4,22.3,22.2,22.1,22.4,22.3,22.2,22.3,22.1,22.1,22,22.3,22.1,22.2,22.3,22.2,22.1,22.1,22.1,22.1,22.1,21.9,21.8,21.8,21.9,21.8,21.8,21.8",
+              "labels": "sensor=sensor-09, location=Lab 1, metric=temperature",
+              "name": "sensor-09 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "43.7,42.9,43.5,42.7,43.4,43.2,43.3,42.6,42.4,42.8,42.9,42.8,42.5,43.1,42.9,42.5,42.9,43.7,42.8,43.1,43.2,43.9,43.2,43.1,43.9,43.5,43.9,44.5,44.2,44,44.3,44.3,44.6,44.6,44.9,45.3,45.5,46,45.7,45.8,46.6,46.5,46.9,46.8,46.2,47.4,46.4,46.6,47.5,47.2,47.3,47.5,47.5,47.7,47.5,48.5,48.1,48.7,48.7,48.7,48.4,48.9,48.7,48.4,48.7,49.2,48.5,49.2,48.4,48.8,48.7,49,48.9,49,49.2,48.8,48.4,49.2,48.9,48.7,48.3,48.1,47.9,48.8,48.2,48.7,47.8,48,47.1,47.2,47.1,47.3,46.7,47.4,47.1,46.9,46.7,46.6,46,46.3,45.7,45.7,45.3,45.4,45.8,44.9,45,45.4,44.7,44.6,44.9,44.7,44,43.9,44.2,44.4,43.7,43.1,43.7,43.2",
+              "labels": "sensor=sensor-09, location=Lab 1, metric=humidity",
+              "name": "sensor-09 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "20.2,20.2,20.2,20.2,20.3,20.3,20,20,19.9,20.1,20.1,20,20,20,19.8,19.8,19.9,19.9,19.9,19.9,19.9,20,19.8,20,19.8,19.8,19.9,19.8,19.9,20,20,20,19.9,20,20.1,19.9,20.1,20,20.2,20.2,20.2,20.3,20.2,20.2,20.3,20.3,20.3,20.4,20.4,20.6,20.7,20.6,20.6,20.8,20.8,20.7,20.8,20.7,20.8,20.9,21,20.9,20.9,20.9,21,21,21.1,21,21.1,21.1,21.1,21.1,21.2,21.2,21.1,21.2,21.2,21.4,21.4,21.4,21.3,21.3,21.2,21.2,21.4,21.4,21.3,21.3,21.2,21.2,21.3,21.1,21.2,21.3,21.2,21.2,21.2,21,20.9,21,21.1,21.1,20.8,20.7,21,20.7,20.9,20.7,20.7,20.6,20.7,20.5,20.7,20.6,20.5,20.5,20.5,20.5,20.4,20.2",
+              "labels": "sensor=sensor-10, location=Lab 2, metric=temperature",
+              "name": "sensor-10 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "29.8,29.9,30.1,30.3,30,29.5,30.4,30.6,30.1,29.7,30.3,30.6,30.3,30,30,30.2,31.1,31.3,30.7,30.6,31.7,31.6,31.4,31.6,32.3,31.9,31.6,32.5,32.4,32.8,33,33,33.5,33.1,33.3,33.2,33.4,34,34,33.7,34.4,34.7,34.7,34.8,34.9,34.3,35.5,34.6,35.4,35.1,34.9,35.4,35.4,35.8,35.3,36.2,35.8,36.5,36.2,36.5,35.7,35.8,36.5,36.5,35.7,35.8,36.4,35.7,36.4,36.3,35.9,35.7,35.1,35.3,35.4,35.6,35.2,35,35.6,35.1,35,34.8,34.9,34.2,34.5,33.7,34.3,34.3,34.1,33.5,33.9,32.9,32.8,33.4,32.2,32.2,31.9,32.8,32.3,31.7,32.3,31.9,31.2,31,30.8,31.2,31.2,30.7,31.2,31.2,30.1,30.9,30.4,30.1,30,30.6,30.5,30.2,29.5,30",
+              "labels": "sensor=sensor-10, location=Lab 2, metric=humidity",
+              "name": "sensor-10 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "9.5,9.5,9.6,9.5,9.4,9.4,9.4,9.4,9.4,9.4,9.5,9.3,9.2,9.2,9.3,9.2,9.4,9.3,9.5,9.3,9.4,9.3,9.5,9.5,9.6,9.6,9.4,9.5,9.7,9.6,9.8,9.6,9.9,9.8,10,10,10.1,10.1,10.1,10.4,10.3,10.3,10.5,10.5,10.7,10.6,10.6,10.6,10.7,10.8,11,10.9,10.9,11,11.1,11.1,11.4,11.2,11.4,11.5,11.4,11.3,11.5,11.4,11.5,11.6,11.7,11.5,11.6,11.6,11.6,11.6,11.7,11.8,11.7,11.6,11.6,11.6,11.7,11.6,11.6,11.6,11.6,11.7,11.4,11.6,11.6,11.4,11.3,11.3,11.1,11.2,11,11,11.2,11.1,10.9,10.9,10.9,10.7,10.8,10.6,10.7,10.6,10.4,10.5,10.3,10.2,10.3,10.2,10,10,9.9,9.9,9.8,9.8,9.9,9.7,9.8,9.7",
+              "labels": "sensor=sensor-11, location=Cold store, metric=temperature",
+              "name": "sensor-11 temperature"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "50.7,51.3,50.8,52,51.3,51.1,52.2,52.2,52.3,52,51.9,52.7,52.9,53.1,53,52.5,52.7,54,54.1,54.2,53.8,54.2,54.4,54.3,55.1,55,54.9,55.7,55.5,55.8,56.1,56.8,56.1,57.2,57.2,57,56.8,57.9,57.2,57.9,57.9,57.7,58.6,58.7,58.8,59.1,58.7,58.3,58.5,58.5,59.4,59,59.2,58.6,59,58.8,58.8,59.3,59.1,58.4,59.4,58.4,58.9,58.1,58.5,58.4,58.2,58,58.4,57.3,57.8,57.6,57.3,57.3,57,56.5,56.2,56,56.4,56.1,55.8,55.6,55.9,55.2,55.5,55.1,54.7,54,54.8,54.5,53.8,53.7,53.4,53,53.2,52.9,53.1,52.8,52.6,52.2,52.7,51.9,51.8,52,52,51.2,51.2,50.9,50.9,51.2,50.8,51.1,50.7,51.4,50.8,51.3,50.8,50.6,51.6,50.7",
+              "labels": "sensor=sensor-11, location=Cold store, metric=humidity",
+              "name": "sensor-11 humidity"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "8,8",
+              "labels": "sensor=sensor-11, location=Cold store, metric=temperature_low",
+              "name": "sensor-11 temperature low"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "14,14",
+              "labels": "sensor=sensor-11, location=Cold store, metric=temperature_high",
+              "name": "sensor-11 temperature high"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "40,40",
+              "labels": "sensor=sensor-11, location=Cold store, metric=humidity_low",
+              "name": "sensor-11 humidity low"
+            },
+            {
+              "timeStep": 30,
+              "valuesCSV": "70,70",
+              "labels": "sensor=sensor-11, location=Cold store, metric=humidity_high",
+              "name": "sensor-11 humidity high"
+            }
+          ]
+        }
+      ],
+      "options": {
+        "labelAttribute": "inkscape:label",
+        "zoneTag": "zone",
+        "fields": {},
+        "limits": {
+          "temperature": {
+            "low": 20,
+            "high": 26
+          },
+          "humidity": {
+            "low": 30,
+            "high": 60
+          }
+        },
+        "staleAfterMinutes": 0,
+        "colorMode": "banded",
+        "indexMode": "deviation",
+        "decimals": 1,
+        "fillOpacity": 0.8,
+        "animate": true,
+        "showLegend": true,
+        "legendText": [],
+        "linkTemplate": "",
+        "linkNewTab": true,
+        "bindings": {
+          "Lobby": "sensor-01",
+          "Reception": "sensor-02",
+          "Meeting A": "sensor-03",
+          "Meeting B": "sensor-04",
+          "Quiet room": "sensor-05",
+          "Server room": "sensor-06",
+          "Open office": "sensor-07",
+          "Kitchen": "sensor-08",
+          "Lab 1": "sensor-09",
+          "Lab 2": "sensor-10",
+          "Cold store": "sensor-11",
+          "Print room": "sensor-12"
+        },
+        "planMarkup": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg\n   xmlns=\"http://www.w3.org/2000/svg\"\n   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\n   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n   width=\"800\"\n   height=\"520\"\n   viewBox=\"0 0 800 520\"\n   version=\"1.1\"\n   id=\"floor\">\n  <title id=\"floor-title\">Demo office floor</title>\n  <sodipodi:namedview id=\"namedview\" pagecolor=\"#ffffff\" bordercolor=\"#666666\" inkscape:document-units=\"px\" />\n  <g inkscape:groupmode=\"layer\" id=\"layer-structure\" inkscape:label=\"Structure\">\n    <rect id=\"outline\" x=\"20\" y=\"20\" width=\"760\" height=\"480\" style=\"fill:#f7f8f9;stroke:#3c4650;stroke-width:6\" />\n    <rect id=\"corridor\" x=\"20\" y=\"220\" width=\"760\" height=\"60\" style=\"fill:#fbfbfb;stroke:none\" />\n    <text id=\"corridor-label\" x=\"400\" y=\"256\" style=\"font-size:13px;text-anchor:middle;fill:#8a949e;letter-spacing:4px\"><tspan sodipodi:role=\"line\" id=\"corridor-label-line\" x=\"400\" y=\"256\">CORRIDOR</tspan></text>\n  </g>\n  <g inkscape:groupmode=\"layer\" id=\"layer-rooms\" inkscape:label=\"Rooms\">\n    <rect\n       id=\"lobby-area\"\n       inkscape:label=\"Lobby [zone]\"\n       x=\"20\" y=\"20\" width=\"140\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"lobby-name\"\n       inkscape:label=\"Lobby [zone title]\"\n       x=\"30\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lobby-name-line\" x=\"30\" y=\"44\">Lobby</tspan></text>\n    <text\n       id=\"lobby-values\"\n       inkscape:label=\"Lobby [zone readout]\"\n       x=\"90\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lobby-values-line\" x=\"90\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"reception-area\"\n       inkscape:label=\"Reception [zone]\"\n       x=\"160\" y=\"20\" width=\"120\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"reception-name\"\n       inkscape:label=\"Reception [zone title]\"\n       x=\"170\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"reception-name-line\" x=\"170\" y=\"44\">Reception</tspan></text>\n    <text\n       id=\"reception-values\"\n       inkscape:label=\"Reception [zone readout]\"\n       x=\"220\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"reception-values-line\" x=\"220\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"meeting-a-area\"\n       inkscape:label=\"Meeting A [zone]\"\n       x=\"280\" y=\"20\" width=\"120\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"meeting-a-name\"\n       inkscape:label=\"Meeting A [zone title]\"\n       x=\"290\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-a-name-line\" x=\"290\" y=\"44\">Meeting A</tspan></text>\n    <text\n       id=\"meeting-a-values\"\n       inkscape:label=\"Meeting A [zone readout]\"\n       x=\"340\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-a-values-line\" x=\"340\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"meeting-b-area\"\n       inkscape:label=\"Meeting B [zone]\"\n       x=\"400\" y=\"20\" width=\"120\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"meeting-b-name\"\n       inkscape:label=\"Meeting B [zone title]\"\n       x=\"410\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-b-name-line\" x=\"410\" y=\"44\">Meeting B</tspan></text>\n    <text\n       id=\"meeting-b-values\"\n       inkscape:label=\"Meeting B [zone readout]\"\n       x=\"460\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-b-values-line\" x=\"460\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"quiet-area\"\n       inkscape:label=\"Quiet room [zone]\"\n       x=\"520\" y=\"20\" width=\"100\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"quiet-name\"\n       inkscape:label=\"Quiet room [zone title]\"\n       x=\"530\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"quiet-name-line\" x=\"530\" y=\"44\">Quiet room</tspan></text>\n    <text\n       id=\"quiet-values\"\n       inkscape:label=\"Quiet room [zone readout]\"\n       x=\"570\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"quiet-values-line\" x=\"570\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"server-area\"\n       inkscape:label=\"Server room [zone]\"\n       x=\"620\" y=\"20\" width=\"160\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"server-name\"\n       inkscape:label=\"Server room [zone title]\"\n       x=\"630\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"server-name-line\" x=\"630\" y=\"44\">Server room</tspan></text>\n    <text\n       id=\"server-values\"\n       inkscape:label=\"Server room [zone readout]\"\n       x=\"700\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"server-values-line\" x=\"700\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"open-office-area\"\n       inkscape:label=\"Open office [zone]\"\n       x=\"20\" y=\"280\" width=\"280\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"open-office-name\"\n       inkscape:label=\"Open office [zone title]\"\n       x=\"30\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"open-office-name-line\" x=\"30\" y=\"304\">Open office</tspan></text>\n    <text\n       id=\"open-office-values\"\n       inkscape:label=\"Open office [zone readout]\"\n       x=\"160\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"open-office-values-line\" x=\"160\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"kitchen-area\"\n       inkscape:label=\"Kitchen [zone]\"\n       x=\"300\" y=\"280\" width=\"100\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"kitchen-name\"\n       inkscape:label=\"Kitchen [zone title]\"\n       x=\"310\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"kitchen-name-line\" x=\"310\" y=\"304\">Kitchen</tspan></text>\n    <text\n       id=\"kitchen-values\"\n       inkscape:label=\"Kitchen [zone readout]\"\n       x=\"350\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"kitchen-values-line\" x=\"350\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"lab-1-area\"\n       inkscape:label=\"Lab 1 [zone]\"\n       x=\"400\" y=\"280\" width=\"120\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"lab-1-name\"\n       inkscape:label=\"Lab 1 [zone title]\"\n       x=\"410\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-1-name-line\" x=\"410\" y=\"304\">Lab 1</tspan></text>\n    <text\n       id=\"lab-1-values\"\n       inkscape:label=\"Lab 1 [zone readout]\"\n       x=\"460\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-1-values-line\" x=\"460\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"lab-2-area\"\n       inkscape:label=\"Lab 2 [zone]\"\n       x=\"520\" y=\"280\" width=\"120\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"lab-2-name\"\n       inkscape:label=\"Lab 2 [zone title]\"\n       x=\"530\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-2-name-line\" x=\"530\" y=\"304\">Lab 2</tspan></text>\n    <text\n       id=\"lab-2-values\"\n       inkscape:label=\"Lab 2 [zone readout]\"\n       x=\"580\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-2-values-line\" x=\"580\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"cold-store-area\"\n       inkscape:label=\"Cold store [zone]\"\n       x=\"640\" y=\"280\" width=\"140\" height=\"110\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"cold-store-name\"\n       inkscape:label=\"Cold store [zone title]\"\n       x=\"650\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"cold-store-name-line\" x=\"650\" y=\"304\">Cold store</tspan></text>\n    <text\n       id=\"cold-store-values\"\n       inkscape:label=\"Cold store [zone readout]\"\n       x=\"710\" y=\"338.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"cold-store-values-line\" x=\"710\" y=\"338.2\">–</tspan></text>\n    <rect\n       id=\"print-area\"\n       inkscape:label=\"Print room [zone]\"\n       x=\"640\" y=\"390\" width=\"140\" height=\"110\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"print-name\"\n       inkscape:label=\"Print room [zone title]\"\n       x=\"650\" y=\"414\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"print-name-line\" x=\"650\" y=\"414\">Print room</tspan></text>\n    <text\n       id=\"print-values\"\n       inkscape:label=\"Print room [zone readout]\"\n       x=\"710\" y=\"448.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"print-values-line\" x=\"710\" y=\"448.2\">–</tspan></text>\n  </g>\n  <g inkscape:groupmode=\"layer\" id=\"layer-doors\" inkscape:label=\"Doors\">\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 73 220 l 34 0 M 73 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 203 220 l 34 0 M 203 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 323 220 l 34 0 M 323 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 443 220 l 34 0 M 443 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 553 220 l 34 0 M 553 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 683 220 l 34 0 M 683 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 143 280 l 34 0 M 143 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 333 280 l 34 0 M 333 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 443 280 l 34 0 M 443 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 563 280 l 34 0 M 563 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 640 300 l 0 34 M 640 300 a 34 34 0 0 0 34 34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 640 410 l 0 34 M 640 410 a 34 34 0 0 0 34 34\" />\n  </g>\n</svg>\n"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 50
+              }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 3,
+      "type": "dkhoadev-climatefloormap-panel",
+      "title": "Ready-made status index, bands",
+      "gridPos": {
+        "x": 0,
+        "y": 13,
+        "w": 12,
+        "h": 13
+      },
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "cfm-testdata"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "cfm-testdata"
+          },
+          "scenarioId": "csv_content",
+          "csvContent": "sensor,status_index\nsensor-01,12\nsensor-02,35\nsensor-03,48\nsensor-04,55\nsensor-05,62\nsensor-06,96\nsensor-07,41\nsensor-08,70\nsensor-09,50\nsensor-10,22\nsensor-11,58"
+        }
+      ],
+      "options": {
+        "labelAttribute": "inkscape:label",
+        "zoneTag": "zone",
+        "fields": {},
+        "limits": {
+          "temperature": {
+            "low": 20,
+            "high": 26
+          },
+          "humidity": {
+            "low": 30,
+            "high": 60
+          }
+        },
+        "staleAfterMinutes": 0,
+        "colorMode": "banded",
+        "indexMode": "position",
+        "decimals": 1,
+        "fillOpacity": 0.8,
+        "animate": true,
+        "showLegend": true,
+        "legendText": [
+          "Low end",
+          "Lower half",
+          "Upper half",
+          "High end"
+        ],
+        "linkTemplate": "",
+        "linkNewTab": true,
+        "bindings": {
+          "Lobby": "sensor-01",
+          "Reception": "sensor-02",
+          "Meeting A": "sensor-03",
+          "Meeting B": "sensor-04",
+          "Quiet room": "sensor-05",
+          "Server room": "sensor-06",
+          "Open office": "sensor-07",
+          "Kitchen": "sensor-08",
+          "Lab 1": "sensor-09",
+          "Lab 2": "sensor-10",
+          "Cold store": "sensor-11",
+          "Print room": "sensor-12"
+        },
+        "planMarkup": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg\n   xmlns=\"http://www.w3.org/2000/svg\"\n   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\n   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n   width=\"800\"\n   height=\"520\"\n   viewBox=\"0 0 800 520\"\n   version=\"1.1\"\n   id=\"floor\">\n  <title id=\"floor-title\">Demo office floor</title>\n  <sodipodi:namedview id=\"namedview\" pagecolor=\"#ffffff\" bordercolor=\"#666666\" inkscape:document-units=\"px\" />\n  <g inkscape:groupmode=\"layer\" id=\"layer-structure\" inkscape:label=\"Structure\">\n    <rect id=\"outline\" x=\"20\" y=\"20\" width=\"760\" height=\"480\" style=\"fill:#f7f8f9;stroke:#3c4650;stroke-width:6\" />\n    <rect id=\"corridor\" x=\"20\" y=\"220\" width=\"760\" height=\"60\" style=\"fill:#fbfbfb;stroke:none\" />\n    <text id=\"corridor-label\" x=\"400\" y=\"256\" style=\"font-size:13px;text-anchor:middle;fill:#8a949e;letter-spacing:4px\"><tspan sodipodi:role=\"line\" id=\"corridor-label-line\" x=\"400\" y=\"256\">CORRIDOR</tspan></text>\n  </g>\n  <g inkscape:groupmode=\"layer\" id=\"layer-rooms\" inkscape:label=\"Rooms\">\n    <rect\n       id=\"lobby-area\"\n       inkscape:label=\"Lobby [zone]\"\n       x=\"20\" y=\"20\" width=\"140\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"lobby-name\"\n       inkscape:label=\"Lobby [zone title]\"\n       x=\"30\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lobby-name-line\" x=\"30\" y=\"44\">Lobby</tspan></text>\n    <text\n       id=\"lobby-values\"\n       inkscape:label=\"Lobby [zone readout]\"\n       x=\"90\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lobby-values-line\" x=\"90\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"reception-area\"\n       inkscape:label=\"Reception [zone]\"\n       x=\"160\" y=\"20\" width=\"120\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"reception-name\"\n       inkscape:label=\"Reception [zone title]\"\n       x=\"170\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"reception-name-line\" x=\"170\" y=\"44\">Reception</tspan></text>\n    <text\n       id=\"reception-values\"\n       inkscape:label=\"Reception [zone readout]\"\n       x=\"220\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"reception-values-line\" x=\"220\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"meeting-a-area\"\n       inkscape:label=\"Meeting A [zone]\"\n       x=\"280\" y=\"20\" width=\"120\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"meeting-a-name\"\n       inkscape:label=\"Meeting A [zone title]\"\n       x=\"290\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-a-name-line\" x=\"290\" y=\"44\">Meeting A</tspan></text>\n    <text\n       id=\"meeting-a-values\"\n       inkscape:label=\"Meeting A [zone readout]\"\n       x=\"340\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-a-values-line\" x=\"340\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"meeting-b-area\"\n       inkscape:label=\"Meeting B [zone]\"\n       x=\"400\" y=\"20\" width=\"120\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"meeting-b-name\"\n       inkscape:label=\"Meeting B [zone title]\"\n       x=\"410\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-b-name-line\" x=\"410\" y=\"44\">Meeting B</tspan></text>\n    <text\n       id=\"meeting-b-values\"\n       inkscape:label=\"Meeting B [zone readout]\"\n       x=\"460\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"meeting-b-values-line\" x=\"460\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"quiet-area\"\n       inkscape:label=\"Quiet room [zone]\"\n       x=\"520\" y=\"20\" width=\"100\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"quiet-name\"\n       inkscape:label=\"Quiet room [zone title]\"\n       x=\"530\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"quiet-name-line\" x=\"530\" y=\"44\">Quiet room</tspan></text>\n    <text\n       id=\"quiet-values\"\n       inkscape:label=\"Quiet room [zone readout]\"\n       x=\"570\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"quiet-values-line\" x=\"570\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"server-area\"\n       inkscape:label=\"Server room [zone]\"\n       x=\"620\" y=\"20\" width=\"160\" height=\"200\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"server-name\"\n       inkscape:label=\"Server room [zone title]\"\n       x=\"630\" y=\"44\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"server-name-line\" x=\"630\" y=\"44\">Server room</tspan></text>\n    <text\n       id=\"server-values\"\n       inkscape:label=\"Server room [zone readout]\"\n       x=\"700\" y=\"123.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"server-values-line\" x=\"700\" y=\"123.2\">–</tspan></text>\n    <rect\n       id=\"open-office-area\"\n       inkscape:label=\"Open office [zone]\"\n       x=\"20\" y=\"280\" width=\"280\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"open-office-name\"\n       inkscape:label=\"Open office [zone title]\"\n       x=\"30\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"open-office-name-line\" x=\"30\" y=\"304\">Open office</tspan></text>\n    <text\n       id=\"open-office-values\"\n       inkscape:label=\"Open office [zone readout]\"\n       x=\"160\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"open-office-values-line\" x=\"160\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"kitchen-area\"\n       inkscape:label=\"Kitchen [zone]\"\n       x=\"300\" y=\"280\" width=\"100\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"kitchen-name\"\n       inkscape:label=\"Kitchen [zone title]\"\n       x=\"310\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"kitchen-name-line\" x=\"310\" y=\"304\">Kitchen</tspan></text>\n    <text\n       id=\"kitchen-values\"\n       inkscape:label=\"Kitchen [zone readout]\"\n       x=\"350\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"kitchen-values-line\" x=\"350\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"lab-1-area\"\n       inkscape:label=\"Lab 1 [zone]\"\n       x=\"400\" y=\"280\" width=\"120\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"lab-1-name\"\n       inkscape:label=\"Lab 1 [zone title]\"\n       x=\"410\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-1-name-line\" x=\"410\" y=\"304\">Lab 1</tspan></text>\n    <text\n       id=\"lab-1-values\"\n       inkscape:label=\"Lab 1 [zone readout]\"\n       x=\"460\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-1-values-line\" x=\"460\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"lab-2-area\"\n       inkscape:label=\"Lab 2 [zone]\"\n       x=\"520\" y=\"280\" width=\"120\" height=\"220\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"lab-2-name\"\n       inkscape:label=\"Lab 2 [zone title]\"\n       x=\"530\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-2-name-line\" x=\"530\" y=\"304\">Lab 2</tspan></text>\n    <text\n       id=\"lab-2-values\"\n       inkscape:label=\"Lab 2 [zone readout]\"\n       x=\"580\" y=\"393.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"lab-2-values-line\" x=\"580\" y=\"393.2\">–</tspan></text>\n    <rect\n       id=\"cold-store-area\"\n       inkscape:label=\"Cold store [zone]\"\n       x=\"640\" y=\"280\" width=\"140\" height=\"110\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"cold-store-name\"\n       inkscape:label=\"Cold store [zone title]\"\n       x=\"650\" y=\"304\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"cold-store-name-line\" x=\"650\" y=\"304\">Cold store</tspan></text>\n    <text\n       id=\"cold-store-values\"\n       inkscape:label=\"Cold store [zone readout]\"\n       x=\"710\" y=\"338.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"cold-store-values-line\" x=\"710\" y=\"338.2\">–</tspan></text>\n    <rect\n       id=\"print-area\"\n       inkscape:label=\"Print room [zone]\"\n       x=\"640\" y=\"390\" width=\"140\" height=\"110\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"print-name\"\n       inkscape:label=\"Print room [zone title]\"\n       x=\"650\" y=\"414\"\n       style=\"font-size:16px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"print-name-line\" x=\"650\" y=\"414\">Print room</tspan></text>\n    <text\n       id=\"print-values\"\n       inkscape:label=\"Print room [zone readout]\"\n       x=\"710\" y=\"448.2\"\n       style=\"font-size:14.4px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"print-values-line\" x=\"710\" y=\"448.2\">–</tspan></text>\n  </g>\n  <g inkscape:groupmode=\"layer\" id=\"layer-doors\" inkscape:label=\"Doors\">\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 73 220 l 34 0 M 73 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 203 220 l 34 0 M 203 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 323 220 l 34 0 M 323 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 443 220 l 34 0 M 443 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 553 220 l 34 0 M 553 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 683 220 l 34 0 M 683 220 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 143 280 l 34 0 M 143 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 333 280 l 34 0 M 333 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 443 280 l 34 0 M 443 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 563 280 l 34 0 M 563 280 a 34 34 0 0 1 34 -34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 640 300 l 0 34 M 640 300 a 34 34 0 0 0 34 34\" />\n    <path style=\"fill:none;stroke:#7a8590;stroke-width:1.5\" d=\"M 640 410 l 0 34 M 640 410 a 34 34 0 0 0 34 34\" />\n  </g>\n</svg>\n"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 25
+              },
+              {
+                "color": "orange",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 75
+              }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    }
+  ]
+}

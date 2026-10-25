@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   width="1230"
+   height="920"
+   viewBox="0 0 1230 920"
+   version="1.1"
+   id="floor">
+  <title id="floor-title">Demo large floor</title>
+  <sodipodi:namedview id="namedview" pagecolor="#ffffff" bordercolor="#666666" inkscape:document-units="px" />
+  <g inkscape:groupmode="layer" id="layer-structure" inkscape:label="Structure">
+    <rect id="outline" x="10" y="10" width="1210" height="900" style="fill:#f7f8f9;stroke:#3c4650;stroke-width:6" />
+  </g>
+  <g inkscape:groupmode="layer" id="layer-rooms" inkscape:label="Rooms">
+    <rect
+       id="bay-a1-area"
+       inkscape:label="Bay A1 [zone]"
+       x="20" y="20" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-a1-name"
+       inkscape:label="Bay A1 [zone title]"
+       x="30" y="42"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a1-name-line" x="30" y="42">Bay A1</tspan></text>
+    <text
+       id="bay-a1-values"
+       inkscape:label="Bay A1 [zone readout]"
+       x="112.5" y="87.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a1-values-line" x="112.5" y="87.8">–</tspan></text>
+    <rect
+       id="bay-a2-area"
+       inkscape:label="Bay A2 [zone]"
+       x="20" y="160" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-a2-name"
+       inkscape:label="Bay A2 [zone title]"
+       x="30" y="182"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a2-name-line" x="30" y="182">Bay A2</tspan></text>
+    <text
+       id="bay-a2-values"
+       inkscape:label="Bay A2 [zone readout]"
+       x="112.5" y="227.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a2-values-line" x="112.5" y="227.8">–</tspan></text>
+    <rect
+       id="bay-a3-area"
+       inkscape:label="Bay A3 [zone]"
+       x="20" y="300" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-a3-name"
+       inkscape:label="Bay A3 [zone title]"
+       x="30" y="322"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a3-name-line" x="30" y="322">Bay A3</tspan></text>
+    <text
+       id="bay-a3-values"
+       inkscape:label="Bay A3 [zone readout]"
+       x="112.5" y="367.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a3-values-line" x="112.5" y="367.8">–</tspan></text>
+    <rect
+       id="bay-a4-area"
+       inkscape:label="Bay A4 [zone]"
+       x="20" y="480" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-a4-name"
+       inkscape:label="Bay A4 [zone title]"
+       x="30" y="502"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a4-name-line" x="30" y="502">Bay A4</tspan></text>
+    <text
+       id="bay-a4-values"
+       inkscape:label="Bay A4 [zone readout]"
+       x="112.5" y="547.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a4-values-line" x="112.5" y="547.8">–</tspan></text>
+    <rect
+       id="bay-a5-area"
+       inkscape:label="Bay A5 [zone]"
+       x="20" y="620" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-a5-name"
+       inkscape:label="Bay A5 [zone title]"
+       x="30" y="642"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a5-name-line" x="30" y="642">Bay A5</tspan></text>
+    <text
+       id="bay-a5-values"
+       inkscape:label="Bay A5 [zone readout]"
+       x="112.5" y="687.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a5-values-line" x="112.5" y="687.8">–</tspan></text>
+    <rect
+       id="bay-a6-area"
+       inkscape:label="Bay A6 [zone]"
+       x="20" y="760" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-a6-name"
+       inkscape:label="Bay A6 [zone title]"
+       x="30" y="782"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a6-name-line" x="30" y="782">Bay A6</tspan></text>
+    <text
+       id="bay-a6-values"
+       inkscape:label="Bay A6 [zone readout]"
+       x="112.5" y="827.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-a6-values-line" x="112.5" y="827.8">–</tspan></text>
+    <rect
+       id="bay-b1-area"
+       inkscape:label="Bay B1 [zone]"
+       x="215" y="20" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-b1-name"
+       inkscape:label="Bay B1 [zone title]"
+       x="225" y="42"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b1-name-line" x="225" y="42">Bay B1</tspan></text>
+    <text
+       id="bay-b1-values"
+       inkscape:label="Bay B1 [zone readout]"
+       x="307.5" y="87.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b1-values-line" x="307.5" y="87.8">–</tspan></text>
+    <rect
+       id="bay-b2-area"
+       inkscape:label="Bay B2 [zone]"
+       x="215" y="160" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-b2-name"
+       inkscape:label="Bay B2 [zone title]"
+       x="225" y="182"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b2-name-line" x="225" y="182">Bay B2</tspan></text>
+    <text
+       id="bay-b2-values"
+       inkscape:label="Bay B2 [zone readout]"
+       x="307.5" y="227.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b2-values-line" x="307.5" y="227.8">–</tspan></text>
+    <rect
+       id="bay-b3-area"
+       inkscape:label="Bay B3 [zone]"
+       x="215" y="300" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-b3-name"
+       inkscape:label="Bay B3 [zone title]"
+       x="225" y="322"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b3-name-line" x="225" y="322">Bay B3</tspan></text>
+    <text
+       id="bay-b3-values"
+       inkscape:label="Bay B3 [zone readout]"
+       x="307.5" y="367.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b3-values-line" x="307.5" y="367.8">–</tspan></text>
+    <rect
+       id="bay-b4-area"
+       inkscape:label="Bay B4 [zone]"
+       x="215" y="480" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-b4-name"
+       inkscape:label="Bay B4 [zone title]"
+       x="225" y="502"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b4-name-line" x="225" y="502">Bay B4</tspan></text>
+    <text
+       id="bay-b4-values"
+       inkscape:label="Bay B4 [zone readout]"
+       x="307.5" y="547.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b4-values-line" x="307.5" y="547.8">–</tspan></text>
+    <rect
+       id="bay-b5-area"
+       inkscape:label="Bay B5 [zone]"
+       x="215" y="620" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-b5-name"
+       inkscape:label="Bay B5 [zone title]"
+       x="225" y="642"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b5-name-line" x="225" y="642">Bay B5</tspan></text>
+    <text
+       id="bay-b5-values"
+       inkscape:label="Bay B5 [zone readout]"
+       x="307.5" y="687.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b5-values-line" x="307.5" y="687.8">–</tspan></text>
+    <rect
+       id="bay-b6-area"
+       inkscape:label="Bay B6 [zone]"
+       x="215" y="760" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-b6-name"
+       inkscape:label="Bay B6 [zone title]"
+       x="225" y="782"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b6-name-line" x="225" y="782">Bay B6</tspan></text>
+    <text
+       id="bay-b6-values"
+       inkscape:label="Bay B6 [zone readout]"
+       x="307.5" y="827.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-b6-values-line" x="307.5" y="827.8">–</tspan></text>
+    <rect
+       id="bay-c1-area"
+       inkscape:label="Bay C1 [zone]"
+       x="410" y="20" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-c1-name"
+       inkscape:label="Bay C1 [zone title]"
+       x="420" y="42"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c1-name-line" x="420" y="42">Bay C1</tspan></text>
+    <text
+       id="bay-c1-values"
+       inkscape:label="Bay C1 [zone readout]"
+       x="502.5" y="87.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c1-values-line" x="502.5" y="87.8">–</tspan></text>
+    <rect
+       id="bay-c2-area"
+       inkscape:label="Bay C2 [zone]"
+       x="410" y="160" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-c2-name"
+       inkscape:label="Bay C2 [zone title]"
+       x="420" y="182"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c2-name-line" x="420" y="182">Bay C2</tspan></text>
+    <text
+       id="bay-c2-values"
+       inkscape:label="Bay C2 [zone readout]"
+       x="502.5" y="227.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c2-values-line" x="502.5" y="227.8">–</tspan></text>
+    <rect
+       id="bay-c3-area"
+       inkscape:label="Bay C3 [zone]"
+       x="410" y="300" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-c3-name"
+       inkscape:label="Bay C3 [zone title]"
+       x="420" y="322"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c3-name-line" x="420" y="322">Bay C3</tspan></text>
+    <text
+       id="bay-c3-values"
+       inkscape:label="Bay C3 [zone readout]"
+       x="502.5" y="367.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c3-values-line" x="502.5" y="367.8">–</tspan></text>
+    <rect
+       id="bay-c4-area"
+       inkscape:label="Bay C4 [zone]"
+       x="410" y="480" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-c4-name"
+       inkscape:label="Bay C4 [zone title]"
+       x="420" y="502"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c4-name-line" x="420" y="502">Bay C4</tspan></text>
+    <text
+       id="bay-c4-values"
+       inkscape:label="Bay C4 [zone readout]"
+       x="502.5" y="547.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c4-values-line" x="502.5" y="547.8">–</tspan></text>
+    <rect
+       id="bay-c5-area"
+       inkscape:label="Bay C5 [zone]"
+       x="410" y="620" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-c5-name"
+       inkscape:label="Bay C5 [zone title]"
+       x="420" y="642"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c5-name-line" x="420" y="642">Bay C5</tspan></text>
+    <text
+       id="bay-c5-values"
+       inkscape:label="Bay C5 [zone readout]"
+       x="502.5" y="687.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c5-values-line" x="502.5" y="687.8">–</tspan></text>
+    <rect
+       id="bay-c6-area"
+       inkscape:label="Bay C6 [zone]"
+       x="410" y="760" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-c6-name"
+       inkscape:label="Bay C6 [zone title]"
+       x="420" y="782"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c6-name-line" x="420" y="782">Bay C6</tspan></text>
+    <text
+       id="bay-c6-values"
+       inkscape:label="Bay C6 [zone readout]"
+       x="502.5" y="827.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-c6-values-line" x="502.5" y="827.8">–</tspan></text>
+    <rect
+       id="bay-d1-area"
+       inkscape:label="Bay D1 [zone]"
+       x="635" y="20" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-d1-name"
+       inkscape:label="Bay D1 [zone title]"
+       x="645" y="42"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d1-name-line" x="645" y="42">Bay D1</tspan></text>
+    <text
+       id="bay-d1-values"
+       inkscape:label="Bay D1 [zone readout]"
+       x="727.5" y="87.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d1-values-line" x="727.5" y="87.8">–</tspan></text>
+    <rect
+       id="bay-d2-area"
+       inkscape:label="Bay D2 [zone]"
+       x="635" y="160" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-d2-name"
+       inkscape:label="Bay D2 [zone title]"
+       x="645" y="182"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d2-name-line" x="645" y="182">Bay D2</tspan></text>
+    <text
+       id="bay-d2-values"
+       inkscape:label="Bay D2 [zone readout]"
+       x="727.5" y="227.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d2-values-line" x="727.5" y="227.8">–</tspan></text>
+    <rect
+       id="bay-d3-area"
+       inkscape:label="Bay D3 [zone]"
+       x="635" y="300" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-d3-name"
+       inkscape:label="Bay D3 [zone title]"
+       x="645" y="322"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d3-name-line" x="645" y="322">Bay D3</tspan></text>
+    <text
+       id="bay-d3-values"
+       inkscape:label="Bay D3 [zone readout]"
+       x="727.5" y="367.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d3-values-line" x="727.5" y="367.8">–</tspan></text>
+    <rect
+       id="bay-d4-area"
+       inkscape:label="Bay D4 [zone]"
+       x="635" y="480" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-d4-name"
+       inkscape:label="Bay D4 [zone title]"
+       x="645" y="502"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d4-name-line" x="645" y="502">Bay D4</tspan></text>
+    <text
+       id="bay-d4-values"
+       inkscape:label="Bay D4 [zone readout]"
+       x="727.5" y="547.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d4-values-line" x="727.5" y="547.8">–</tspan></text>
+    <rect
+       id="bay-d5-area"
+       inkscape:label="Bay D5 [zone]"
+       x="635" y="620" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-d5-name"
+       inkscape:label="Bay D5 [zone title]"
+       x="645" y="642"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d5-name-line" x="645" y="642">Bay D5</tspan></text>
+    <text
+       id="bay-d5-values"
+       inkscape:label="Bay D5 [zone readout]"
+       x="727.5" y="687.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d5-values-line" x="727.5" y="687.8">–</tspan></text>
+    <rect
+       id="bay-d6-area"
+       inkscape:label="Bay D6 [zone]"
+       x="635" y="760" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-d6-name"
+       inkscape:label="Bay D6 [zone title]"
+       x="645" y="782"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d6-name-line" x="645" y="782">Bay D6</tspan></text>
+    <text
+       id="bay-d6-values"
+       inkscape:label="Bay D6 [zone readout]"
+       x="727.5" y="827.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-d6-values-line" x="727.5" y="827.8">–</tspan></text>
+    <rect
+       id="bay-e1-area"
+       inkscape:label="Bay E1 [zone]"
+       x="830" y="20" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-e1-name"
+       inkscape:label="Bay E1 [zone title]"
+       x="840" y="42"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e1-name-line" x="840" y="42">Bay E1</tspan></text>
+    <text
+       id="bay-e1-values"
+       inkscape:label="Bay E1 [zone readout]"
+       x="922.5" y="87.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e1-values-line" x="922.5" y="87.8">–</tspan></text>
+    <rect
+       id="bay-e2-area"
+       inkscape:label="Bay E2 [zone]"
+       x="830" y="160" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-e2-name"
+       inkscape:label="Bay E2 [zone title]"
+       x="840" y="182"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e2-name-line" x="840" y="182">Bay E2</tspan></text>
+    <text
+       id="bay-e2-values"
+       inkscape:label="Bay E2 [zone readout]"
+       x="922.5" y="227.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e2-values-line" x="922.5" y="227.8">–</tspan></text>
+    <rect
+       id="bay-e3-area"
+       inkscape:label="Bay E3 [zone]"
+       x="830" y="300" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-e3-name"
+       inkscape:label="Bay E3 [zone title]"
+       x="840" y="322"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e3-name-line" x="840" y="322">Bay E3</tspan></text>
+    <text
+       id="bay-e3-values"
+       inkscape:label="Bay E3 [zone readout]"
+       x="922.5" y="367.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e3-values-line" x="922.5" y="367.8">–</tspan></text>
+    <rect
+       id="bay-e4-area"
+       inkscape:label="Bay E4 [zone]"
+       x="830" y="480" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-e4-name"
+       inkscape:label="Bay E4 [zone title]"
+       x="840" y="502"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e4-name-line" x="840" y="502">Bay E4</tspan></text>
+    <text
+       id="bay-e4-values"
+       inkscape:label="Bay E4 [zone readout]"
+       x="922.5" y="547.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e4-values-line" x="922.5" y="547.8">–</tspan></text>
+    <rect
+       id="bay-e5-area"
+       inkscape:label="Bay E5 [zone]"
+       x="830" y="620" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-e5-name"
+       inkscape:label="Bay E5 [zone title]"
+       x="840" y="642"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e5-name-line" x="840" y="642">Bay E5</tspan></text>
+    <text
+       id="bay-e5-values"
+       inkscape:label="Bay E5 [zone readout]"
+       x="922.5" y="687.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e5-values-line" x="922.5" y="687.8">–</tspan></text>
+    <rect
+       id="bay-e6-area"
+       inkscape:label="Bay E6 [zone]"
+       x="830" y="760" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-e6-name"
+       inkscape:label="Bay E6 [zone title]"
+       x="840" y="782"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e6-name-line" x="840" y="782">Bay E6</tspan></text>
+    <text
+       id="bay-e6-values"
+       inkscape:label="Bay E6 [zone readout]"
+       x="922.5" y="827.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-e6-values-line" x="922.5" y="827.8">–</tspan></text>
+    <rect
+       id="bay-f1-area"
+       inkscape:label="Bay F1 [zone]"
+       x="1025" y="20" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-f1-name"
+       inkscape:label="Bay F1 [zone title]"
+       x="1035" y="42"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f1-name-line" x="1035" y="42">Bay F1</tspan></text>
+    <text
+       id="bay-f1-values"
+       inkscape:label="Bay F1 [zone readout]"
+       x="1117.5" y="87.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f1-values-line" x="1117.5" y="87.8">–</tspan></text>
+    <rect
+       id="bay-f2-area"
+       inkscape:label="Bay F2 [zone]"
+       x="1025" y="160" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-f2-name"
+       inkscape:label="Bay F2 [zone title]"
+       x="1035" y="182"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f2-name-line" x="1035" y="182">Bay F2</tspan></text>
+    <text
+       id="bay-f2-values"
+       inkscape:label="Bay F2 [zone readout]"
+       x="1117.5" y="227.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f2-values-line" x="1117.5" y="227.8">–</tspan></text>
+    <rect
+       id="bay-f3-area"
+       inkscape:label="Bay F3 [zone]"
+       x="1025" y="300" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-f3-name"
+       inkscape:label="Bay F3 [zone title]"
+       x="1035" y="322"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f3-name-line" x="1035" y="322">Bay F3</tspan></text>
+    <text
+       id="bay-f3-values"
+       inkscape:label="Bay F3 [zone readout]"
+       x="1117.5" y="367.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f3-values-line" x="1117.5" y="367.8">–</tspan></text>
+    <rect
+       id="bay-f4-area"
+       inkscape:label="Bay F4 [zone]"
+       x="1025" y="480" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-f4-name"
+       inkscape:label="Bay F4 [zone title]"
+       x="1035" y="502"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f4-name-line" x="1035" y="502">Bay F4</tspan></text>
+    <text
+       id="bay-f4-values"
+       inkscape:label="Bay F4 [zone readout]"
+       x="1117.5" y="547.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f4-values-line" x="1117.5" y="547.8">–</tspan></text>
+    <rect
+       id="bay-f5-area"
+       inkscape:label="Bay F5 [zone]"
+       x="1025" y="620" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-f5-name"
+       inkscape:label="Bay F5 [zone title]"
+       x="1035" y="642"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f5-name-line" x="1035" y="642">Bay F5</tspan></text>
+    <text
+       id="bay-f5-values"
+       inkscape:label="Bay F5 [zone readout]"
+       x="1117.5" y="687.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f5-values-line" x="1117.5" y="687.8">–</tspan></text>
+    <rect
+       id="bay-f6-area"
+       inkscape:label="Bay F6 [zone]"
+       x="1025" y="760" width="185" height="130"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="bay-f6-name"
+       inkscape:label="Bay F6 [zone title]"
+       x="1035" y="782"
+       style="font-size:14px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f6-name-line" x="1035" y="782">Bay F6</tspan></text>
+    <text
+       id="bay-f6-values"
+       inkscape:label="Bay F6 [zone readout]"
+       x="1117.5" y="827.8"
+       style="font-size:12.6px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="bay-f6-values-line" x="1117.5" y="827.8">–</tspan></text>
+  </g>
+</svg>

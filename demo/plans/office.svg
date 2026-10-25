@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   width="800"
+   height="520"
+   viewBox="0 0 800 520"
+   version="1.1"
+   id="floor">
+  <title id="floor-title">Demo office floor</title>
+  <sodipodi:namedview id="namedview" pagecolor="#ffffff" bordercolor="#666666" inkscape:document-units="px" />
+  <g inkscape:groupmode="layer" id="layer-structure" inkscape:label="Structure">
+    <rect id="outline" x="20" y="20" width="760" height="480" style="fill:#f7f8f9;stroke:#3c4650;stroke-width:6" />
+    <rect id="corridor" x="20" y="220" width="760" height="60" style="fill:#fbfbfb;stroke:none" />
+    <text id="corridor-label" x="400" y="256" style="font-size:13px;text-anchor:middle;fill:#8a949e;letter-spacing:4px"><tspan sodipodi:role="line" id="corridor-label-line" x="400" y="256">CORRIDOR</tspan></text>
+  </g>
+  <g inkscape:groupmode="layer" id="layer-rooms" inkscape:label="Rooms">
+    <rect
+       id="lobby-area"
+       inkscape:label="Lobby [zone]"
+       x="20" y="20" width="140" height="200"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="lobby-name"
+       inkscape:label="Lobby [zone title]"
+       x="30" y="44"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="lobby-name-line" x="30" y="44">Lobby</tspan></text>
+    <text
+       id="lobby-values"
+       inkscape:label="Lobby [zone readout]"
+       x="90" y="123.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="lobby-values-line" x="90" y="123.2">–</tspan></text>
+    <rect
+       id="reception-area"
+       inkscape:label="Reception [zone]"
+       x="160" y="20" width="120" height="200"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="reception-name"
+       inkscape:label="Reception [zone title]"
+       x="170" y="44"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="reception-name-line" x="170" y="44">Reception</tspan></text>
+    <text
+       id="reception-values"
+       inkscape:label="Reception [zone readout]"
+       x="220" y="123.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="reception-values-line" x="220" y="123.2">–</tspan></text>
+    <rect
+       id="meeting-a-area"
+       inkscape:label="Meeting A [zone]"
+       x="280" y="20" width="120" height="200"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="meeting-a-name"
+       inkscape:label="Meeting A [zone title]"
+       x="290" y="44"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="meeting-a-name-line" x="290" y="44">Meeting A</tspan></text>
+    <text
+       id="meeting-a-values"
+       inkscape:label="Meeting A [zone readout]"
+       x="340" y="123.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="meeting-a-values-line" x="340" y="123.2">–</tspan></text>
+    <rect
+       id="meeting-b-area"
+       inkscape:label="Meeting B [zone]"
+       x="400" y="20" width="120" height="200"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="meeting-b-name"
+       inkscape:label="Meeting B [zone title]"
+       x="410" y="44"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="meeting-b-name-line" x="410" y="44">Meeting B</tspan></text>
+    <text
+       id="meeting-b-values"
+       inkscape:label="Meeting B [zone readout]"
+       x="460" y="123.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="meeting-b-values-line" x="460" y="123.2">–</tspan></text>
+    <rect
+       id="quiet-area"
+       inkscape:label="Quiet room [zone]"
+       x="520" y="20" width="100" height="200"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="quiet-name"
+       inkscape:label="Quiet room [zone title]"
+       x="530" y="44"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="quiet-name-line" x="530" y="44">Quiet room</tspan></text>
+    <text
+       id="quiet-values"
+       inkscape:label="Quiet room [zone readout]"
+       x="570" y="123.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="quiet-values-line" x="570" y="123.2">–</tspan></text>
+    <rect
+       id="server-area"
+       inkscape:label="Server room [zone]"
+       x="620" y="20" width="160" height="200"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="server-name"
+       inkscape:label="Server room [zone title]"
+       x="630" y="44"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="server-name-line" x="630" y="44">Server room</tspan></text>
+    <text
+       id="server-values"
+       inkscape:label="Server room [zone readout]"
+       x="700" y="123.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="server-values-line" x="700" y="123.2">–</tspan></text>
+    <rect
+       id="open-office-area"
+       inkscape:label="Open office [zone]"
+       x="20" y="280" width="280" height="220"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="open-office-name"
+       inkscape:label="Open office [zone title]"
+       x="30" y="304"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="open-office-name-line" x="30" y="304">Open office</tspan></text>
+    <text
+       id="open-office-values"
+       inkscape:label="Open office [zone readout]"
+       x="160" y="393.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="open-office-values-line" x="160" y="393.2">–</tspan></text>
+    <rect
+       id="kitchen-area"
+       inkscape:label="Kitchen [zone]"
+       x="300" y="280" width="100" height="220"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="kitchen-name"
+       inkscape:label="Kitchen [zone title]"
+       x="310" y="304"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="kitchen-name-line" x="310" y="304">Kitchen</tspan></text>
+    <text
+       id="kitchen-values"
+       inkscape:label="Kitchen [zone readout]"
+       x="350" y="393.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="kitchen-values-line" x="350" y="393.2">–</tspan></text>
+    <rect
+       id="lab-1-area"
+       inkscape:label="Lab 1 [zone]"
+       x="400" y="280" width="120" height="220"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="lab-1-name"
+       inkscape:label="Lab 1 [zone title]"
+       x="410" y="304"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="lab-1-name-line" x="410" y="304">Lab 1</tspan></text>
+    <text
+       id="lab-1-values"
+       inkscape:label="Lab 1 [zone readout]"
+       x="460" y="393.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="lab-1-values-line" x="460" y="393.2">–</tspan></text>
+    <rect
+       id="lab-2-area"
+       inkscape:label="Lab 2 [zone]"
+       x="520" y="280" width="120" height="220"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="lab-2-name"
+       inkscape:label="Lab 2 [zone title]"
+       x="530" y="304"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="lab-2-name-line" x="530" y="304">Lab 2</tspan></text>
+    <text
+       id="lab-2-values"
+       inkscape:label="Lab 2 [zone readout]"
+       x="580" y="393.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="lab-2-values-line" x="580" y="393.2">–</tspan></text>
+    <rect
+       id="cold-store-area"
+       inkscape:label="Cold store [zone]"
+       x="640" y="280" width="140" height="110"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="cold-store-name"
+       inkscape:label="Cold store [zone title]"
+       x="650" y="304"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="cold-store-name-line" x="650" y="304">Cold store</tspan></text>
+    <text
+       id="cold-store-values"
+       inkscape:label="Cold store [zone readout]"
+       x="710" y="338.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="cold-store-values-line" x="710" y="338.2">–</tspan></text>
+    <rect
+       id="print-area"
+       inkscape:label="Print room [zone]"
+       x="640" y="390" width="140" height="110"
+       style="fill:#eef1f4;stroke:#3c4650;stroke-width:3" />
+    <text
+       id="print-name"
+       inkscape:label="Print room [zone title]"
+       x="650" y="414"
+       style="font-size:16px;font-weight:600;fill:#2b3138"><tspan sodipodi:role="line" id="print-name-line" x="650" y="414">Print room</tspan></text>
+    <text
+       id="print-values"
+       inkscape:label="Print room [zone readout]"
+       x="710" y="448.2"
+       style="font-size:14.4px;text-anchor:middle;fill:#2b3138"><tspan sodipodi:role="line" id="print-values-line" x="710" y="448.2">–</tspan></text>
+  </g>
+  <g inkscape:groupmode="layer" id="layer-doors" inkscape:label="Doors">
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 73 220 l 34 0 M 73 220 a 34 34 0 0 1 34 -34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 203 220 l 34 0 M 203 220 a 34 34 0 0 1 34 -34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 323 220 l 34 0 M 323 220 a 34 34 0 0 1 34 -34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 443 220 l 34 0 M 443 220 a 34 34 0 0 1 34 -34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 553 220 l 34 0 M 553 220 a 34 34 0 0 1 34 -34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 683 220 l 34 0 M 683 220 a 34 34 0 0 1 34 -34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 143 280 l 34 0 M 143 280 a 34 34 0 0 1 34 -34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 333 280 l 34 0 M 333 280 a 34 34 0 0 1 34 -34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 443 280 l 34 0 M 443 280 a 34 34 0 0 1 34 -34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 563 280 l 34 0 M 563 280 a 34 34 0 0 1 34 -34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 640 300 l 0 34 M 640 300 a 34 34 0 0 0 34 34" />
+    <path style="fill:none;stroke:#7a8590;stroke-width:1.5" d="M 640 410 l 0 34 M 640 410 a 34 34 0 0 0 34 34" />
+  </g>
+</svg>

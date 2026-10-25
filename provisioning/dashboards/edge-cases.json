@@ -1,0 +1,125 @@
+{
+  "uid": "cfm-edge-cases",
+  "title": "Climate Floor Map: Edge cases",
+  "tags": [
+    "climate-floor-map",
+    "demo"
+  ],
+  "editable": true,
+  "schemaVersion": 41,
+  "refresh": "",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timezone": "browser",
+  "templating": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "dkhoadev-climatefloormap-panel",
+      "title": "One zone per state (offline after 15 min)",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 16
+      },
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "cfm-testdata"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "cfm-testdata"
+          },
+          "scenarioId": "csv_content",
+          "csvContent": "sensor,label,temperature,humidity,humidity_low,humidity_high,status_index\ncase-normal,Normal,22.4,44,,,\ncase-humidity,Humidity only,,57.5,,,\ncase-limits,Invalid limits,23,50,65,35,\ncase-index,Index above 100,,,,,140\ncase-extra,Sensor with no zone,21,40,,,"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "cfm-testdata"
+          },
+          "scenarioId": "csv_content",
+          "csvContent": "time,sensor,label,temperature,humidity\n2026-01-01T08:00:00Z,case-stale,Stale reading,21.2,41"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "cfm-testdata"
+          },
+          "scenarioId": "csv_content",
+          "csvContent": "sensor,label,temperature,humidity\ncase-text,Text values,n/a,error"
+        }
+      ],
+      "options": {
+        "labelAttribute": "inkscape:label",
+        "zoneTag": "zone",
+        "fields": {},
+        "limits": {
+          "temperature": {
+            "low": 20,
+            "high": 26
+          },
+          "humidity": {
+            "low": 30,
+            "high": 60
+          }
+        },
+        "staleAfterMinutes": 15,
+        "colorMode": "continuous",
+        "indexMode": "position",
+        "decimals": 1,
+        "fillOpacity": 0.8,
+        "animate": true,
+        "showLegend": true,
+        "legendText": [],
+        "linkTemplate": "",
+        "linkNewTab": true,
+        "bindings": {
+          "Normal": "case-normal",
+          "Offline sensor": "case-missing",
+          "Stale reading": "case-stale",
+          "Humidity only": "case-humidity",
+          "Invalid limits": "case-limits",
+          "Index above 100": "case-index",
+          "Text values": "case-text"
+        },
+        "planMarkup": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg\n   xmlns=\"http://www.w3.org/2000/svg\"\n   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\n   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n   width=\"800\"\n   height=\"380\"\n   viewBox=\"0 0 800 380\"\n   version=\"1.1\"\n   id=\"floor\">\n  <title id=\"floor-title\">Edge cases</title>\n  <sodipodi:namedview id=\"namedview\" pagecolor=\"#ffffff\" bordercolor=\"#666666\" inkscape:document-units=\"px\" />\n  <g inkscape:groupmode=\"layer\" id=\"layer-rooms\" inkscape:label=\"Rooms\">\n    <rect\n       id=\"case-1-area\"\n       inkscape:label=\"Normal [zone]\"\n       x=\"20\" y=\"20\" width=\"180\" height=\"160\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"case-1-name\"\n       inkscape:label=\"Normal [zone title]\"\n       x=\"30\" y=\"43\"\n       style=\"font-size:15px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-1-name-line\" x=\"30\" y=\"43\">Normal</tspan></text>\n    <text\n       id=\"case-1-values\"\n       inkscape:label=\"Normal [zone readout]\"\n       x=\"110\" y=\"103\"\n       style=\"font-size:13.5px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-1-values-line\" x=\"110\" y=\"103\">–</tspan></text>\n    <rect\n       id=\"case-2-area\"\n       inkscape:label=\"Offline sensor [zone]\"\n       x=\"210\" y=\"20\" width=\"180\" height=\"160\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"case-2-name\"\n       inkscape:label=\"Offline sensor [zone title]\"\n       x=\"220\" y=\"43\"\n       style=\"font-size:15px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-2-name-line\" x=\"220\" y=\"43\">Offline sensor</tspan></text>\n    <text\n       id=\"case-2-values\"\n       inkscape:label=\"Offline sensor [zone readout]\"\n       x=\"300\" y=\"103\"\n       style=\"font-size:13.5px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-2-values-line\" x=\"300\" y=\"103\">–</tspan></text>\n    <rect\n       id=\"case-3-area\"\n       inkscape:label=\"Stale reading [zone]\"\n       x=\"400\" y=\"20\" width=\"180\" height=\"160\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"case-3-name\"\n       inkscape:label=\"Stale reading [zone title]\"\n       x=\"410\" y=\"43\"\n       style=\"font-size:15px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-3-name-line\" x=\"410\" y=\"43\">Stale reading</tspan></text>\n    <text\n       id=\"case-3-values\"\n       inkscape:label=\"Stale reading [zone readout]\"\n       x=\"490\" y=\"103\"\n       style=\"font-size:13.5px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-3-values-line\" x=\"490\" y=\"103\">–</tspan></text>\n    <rect\n       id=\"case-4-area\"\n       inkscape:label=\"Humidity only [zone]\"\n       x=\"590\" y=\"20\" width=\"180\" height=\"160\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"case-4-name\"\n       inkscape:label=\"Humidity only [zone title]\"\n       x=\"600\" y=\"43\"\n       style=\"font-size:15px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-4-name-line\" x=\"600\" y=\"43\">Humidity only</tspan></text>\n    <text\n       id=\"case-4-values\"\n       inkscape:label=\"Humidity only [zone readout]\"\n       x=\"680\" y=\"103\"\n       style=\"font-size:13.5px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-4-values-line\" x=\"680\" y=\"103\">–</tspan></text>\n    <rect\n       id=\"case-5-area\"\n       inkscape:label=\"Invalid limits [zone]\"\n       x=\"20\" y=\"190\" width=\"180\" height=\"160\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"case-5-name\"\n       inkscape:label=\"Invalid limits [zone title]\"\n       x=\"30\" y=\"213\"\n       style=\"font-size:15px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-5-name-line\" x=\"30\" y=\"213\">Invalid limits</tspan></text>\n    <text\n       id=\"case-5-values\"\n       inkscape:label=\"Invalid limits [zone readout]\"\n       x=\"110\" y=\"273\"\n       style=\"font-size:13.5px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-5-values-line\" x=\"110\" y=\"273\">–</tspan></text>\n    <rect\n       id=\"case-6-area\"\n       inkscape:label=\"Index above 100 [zone]\"\n       x=\"210\" y=\"190\" width=\"180\" height=\"160\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"case-6-name\"\n       inkscape:label=\"Index above 100 [zone title]\"\n       x=\"220\" y=\"213\"\n       style=\"font-size:15px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-6-name-line\" x=\"220\" y=\"213\">Index above 100</tspan></text>\n    <text\n       id=\"case-6-values\"\n       inkscape:label=\"Index above 100 [zone readout]\"\n       x=\"300\" y=\"273\"\n       style=\"font-size:13.5px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-6-values-line\" x=\"300\" y=\"273\">–</tspan></text>\n    <rect\n       id=\"case-7-area\"\n       inkscape:label=\"Not bound [zone]\"\n       x=\"400\" y=\"190\" width=\"180\" height=\"160\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"case-7-name\"\n       inkscape:label=\"Not bound [zone title]\"\n       x=\"410\" y=\"213\"\n       style=\"font-size:15px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-7-name-line\" x=\"410\" y=\"213\">Not bound</tspan></text>\n    <text\n       id=\"case-7-values\"\n       inkscape:label=\"Not bound [zone readout]\"\n       x=\"490\" y=\"273\"\n       style=\"font-size:13.5px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-7-values-line\" x=\"490\" y=\"273\">–</tspan></text>\n    <rect\n       id=\"case-8-area\"\n       inkscape:label=\"Text values [zone]\"\n       x=\"590\" y=\"190\" width=\"180\" height=\"160\"\n       style=\"fill:#eef1f4;stroke:#3c4650;stroke-width:3\" />\n    <text\n       id=\"case-8-name\"\n       inkscape:label=\"Text values [zone title]\"\n       x=\"600\" y=\"213\"\n       style=\"font-size:15px;font-weight:600;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-8-name-line\" x=\"600\" y=\"213\">Text values</tspan></text>\n    <text\n       id=\"case-8-values\"\n       inkscape:label=\"Text values [zone readout]\"\n       x=\"680\" y=\"273\"\n       style=\"font-size:13.5px;text-anchor:middle;fill:#2b3138\"><tspan sodipodi:role=\"line\" id=\"case-8-values-line\" x=\"680\" y=\"273\">–</tspan></text>\n  </g>\n</svg>\n"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlYlRd"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    }
+  ]
+}
