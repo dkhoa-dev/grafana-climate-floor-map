@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { createDataFrame, FieldType, getDefaultTimeRange, LoadingState, PanelProps } from '@grafana/data';
 import { ClimateFloorOptions } from '../types';
-import { ClimateFloorPanel, buildRoomLink } from './ClimateFloorPanel';
+import { ClimateFloorPanel, buildRoomLink, isSafeLink } from './ClimateFloorPanel';
 
 const PLAN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">
   <title>should be removed</title>
@@ -127,5 +127,22 @@ describe('buildRoomLink', () => {
       sensor: { text: 's/1', value: 's%2F1' },
       location: { text: 'Lab 1', value: 'Lab%201' },
     });
+  });
+});
+
+describe('isSafeLink', () => {
+  it.each(['https://example.com/d/x', '/d/room?var-room=Lab%201', 'details?x=1'])('allows %s', (url) => {
+    expect(isSafeLink(url, 'https://grafana.example/d/a')).toBe(true);
+  });
+
+  it.each([
+    'javascript:alert(1)',
+    'java\tscript:alert(1)',
+    ' JAVASCRIPT:alert(1)',
+    'data:text/html,hi',
+    'vbscript:x',
+    '',
+  ])('refuses %p', (url) => {
+    expect(isSafeLink(url, 'https://grafana.example/d/a')).toBe(false);
   });
 });
