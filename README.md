@@ -13,6 +13,23 @@ A Grafana panel plugin that draws a floor plan from SVG and colours each room by
 
 ## Floor plan
 
+You do not have to write SVG by hand. Under **Floor plan** in the panel options:
+
+- **Edit floor plan** opens a drawing editor. Drag to draw rectangles, or click corners to draw a polygon. Move rooms, resize them by their corners, drag polygon vertices, and rename or duplicate rooms. Shapes snap to a grid (hold Alt to place freely). Ctrl+Z undoes, Delete removes, arrows nudge.
+- **Generate from data** creates one room for each sensor location in the query result and lays them out as a grid. Rearrange the rooms in the editor to match the building. Because the names match the sensors, they bind automatically.
+- **AI assistant** (in the editor sidebar) asks Claude to draw the plan:
+  - from a description ("open office on the left, three meeting rooms along the top…"),
+  - by tracing an image or PDF of an existing floor plan, or
+  - with **Fix format**, by rewriting a pasted SVG into the format the panel expects (rooms as `rect`/`polygon` with `data-room`, no transforms or text labels).
+
+  The result replaces the canvas, and Ctrl+Z brings the previous plan back. The assistant calls the Anthropic API directly from your browser with your own API key. The key is kept only in your browser (optionally remembered in local storage) and is never written to the dashboard. If your Grafana sets a content security policy, it must allow `connect-src https://api.anthropic.com`.
+
+- **SVG source** still accepts pasted markup.
+
+![The floor plan editor](docs/img/editor.png)
+
+### SVG format
+
 Any element with a `data-room` attribute, or an id of the form `room-<name>` or `room:<name>`, is a room:
 
 ```svg

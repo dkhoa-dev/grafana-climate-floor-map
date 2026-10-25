@@ -2,6 +2,7 @@ import { PanelPlugin } from '@grafana/data';
 import { ClimateFloorOptions } from './types';
 import { ClimateFloorPanel } from './components/ClimateFloorPanel';
 import { RoomBindingsEditor } from './components/RoomBindingsEditor';
+import { FloorPlanOption } from './components/FloorPlanOption';
 import { DEMO_FLOOR_PLAN } from './svg/demoPlan';
 
 const FLOOR = ['Floor plan'];
@@ -17,14 +18,14 @@ export const plugin = new PanelPlugin<ClimateFloorOptions>(ClimateFloorPanel)
   .setNoPadding()
   .setPanelOptions((builder) =>
     builder
-      .addTextInput({
+      .addCustomEditor({
+        id: 'floorPlan',
         path: 'floorPlan',
-        name: 'SVG markup',
-        description:
-          'Rooms are elements with data-room="Name", or an id of room-Name or room:Name. The markup is sanitised before display.',
+        name: 'Plan',
+        description: 'Draw rooms in the editor, generate them from the query, or paste SVG under SVG source.',
         category: FLOOR,
         defaultValue: DEMO_FLOOR_PLAN,
-        settings: { useTextarea: true, rows: 8 },
+        editor: FloorPlanOption,
       })
       .addTextInput({
         path: 'sensorField',
