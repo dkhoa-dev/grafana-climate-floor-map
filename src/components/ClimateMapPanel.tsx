@@ -140,7 +140,7 @@ export function ClimateMapPanel({
       <div className={styles.empty} style={box} data-testid="cfm-empty">
         <strong>Add a floor plan to get started</strong>
         <span>
-          Paste SVG markup into the Floor plan option, then mark each room as a zone.{' '}
+          Paste SVG markup into the Plan drawing option, then mark each room as a zone.{' '}
           <a href={README_PLAN_SECTION} target="_blank" rel="noopener noreferrer">
             How to draw and mark a plan
           </a>

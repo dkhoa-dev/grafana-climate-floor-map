@@ -51,7 +51,7 @@ For plugin development, run `npm run dev` (rebuilds on change) next to `npm run 
    Room names can contain spaces, dots, brackets and other punctuation. Put the tag on the shape itself (rectangle, path, polygon), not on a group.
 
 3. Writing SVG by hand? Use attributes instead of labels: `data-zone="Lab 1"`, `data-zone-title="Lab 1"`, `data-zone-readout="Lab 1"`.
-4. Copy the SVG source into the panel option **Floor plan > Plan SVG markup**. The **Zone bindings** section then lists every zone it found.
+4. Copy the SVG source into the panel option **Plan drawing > Plan SVG markup**. The **Zone bindings** section then lists every zone it found.
 
 The tag word (`zone`) and the label attribute (`inkscape:label`) are panel options, in case your drawings already use another convention.
 
@@ -111,16 +111,16 @@ Limits come from the data when a sensor sends a valid pair, otherwise from the *
 
 ## Options
 
-| Section          | Option                                                                                                                        | Default                             |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| Floor plan       | Plan SVG markup, zone tag, label attribute                                                                                    | empty, `zone`, `inkscape:label`     |
-| Zone bindings    | One sensor picker per zone; **Bind by matching names** binds each unbound zone to the sensor whose label equals the zone name | none                                |
-| Data fields      | Field for each role                                                                                                           | detected                            |
-| Comfort band     | Temperature and humidity limits; **Offline after (minutes)**                                                                  | 20–26 °C, 30–60 %, 0 (off)          |
-| Display          | Status index mode, colouring (continuous or threshold bands), readout decimals, fill opacity, fade                            | position, continuous, 1, 0.8, on    |
-| Legend           | Show legend, labels                                                                                                           | on, defaults per mode               |
-| Click-through    | Detail link, open in a new tab                                                                                                | empty (not clickable), on           |
-| Standard options | Colour scheme and thresholds                                                                                                  | blue-yellow-red, steps at 10 and 90 |
+| Section          | Option                                                                                                                          | Default                             |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Plan drawing     | Plan SVG markup, zone tag, label attribute                                                                                      | empty, `zone`, `inkscape:label`     |
+| Zone bindings    | One sensor dropdown per zone; **Bind by matching names** binds each unbound zone to the sensor whose label equals the zone name | none                                |
+| Data fields      | Field for each role                                                                                                             | detected                            |
+| Comfort band     | Temperature and humidity limits; **Offline after (minutes)**                                                                    | 20–26 °C, 30–60 %, 0 (off)          |
+| Display          | Status index mode, colouring (continuous or threshold bands), readout decimals, fill opacity, fade                              | position, continuous, 1, 0.8, on    |
+| Legend           | Show legend, legend text                                                                                                        | on, defaults per mode               |
+| Click-through    | Detail link, open in a new tab                                                                                                  | empty (not clickable), on           |
+| Standard options | Colour scheme and thresholds                                                                                                    | blue-yellow-red, steps at 10 and 90 |
 
 The detail link accepts `${__zone.name}`, `${__zone.sensor}` and `${__zone.label}` (URL-encoded), plus dashboard variables such as `${__url_time_range}`. Only `http`, `https` and relative links are opened. Zones with a link are reachable with Tab and open with Enter.
 

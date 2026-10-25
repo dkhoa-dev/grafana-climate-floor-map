@@ -4,7 +4,7 @@
   "name": "Climate Floor Map",
   "id": "dkhoadev-climatefloormap-panel",
   "info": {
-    "keywords": ["floor plan", "svg", "temperature", "humidity", "indoor climate", "facility"],
+    "keywords": ["svg", "floor plan", "temperature", "humidity", "indoor climate", "facility"],
     "description": "Colours the rooms of a floor plan by their live temperature and humidity.",
     "author": {
       "name": "Phan Minh Dang Khoa",

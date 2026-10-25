@@ -42,10 +42,10 @@ export const plugin = new PanelPlugin<FloorMapOptions>(ClimateMapPanel)
     },
   })
   .setPanelOptions((builder) => {
-    const floorPlan = 'Floor plan';
+    const planDrawing = 'Plan drawing';
     builder
       .addTextInput({
-        category: [floorPlan],
+        category: [planDrawing],
         path: 'planMarkup',
         name: 'Plan SVG markup',
         description: 'Paste the SVG source of one floor. Scripts, images, styles and external links are removed.',
@@ -53,14 +53,14 @@ export const plugin = new PanelPlugin<FloorMapOptions>(ClimateMapPanel)
         settings: { useTextarea: true, rows: 8 },
       })
       .addTextInput({
-        category: [floorPlan],
+        category: [planDrawing],
         path: 'zoneTag',
         name: 'Zone tag',
         description: 'Shapes labelled "<name> [zone]" become zones; "[zone title]" and "[zone readout]" mark text.',
         defaultValue: DEFAULT_ZONE_TAG,
       })
       .addTextInput({
-        category: [floorPlan],
+        category: [planDrawing],
         path: 'labelAttribute',
         name: 'Label attribute',
         description: 'The SVG attribute that holds the label. Inkscape writes inkscape:label.',
@@ -184,7 +184,7 @@ export const plugin = new PanelPlugin<FloorMapOptions>(ClimateMapPanel)
       .addStringArray({
         category: ['Legend'],
         path: 'legendText',
-        name: 'Legend labels',
+        name: 'Legend text',
         description:
           'In order: three labels for the continuous bar, or one per threshold step. Blank keeps the default.',
         defaultValue: [],
