@@ -57,7 +57,8 @@ export function evaluateRoom(room: string, readings: SensorReading[], opts: Eval
   const base = { room, reading, temperatureLimits, humidityLimits };
 
   if (!reading) {
-    return { ...base, status: 'unbound' };
+    // A room bound to a specific sensor expects data; silence from it means the sensor is down.
+    return { ...base, status: opts.bindings[room] ? 'offline' : 'unbound' };
   }
   if (opts.staleAfterMs > 0 && reading.time !== undefined && opts.now - reading.time > opts.staleAfterMs) {
     return { ...base, status: 'offline' };
