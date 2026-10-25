@@ -1,12 +1,12 @@
 import { listRooms, sanitizeFloorPlan } from './floorPlan';
 import { DEMO_FLOOR_PLAN } from './demoPlan';
 
-describe('floor plan', () => {
+describe('plan markup', () => {
   it('finds rooms by data-room and by id prefix, once each', () => {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg">
       <rect data-room="Lab 1"/>
       <rect id="room-Office"/>
-      <path id="room:Kitchen"/>
+      <path id="room-Kitchen"/>
       <rect id="roomy"/>
       <rect data-room="Lab 1"/>
     </svg>`;

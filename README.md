@@ -13,7 +13,7 @@ A Grafana panel plugin that draws a floor plan from SVG and colours each room by
 
 ## Floor plan
 
-You do not have to write SVG by hand. Under **Floor plan** in the panel options:
+You do not have to write SVG by hand. Under **Plan drawing** in the panel options:
 
 - **Edit floor plan** opens a drawing editor. Drag to draw rectangles, or click corners to draw a polygon. Move rooms, resize them by their corners, drag polygon vertices, and rename or duplicate rooms. Shapes snap to a grid (hold Alt to place freely). Ctrl+Z undoes, Delete removes, arrows nudge.
 - **Generate from data** creates one room for each sensor location in the query result and lays them out as a grid. Rearrange the rooms in the editor to match the building. Because the names match the sensors, they bind automatically.
@@ -39,7 +39,7 @@ You do not have to write SVG by hand. Under **Floor plan** in the panel options:
 
 ### SVG format
 
-Any element with a `data-room` attribute, or an id of the form `room-<name>` or `room:<name>`, is a room:
+Any element with a `data-room` attribute, or an id of the form `room-<name>`, is a room:
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
@@ -48,7 +48,7 @@ Any element with a `data-room` attribute, or an id of the form `room-<name>` or 
 </svg>
 ```
 
-The panel writes the room name and its values at the centre of each shape, so the plan does not need text labels. Scripts, event handlers, `<foreignObject>` and `<use>` are removed. `<title>` elements are dropped so the browser's own tooltip does not cover the panel's tooltip.
+The panel writes the room name and its values at the centre of each shape, so the plan does not need text labels. Scripts, event handlers, `<foreignObject>`, `<use>` and `<style>` are removed, and so is any attribute that would make the browser fetch something: a link to another document, or CSS such as `url(https://…)`, `image-set()` or `@import`. References inside the plan, such as `fill="url(#gradient)"`, are kept. `<title>` elements are dropped so the browser's own tooltip does not cover the panel's tooltip.
 
 The default plan is a small made-up office, so the panel shows something as soon as it is added.
 
@@ -62,18 +62,18 @@ The panel keeps the newest reading per sensor. It accepts two shapes, and you ca
 | ---------------- | ------ | -------- | ----------- | -------- | ------------------ | --------------- |
 | 2026-01-01 00:00 | n-01   | Office A | 22.4        | 44       | 18-26              | 30-60           |
 
-**Series.** One numeric field per metric, with the sensor in a label (`sensor`, `sensor_id`, `device`, `id` and similar). If there is no such label, the frame name is used. Flux results work as they are: the metric name is taken from the `_field` label.
+**Series.** One numeric field per metric, with the sensor in a label (`sensor`, `sensor_id`, `device`, `device_id` or `id`) and, optionally, the location in a `location`, `room` or `place` label. If there is no such label, the frame name is used. Flux results work as they are: the metric name is taken from the `_field` label.
 
 If you leave the field options blank, the panel recognises these names. Matching ignores case, spaces, `_`, `-` and `.`:
 
-| Meaning           | Names                                                                                                      |
-| ----------------- | ---------------------------------------------------------------------------------------------------------- |
-| Sensor            | `sensor`, `sensor_id`, `device`, `device_id`, `device_code`, `id`                                          |
-| Location          | `location`, `room`, `desc`, `description`, `place`                                                         |
-| Temperature       | `temperature`, `temp`, `t`                                                                                 |
-| Humidity          | `humidity`, `hum`, `humi`, `rh`                                                                            |
-| Limits as text    | `temperature_limits`, `temp_limit`, `humidity_limits`, `hum_limit`, … (`min-max`, `min..max` or `min,max`) |
-| Limits as numbers | `temperature_min` / `temperature_max`, `humidity_min` / `humidity_max`, `temp_min`, …                      |
+| Meaning           | Names                                                                        |
+| ----------------- | ---------------------------------------------------------------------------- |
+| Sensor            | `sensor`, `sensor_id`, `device`, `device_id`, `id`                           |
+| Location          | `location`, `room`, `description`, `place`                                   |
+| Temperature       | `temperature`, `t`                                                           |
+| Humidity          | `humidity`, `rh`                                                             |
+| Limits as text    | `temperature_limits`, `humidity_limits` (`min-max`, `min..max` or `min,max`) |
+| Limits as numbers | `temperature_min` / `temperature_max`, `humidity_min` / `humidity_max`       |
 
 ## How a room gets its colour
 
@@ -84,22 +84,18 @@ If you leave the field options blank, the panel recognises these names. Matching
 
 ## Options
 
-![The panel's options pane in Grafana 13.2](docs/img/options.png)
-
-The screenshot is from the demo dashboard, which clears _Offline after_ because its readings have fixed timestamps.
-
-| Group      | Option                                           | Default     |
-| ---------- | ------------------------------------------------ | ----------- |
-| Floor plan | SVG markup                                       | demo office |
-| Data       | Sensor / location / temperature / humidity field | auto        |
-| Data       | Offline after                                    | `15m`       |
-| Limits     | Temperature min / max                            | 18 / 27 °C  |
-| Limits     | Humidity min / max                               | 30 / 60 %RH |
-| Limits     | Warning margin                                   | 10 %        |
-| Display    | Colour rooms by                                  | Status      |
-| Display    | Show values in rooms, decimals, show legend      | on, 1, on   |
-| Rooms      | Auto-bind by name, sensor per room               | on, none    |
-| Room link  | URL, open in new tab                             | none, off   |
+| Group        | Option                                           | Default     |
+| ------------ | ------------------------------------------------ | ----------- |
+| Plan drawing | Plan                                             | demo office |
+| Data         | Sensor / location / temperature / humidity field | auto        |
+| Data         | Offline after                                    | `15m`       |
+| Limits       | Temperature min / max                            | 18 / 27 °C  |
+| Limits       | Humidity min / max                               | 30 / 60 %RH |
+| Limits       | Warning margin                                   | 10 %        |
+| Display      | Colour rooms by                                  | Status      |
+| Display      | Show values in rooms, decimals, show legend      | on, 1, on   |
+| Rooms        | Auto-bind by name, sensor per room               | on, none    |
+| Room link    | URL, open in new tab                             | none, off   |
 
 ## Development
 

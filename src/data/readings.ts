@@ -20,21 +20,21 @@ type Metric =
 
 // Auto-detection candidates, compared after normalising case and separators.
 const CANDIDATES: Record<Metric | 'sensor' | 'location', string[]> = {
-  sensor: ['sensor', 'sensorid', 'device', 'deviceid', 'devicecode', 'id'],
-  location: ['location', 'room', 'desc', 'description', 'place'],
-  temperature: ['temperature', 'temp', 't'],
-  humidity: ['humidity', 'hum', 'humi', 'rh'],
-  temperatureLimits: ['temperaturelimits', 'temperaturelimit', 'templimits', 'templimit'],
-  humidityLimits: ['humiditylimits', 'humiditylimit', 'humlimits', 'humlimit', 'humilimits', 'humilimit'],
-  temperatureMin: ['temperaturemin', 'tempmin'],
-  temperatureMax: ['temperaturemax', 'tempmax'],
-  humidityMin: ['humiditymin', 'hummin', 'humimin'],
-  humidityMax: ['humiditymax', 'hummax', 'humimax'],
+  sensor: ['sensor', 'sensorid', 'device', 'deviceid', 'id'],
+  location: ['location', 'room', 'description', 'place'],
+  temperature: ['temperature', 't'],
+  humidity: ['humidity', 'rh'],
+  temperatureLimits: ['temperaturelimits', 'temperaturelimit'],
+  humidityLimits: ['humiditylimits', 'humiditylimit'],
+  temperatureMin: ['temperaturemin'],
+  temperatureMax: ['temperaturemax'],
+  humidityMin: ['humiditymin'],
+  humidityMax: ['humiditymax'],
 };
 
 // Labels that identify the sensor when each series is its own frame.
-const SENSOR_LABELS = ['sensor', 'sensor_id', 'device', 'device_id', 'deviceCode', 'id'];
-const LOCATION_LABELS = ['location', 'room', 'desc'];
+const SENSOR_LABELS = ['sensor', 'sensor_id', 'device', 'device_id', 'id'];
+const LOCATION_LABELS = ['location', 'room', 'place'];
 
 export const normalizeName = (name: string) => name.toLowerCase().replace(/[\s_\-.]/g, '');
 

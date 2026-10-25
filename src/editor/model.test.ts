@@ -34,7 +34,7 @@ describe('parsePlan', () => {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100">
       <g transform="translate(10 0)"><rect data-room="Moved" width="10" height="10"/></g>
       <path id="room-Curvy" d="M0 0 L10 10"/>
-      <rect id="room:Plain" x="1" y="2" width="3" height="4"/>
+      <rect id="room-Plain" x="1" y="2" width="3" height="4"/>
     </svg>`;
     const plan = parsePlan(svg);
     expect(plan.width).toBe(300);

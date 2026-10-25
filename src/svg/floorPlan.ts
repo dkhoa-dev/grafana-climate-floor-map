@@ -4,7 +4,7 @@ import { loadsExternalResource } from './externalRefs';
 /** Attribute the panel stamps on every room element it finds, holding the room name. */
 export const ROOM_ATTR = 'data-cfm-room';
 
-const ID_PREFIX = /^room[-:](.+)$/;
+const ID_PREFIX = /^room-(.+)$/;
 
 /** Elements that never belong in a floor plan. Animations are here because they can rewrite attributes after sanitising. */
 const BLOCKED_TAGS = [
@@ -90,7 +90,7 @@ export function scopeIds(root: Element, prefix: string) {
   });
 }
 
-/** Room name of an element: `data-room` wins, then an id of the form `room-<name>` or `room:<name>`. */
+/** Room name of an element: `data-room` wins, then an id of the form `room-<name>`. */
 export function roomNameOf(el: Element): string | undefined {
   const explicit = el.getAttribute('data-room')?.trim();
   if (explicit) {
@@ -104,7 +104,7 @@ export function roomNameOf(el: Element): string | undefined {
 /** Finds the room elements under `root`, tags them with ROOM_ATTR and returns them by name. */
 export function collectRooms(root: ParentNode): Map<string, Element> {
   const rooms = new Map<string, Element>();
-  root.querySelectorAll('[data-room], [id^="room-"], [id^="room:"]').forEach((el) => {
+  root.querySelectorAll('[data-room], [id^="room-"]').forEach((el) => {
     const name = roomNameOf(el);
     if (name && !rooms.has(name)) {
       el.setAttribute(ROOM_ATTR, name);
