@@ -164,6 +164,10 @@ Two demo dashboards are provisioned:
 
 Requires Grafana 13.2 or later.
 
+### Releasing
+
+Bump the version with `npm version <patch|minor|major> --no-git-tag-version`, add the release to `CHANGELOG.md` and merge to `main`. The _Tag release_ workflow then tags `v<version>` and runs the _Release_ workflow on it, which builds the plugin and creates a draft GitHub release with the `.zip` and its SHA1. Pushing a `v*` tag by hand works too.
+
 ## License
 
 MIT, see [LICENSE](LICENSE).

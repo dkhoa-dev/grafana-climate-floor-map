@@ -6,6 +6,8 @@ on:
   push:
     tags:
       - 'v*' # Run workflow on version tags, e.g. v1.0.0.
+  # Run by tag-release.yml on the tag it creates, since a tag pushed with GITHUB_TOKEN starts no workflow.
+  workflow_dispatch:
 
 permissions: read-all
 
