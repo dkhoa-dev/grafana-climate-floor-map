@@ -49,7 +49,7 @@ function headers(settings: AiSettings): Record<string, string> {
   if (settings.openAiPreset === 'openrouter') {
     // Optional attribution headers OpenRouter uses for its app rankings.
     h['HTTP-Referer'] = window.location.origin;
-    h['X-Title'] = 'Climate Floor Map';
+    h['X-Title'] = 'Sensor Floor Map';
   }
   return h;
 }

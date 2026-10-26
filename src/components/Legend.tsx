@@ -22,7 +22,7 @@ export const Legend: React.FC<Props> = ({ colorBy, metrics, lookup, states }) =>
   if (colorBy !== 'status') {
     const stops = [-0.01, 0, 0.25, 0.5, 0.75, 1, 1.01].map((p) => valueColor(p, lookup));
     return (
-      <div className={styles.legend} data-testid="climate-floor-legend">
+      <div className={styles.legend} data-testid="sensor-floor-legend">
         <span>Below limit</span>
         <span className={styles.bar} style={{ background: `linear-gradient(to right, ${stops.join(', ')})` }} />
         <span>Above limit</span>
@@ -35,7 +35,7 @@ export const Legend: React.FC<Props> = ({ colorBy, metrics, lookup, states }) =>
   states.forEach((s) => counts.set(s.status, (counts.get(s.status) ?? 0) + 1));
 
   return (
-    <div className={styles.legend} data-testid="climate-floor-legend">
+    <div className={styles.legend} data-testid="sensor-floor-legend">
       {STATUSES.map((status) => (
         <span key={status} className={styles.item}>
           <span className={styles.swatch} style={{ background: lookup(STATUS_COLOR[status]) }} />

@@ -2,7 +2,7 @@ import createDOMPurify from 'dompurify';
 import { loadsExternalResource } from './externalRefs';
 
 /** Attribute the panel stamps on every room element it finds, holding the room name. */
-export const ROOM_ATTR = 'data-cfm-room';
+export const ROOM_ATTR = 'data-sfm-room';
 
 const ID_PREFIX = /^room-(.+)$/;
 

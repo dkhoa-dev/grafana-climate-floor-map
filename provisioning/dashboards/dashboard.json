@@ -54,7 +54,7 @@
         }
       ],
       "title": "Status",
-      "type": "dkhoa-climatefloormap-panel"
+      "type": "dkhoa-sensorfloormap-panel"
     },
     {
       "datasource": {
@@ -90,7 +90,7 @@
         }
       ],
       "title": "Temperature",
-      "type": "dkhoa-climatefloormap-panel"
+      "type": "dkhoa-sensorfloormap-panel"
     }
   ],
   "refresh": "",
@@ -105,7 +105,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Climate Floor Map demo",
+  "title": "Sensor Floor Map demo",
   "uid": "a538aeff-5a8a-42a5-901c-938d896fdd6f",
   "version": 1,
   "weekStart": ""

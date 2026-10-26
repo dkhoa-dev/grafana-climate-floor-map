@@ -3,7 +3,7 @@ import { css } from '@emotion/css';
 import { GrafanaTheme2, PanelProps, rangeUtil } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { useStyles2, useTheme2 } from '@grafana/ui';
-import { ClimateFloorOptions, RoomState } from '../types';
+import { SensorFloorOptions, RoomState } from '../types';
 import { parseMetricList, readingsFromFrames } from '../data/readings';
 import { Formatter, metricFormatter } from '../data/format';
 import { evaluateRoom } from '../data/rooms';
@@ -12,10 +12,10 @@ import { collectRooms, ROOM_ATTR, sanitizeFloorPlan, scopeIds } from '../svg/flo
 import { RoomTooltip } from './RoomTooltip';
 import { Legend, LEGEND_HEIGHT } from './Legend';
 
-interface Props extends PanelProps<ClimateFloorOptions> {}
+interface Props extends PanelProps<SensorFloorOptions> {}
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const LABELS_ATTR = 'data-cfm-labels';
+const LABELS_ATTR = 'data-sfm-labels';
 
 export function parseStaleAfter(value: string): number {
   if (!value?.trim()) {
@@ -68,7 +68,7 @@ const openLink = (url: string, newTab: boolean) => {
   }
 };
 
-export const ClimateFloorPanel: React.FC<Props> = ({
+export const SensorFloorPanel: React.FC<Props> = ({
   id,
   options,
   data,
@@ -105,7 +105,7 @@ export const ClimateFloorPanel: React.FC<Props> = ({
     }
     roomEls.current = collectRooms(host);
     // After collecting rooms, since a room can be named by its id.
-    scopeIds(host, `cfm-${id}-`);
+    scopeIds(host, `sfm-${id}-`);
     setRoomNames(Array.from(roomEls.current.keys()));
   }, [markup, id]);
 
@@ -280,7 +280,7 @@ export const ClimateFloorPanel: React.FC<Props> = ({
         ref={planRef}
         className={styles.plan}
         style={{ height: planHeight }}
-        data-testid="climate-floor-plan"
+        data-testid="sensor-floor-plan"
         onMouseMove={onMouseMove}
         onMouseLeave={() => setHover(undefined)}
         onClick={(e) => activate(roomAt(e.target))}

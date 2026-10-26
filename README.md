@@ -1,4 +1,4 @@
-# Climate Floor Map
+# Sensor Floor Map
 
 A Grafana panel plugin that draws a floor plan from SVG and colours each room by its live sensor readings (temperature, humidity, CO₂ or any other metric), judged against that sensor's own limits.
 

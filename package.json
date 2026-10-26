@@ -1,5 +1,5 @@
 {
-  "name": "grafana-climate-floor-map",
+  "name": "grafana-sensor-floor-map",
   "version": "0.1.0",
   "description": "Grafana panel that colours floor-plan rooms by live temperature and humidity",
   "scripts": {
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dkhoa-dev/grafana-climate-floor-map.git"
+    "url": "https://github.com/dkhoa-dev/grafana-sensor-floor-map.git"
   },
   "author": "Phan Minh Dang Khoa",
   "license": "MIT",
