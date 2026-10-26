@@ -1,6 +1,6 @@
 {
   "name": "grafana-sensor-floor-map",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Grafana panel that colours floor-plan rooms by live temperature and humidity",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
