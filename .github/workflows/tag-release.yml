@@ -1,0 +1,38 @@
+# Tags a release when the version in package.json changes on main, then runs the release workflow on that tag.
+# Bump the version with `npm version <patch|minor|major> --no-git-tag-version`, update CHANGELOG.md and merge.
+name: Tag release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+      - .github/workflows/tag-release.yml
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  tag:
+    permissions:
+      contents: write
+      actions: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Create the version tag and start the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="v$(jq -r .version package.json)"
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" --silent 2>/dev/null; then
+            echo "${tag} already exists, nothing to release."
+            exit 0
+          fi
+          gh api "repos/${GITHUB_REPOSITORY}/git/refs" -f ref="refs/tags/${tag}" -f sha="${GITHUB_SHA}" --silent
+          gh workflow run release.yml --repo "${GITHUB_REPOSITORY}" --ref "${tag}"
+          echo "Tagged ${tag} and started the release workflow."
