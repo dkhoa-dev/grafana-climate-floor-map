@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 (2026-10-26)
+
+- Room links that leave Grafana open in the same tab without touching `window.location`, as Grafana's plugin rules require.
+- Release archives carry a build provenance attestation.
+
 ## 0.2.0 (2026-10-26)
 
 - The AI assistant no longer calls AI providers with an API key from the browser. Copy its prompt into any AI chat (with a floor plan image or PDF attached there, if you have one) and paste the reply back, or generate through the Grafana LLM app when it is set up. The Anthropic, Foundry and OpenAI-compatible provider settings are gone.

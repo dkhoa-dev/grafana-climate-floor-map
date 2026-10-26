@@ -47,7 +47,7 @@ const ALLOWED_PROTOCOLS = new Set(['http:', 'https:']);
  * Only http(s) and relative links may be opened. The browser's URL parser decides, so spellings
  * such as "java\tscript:" are caught, and a dashboard variable cannot turn the link into one.
  */
-export function isSafeLink(url: string, base = window.location.href): boolean {
+export function isSafeLink(url: string, base = document.baseURI): boolean {
   if (!url.trim()) {
     return false;
   }
@@ -64,7 +64,11 @@ const openLink = (url: string, newTab: boolean) => {
   } else if (url.startsWith('/') && !url.startsWith('//')) {
     locationService.push(url);
   } else {
-    window.location.assign(url);
+    // Follows the link in this tab the way a click on it would.
+    const a = document.createElement('a');
+    a.href = url;
+    a.rel = 'noopener noreferrer';
+    a.click();
   }
 };
 
