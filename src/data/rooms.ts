@@ -1,31 +1,19 @@
-import { Level, Limits, RoomState, RoomStatus, SensorReading } from '../types';
-import { normalizeName } from './readings';
+import { Level, Limits, MetricInfo, MetricState, RoomState, SensorReading } from '../types';
+import { hasLimits, levelOf, normalizeName, WELL_KNOWN, worst } from './metrics';
+
+export { bandPosition, levelOf } from './metrics';
 
 export interface EvaluateOptions {
   bindings: Record<string, string>;
   autoBind: boolean;
-  defaultTemperature: Limits;
-  defaultHumidity: Limits;
-  /** Percent of the band width, per side. */
+  /** Metrics to judge, in display order. */
+  metrics: MetricInfo[];
+  /** Percent of the band width (or of a one-sided limit). */
   warningMargin: number;
   /** Epoch ms the readings are judged against. */
   now: number;
   /** Milliseconds; 0 or less disables the offline check. */
   staleAfterMs: number;
-}
-
-const RANK: Record<Level, number> = { ok: 0, warning: 1, alarm: 2 };
-
-/** Where a value sits relative to its band: outside is an alarm, inside but within the margin is a warning. */
-export function levelOf(value: number, limits: Limits, marginPercent: number): Level {
-  if (value < limits.min || value > limits.max) {
-    return 'alarm';
-  }
-  const margin = ((limits.max - limits.min) * Math.max(0, marginPercent)) / 100;
-  if (value < limits.min + margin || value > limits.max - margin) {
-    return 'warning';
-  }
-  return 'ok';
 }
 
 /** Room names in markup and sensor locations rarely agree on case or separators. */
@@ -50,30 +38,30 @@ export function findReading(
   return free.find((r) => sameName(r.location, room)) ?? free.find((r) => sameName(r.sensor, room));
 }
 
+/** The reading's own limits, or the built-in default for a well-known metric when it has none. */
+export const effectiveLimits = (key: string, own: Limits | undefined): Limits | undefined =>
+  hasLimits(own) ? own : WELL_KNOWN[key]?.limits;
+
 export function evaluateRoom(room: string, readings: SensorReading[], opts: EvaluateOptions): RoomState {
   const reading = findReading(room, readings, opts.bindings, opts.autoBind);
-  const temperatureLimits = reading?.temperatureLimits ?? opts.defaultTemperature;
-  const humidityLimits = reading?.humidityLimits ?? opts.defaultHumidity;
-  const base = { room, reading, temperatureLimits, humidityLimits };
 
   if (!reading) {
     // A room bound to a specific sensor expects data; silence from it means the sensor is down.
-    return { ...base, status: opts.bindings[room] ? 'offline' : 'unbound' };
+    return { room, metrics: [], status: opts.bindings[room] ? 'offline' : 'unbound' };
   }
+
+  const metrics: MetricState[] = opts.metrics
+    .filter((m) => reading.values[m.key] !== undefined)
+    .map((m) => {
+      const { value, limits: own } = reading.values[m.key];
+      const limits = effectiveLimits(m.key, own);
+      return { key: m.key, value, limits, level: limits ? levelOf(value, limits, opts.warningMargin) : undefined };
+    });
+
   if (opts.staleAfterMs > 0 && reading.time !== undefined && opts.now - reading.time > opts.staleAfterMs) {
-    return { ...base, status: 'offline' };
+    return { room, reading, metrics, status: 'offline' };
   }
-
-  const temperatureLevel =
-    reading.temperature !== undefined ? levelOf(reading.temperature, temperatureLimits, opts.warningMargin) : undefined;
-  const humidityLevel =
-    reading.humidity !== undefined ? levelOf(reading.humidity, humidityLimits, opts.warningMargin) : undefined;
-  const levels = [temperatureLevel, humidityLevel].filter((l): l is Level => l !== undefined);
-  const status: RoomStatus = levels.reduce<Level>((worst, l) => (RANK[l] > RANK[worst] ? l : worst), 'ok');
-
-  return { ...base, status, temperatureLevel, humidityLevel };
+  // A room whose metrics have no limits at all has nothing to be out of.
+  const status = worst(metrics.map((m) => m.level).filter((l): l is Level => l !== undefined)) ?? 'ok';
+  return { room, reading, metrics, status };
 }
-
-/** Position of a value in its band: 0 at min, 1 at max, below 0 or above 1 when out of limits. */
-export const bandPosition = (value: number, limits: Limits) =>
-  limits.max === limits.min ? 0.5 : (value - limits.min) / (limits.max - limits.min);

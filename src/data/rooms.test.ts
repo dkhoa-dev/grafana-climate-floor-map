@@ -1,4 +1,4 @@
-import { SensorReading } from '../types';
+import { MetricInfo, SensorReading } from '../types';
 import { bandPosition, evaluateRoom, EvaluateOptions, findReading, levelOf } from './rooms';
 import { mixHex, roomColor, valueColor } from './colors';
 
@@ -20,13 +20,36 @@ describe('levelOf', () => {
   it('never warns with a zero margin', () => {
     expect(levelOf(20, limits, 0)).toBe('ok');
   });
+
+  it.each([
+    [800, 'ok'],
+    [950, 'warning'],
+    [1001, 'alarm'],
+  ])('measures a one-sided max: %p is %p', (value, level) => {
+    expect(levelOf(value, { max: 1000 }, 10)).toBe(level);
+  });
+
+  it.each([
+    [25, 'ok'],
+    [20.5, 'warning'],
+    [19, 'alarm'],
+  ])('measures a one-sided min: %p is %p', (value, level) => {
+    expect(levelOf(value, { min: 20 }, 10)).toBe(level);
+  });
+});
+
+const reading = (sensor: string, location: string | undefined, values: SensorReading['values'], time?: number) => ({
+  sensor,
+  location,
+  time,
+  values,
 });
 
 describe('findReading', () => {
   const readings: SensorReading[] = [
-    { sensor: 'a', location: 'Lab_1', temperature: 20 },
-    { sensor: 'office-b', temperature: 21 },
-    { sensor: 'c', location: 'Office A', temperature: 22 },
+    reading('a', 'Lab_1', { temperature: { value: 20 } }),
+    reading('office-b', undefined, { temperature: { value: 21 } }),
+    reading('c', 'Office A', { temperature: { value: 22 } }),
   ];
 
   it('prefers an explicit binding', () => {
@@ -53,11 +76,11 @@ describe('findReading', () => {
 });
 
 describe('evaluateRoom', () => {
+  const metric = (key: string): MetricInfo => ({ key, name: key });
   const base: EvaluateOptions = {
     bindings: {},
     autoBind: true,
-    defaultTemperature: { min: 18, max: 27 },
-    defaultHumidity: { min: 30, max: 60 },
+    metrics: ['temperature', 'humidity', 'co2', 'battery'].map(metric),
     warningMargin: 10,
     now: 10_000,
     staleAfterMs: 5_000,
@@ -72,19 +95,47 @@ describe('evaluateRoom', () => {
   });
 
   it('is offline when the newest reading is too old', () => {
-    const r = [{ sensor: 'Lab', time: 1_000, temperature: 22 }];
+    const r = [reading('Lab', undefined, { temperature: { value: 22 } }, 1_000)];
     expect(evaluateRoom('Lab', r, base).status).toBe('offline');
     expect(evaluateRoom('Lab', r, { ...base, staleAfterMs: 0 }).status).toBe('ok');
   });
 
-  it('takes the worst level and prefers limits carried by the data', () => {
-    const r = [{ sensor: 'Lab', time: 9_000, temperature: 22, humidity: 70, temperatureLimits: { min: 21, max: 23 } }];
+  it('takes the worst level over every metric, own limits first, built-in defaults otherwise', () => {
+    const r = [
+      reading(
+        'Lab',
+        undefined,
+        {
+          temperature: { value: 22, limits: { min: 21, max: 23 } },
+          humidity: { value: 45 },
+          co2: { value: 1200 },
+          battery: { value: 3 },
+        },
+        9_000
+      ),
+    ];
     const state = evaluateRoom('Lab', r, base);
-    expect(state.temperatureLevel).toBe('ok');
-    expect(state.humidityLevel).toBe('alarm');
+    expect(state.metrics).toEqual([
+      { key: 'temperature', value: 22, limits: { min: 21, max: 23 }, level: 'ok' },
+      { key: 'humidity', value: 45, limits: { min: 30, max: 60 }, level: 'ok' },
+      // Built-in CO₂ limit (≤ 1000 ppm).
+      { key: 'co2', value: 1200, limits: { max: 1000 }, level: 'alarm' },
+      // Not well known and no limits configured: shown, but not judged.
+      { key: 'battery', value: 3, limits: undefined, level: undefined },
+    ]);
     expect(state.status).toBe('alarm');
-    expect(state.temperatureLimits).toEqual({ min: 21, max: 23 });
-    expect(state.humidityLimits).toEqual(base.defaultHumidity);
+  });
+
+  it('is within limits when no metric has limits', () => {
+    const r = [reading('Lab', undefined, { battery: { value: 3 } }, 9_000)];
+    expect(evaluateRoom('Lab', r, base).status).toBe('ok');
+  });
+
+  it('judges only the metrics it is given', () => {
+    const r = [reading('Lab', undefined, { co2: { value: 1200 }, humidity: { value: 45 } }, 9_000)];
+    const state = evaluateRoom('Lab', r, { ...base, metrics: [metric('humidity')] });
+    expect(state.metrics.map((m) => m.key)).toEqual(['humidity']);
+    expect(state.status).toBe('ok');
   });
 });
 
@@ -99,15 +150,27 @@ describe('colours', () => {
 
   it('maps band position to the value scale', () => {
     expect(bandPosition(25, limits)).toBe(0.5);
+    expect(bandPosition(500, { max: 1000 })).toBe(0.5);
+    expect(bandPosition(10, { min: 20 })).toBe(-1);
+    expect(bandPosition(10, {})).toBeUndefined();
     expect(valueColor(-0.1, lookup)).toBe('#000080');
     expect(valueColor(0.5, lookup)).toBe('#00ff00');
     expect(valueColor(1.2, lookup)).toBe('#ff0000');
   });
 
-  it('leaves unbound rooms unpainted and greys out offline ones', () => {
-    const state = { room: 'x', temperatureLimits: limits, humidityLimits: limits };
-    expect(roomColor({ ...state, status: 'unbound' }, 'status', lookup)).toBeUndefined();
-    expect(roomColor({ ...state, status: 'offline' }, 'temperature', lookup)).toBe('text-disabled');
-    expect(roomColor({ ...state, status: 'alarm' }, 'status', lookup)).toBe('#ff0000');
+  it('colours by status, by a metric, or greys out what cannot be placed', () => {
+    const state = (status: 'ok' | 'alarm' | 'offline' | 'unbound') => ({
+      room: 'x',
+      status,
+      metrics: [
+        { key: 'co2', value: 1500, limits: { max: 1000 }, level: 'alarm' as const },
+        { key: 'battery', value: 3 },
+      ],
+    });
+    expect(roomColor(state('unbound'), 'status', lookup)).toBeUndefined();
+    expect(roomColor(state('offline'), 'co2', lookup)).toBe('text-disabled');
+    expect(roomColor(state('alarm'), 'status', lookup)).toBe('#ff0000');
+    expect(roomColor(state('alarm'), 'co2', lookup)).toBe('#ff0000');
+    expect(roomColor(state('ok'), 'battery', lookup)).toBe('text-disabled');
   });
 });

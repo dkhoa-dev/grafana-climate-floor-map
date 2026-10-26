@@ -1,6 +1,6 @@
 # Climate Floor Map
 
-A Grafana panel plugin that draws a floor plan from SVG and colours each room by its live temperature and humidity, judged against that sensor's own limits.
+A Grafana panel plugin that draws a floor plan from SVG and colours each room by its live sensor readings (temperature, humidity, CO₂ or any other metric), judged against that sensor's own limits.
 
 ![Status and temperature views of the demo floor plan](src/img/screenshot.png)
 
@@ -54,26 +54,45 @@ The default plan is a small made-up office, so the panel shows something as soon
 
 ## Data
 
-The panel keeps the newest reading per sensor. It accepts two shapes, and you can mix them across queries.
+The panel keeps the newest reading per sensor. It is not limited to temperature and humidity: **every numeric field is a metric**, such as CO₂, PM2.5, noise, pressure or occupancy. Use the _Metrics_ option to pick and order them, for example `temperature, humidity, co2`. Leave it blank to use them all.
+
+The data can come in two shapes, and you can mix them across queries.
 
 **Table.** One row per reading, with a string column that names the sensor:
 
-| time             | sensor | location | temperature | humidity | temperature_limits | humidity_limits |
-| ---------------- | ------ | -------- | ----------- | -------- | ------------------ | --------------- |
-| 2026-01-01 00:00 | n-01   | Office A | 22.4        | 44       | 18-26              | 30-60           |
+| time             | sensor | location | temperature | humidity | co2 | temperature_limits | co2_max |
+| ---------------- | ------ | -------- | ----------- | -------- | --- | ------------------ | ------- |
+| 2026-01-01 00:00 | n-01   | Office A | 22.4        | 44       | 640 | 18-26              | 800     |
 
 **Series.** One numeric field per metric, with the sensor in a label (`sensor`, `sensor_id`, `device`, `device_id` or `id`) and, optionally, the location in a `location`, `room` or `place` label. If there is no such label, the frame name is used. Flux results work as they are: the metric name is taken from the `_field` label.
 
-If you leave the field options blank, the panel recognises these names. Matching ignores case, spaces, `_`, `-` and `.`:
+If you leave the sensor and location options blank, the panel recognises these names. Matching ignores case, spaces, `_`, `-` and `.`:
 
-| Meaning           | Names                                                                        |
-| ----------------- | ---------------------------------------------------------------------------- |
-| Sensor            | `sensor`, `sensor_id`, `device`, `device_id`, `id`                           |
-| Location          | `location`, `room`, `description`, `place`                                   |
-| Temperature       | `temperature`, `t`                                                           |
-| Humidity          | `humidity`, `rh`                                                             |
-| Limits as text    | `temperature_limits`, `humidity_limits` (`min-max`, `min..max` or `min,max`) |
-| Limits as numbers | `temperature_min` / `temperature_max`, `humidity_min` / `humidity_max`       |
+| Meaning  | Names                                              |
+| -------- | -------------------------------------------------- |
+| Sensor   | `sensor`, `sensor_id`, `device`, `device_id`, `id` |
+| Location | `location`, `room`, `description`, `place`         |
+
+### Units, decimals and limits
+
+Each metric takes its unit, decimals and display name from Grafana's **Standard options**, and its limits from **Limits → Limit min / Limit max** in the panel's field config. Set them for one metric with an **override**, for example _Fields with name_ `co2` → _Unit_ `ppm`, _Limit max_ `1000`. Leave one side blank for a one-sided limit. In the time series layout, field names carry the sensor's labels, so match them with _Fields with name matching regex_, such as `co2.*`.
+
+Limits can also come with the data, per sensor, and then take precedence over the field config. Either column (or, in the series layout, label) works:
+
+- `<metric>_limits` (or `<metric>_limit`) as text: `18-26`, `18..26` or `18,26`.
+- `<metric>_min` and/or `<metric>_max` as numbers.
+
+When neither the data nor the field config gives a metric any limit, a few well-known metrics fall back to built-in defaults. Each default can be replaced in the field config:
+
+| Metric (field name)    | Unit  | Default limits |
+| ---------------------- | ----- | -------------- |
+| `temperature` (or `t`) | °C    | 18 – 27        |
+| `humidity` (or `rh`)   | %     | 30 – 60        |
+| `co2`                  | ppm   | ≤ 1000         |
+| `pm2.5` / `pm25`       | µg/m³ | ≤ 25           |
+| `pm10`                 | µg/m³ | ≤ 50           |
+
+Any other metric is shown in the room and the tooltip, but has no limits and does not affect the status until you give it some.
 
 ### ClickHouse
 
@@ -88,6 +107,7 @@ SELECT
   argMax(location, time) AS location,
   argMax(temperature, time) AS temperature,
   argMax(humidity, time) AS humidity,
+  argMax(co2, time) AS co2,
   argMax(temperature_limits, time) AS temperature_limits,
   argMax(humidity_limits, time) AS humidity_limits
 FROM readings
@@ -99,29 +119,30 @@ Alias the newest time to anything other than the source column name (`last_seen`
 
 **Time series format.** The data source turns text columns such as `location` and `temperature_limits` into labels on each value series. The panel reads the sensor, location and limits from those labels. With `$__timeFilter(time)`, a sensor that sent nothing inside the time range is missing from the result. Its room then shows _no sensor_, unless you chose that sensor for the room under **Rooms**, in which case it shows _offline_.
 
-![The ClickHouse demo dashboard: table format on the left, time series format on the right](docs/img/clickhouse.png)
+![The ClickHouse demo: table format coloured by status on the left, time series format coloured by CO₂ on the right](docs/img/clickhouse.png)
 
 ## How a room gets its colour
 
 1. **Find the sensor.** A sensor picked under _Rooms → Sensor per room_ wins. Otherwise, with _Auto-bind by name_ on, the room uses the sensor whose location (or, failing that, id) matches the room name. A sensor bound to another room is never auto-bound.
 2. **Offline check.** The room is _offline_ when its newest reading is older than _Offline after_ (default `15m`), counted back from the end of the dashboard time range. A room whose chosen sensor is missing from the query result entirely is offline too.
-3. **Grade each metric.** A value outside its band is _out of limits_. A value inside the band but within the _warning margin_ of either edge is _near a limit_. The margin defaults to 10 % of the band width on each side. The room takes the worse of its temperature and humidity grades.
-4. **Paint.** In _Status_ mode, the grade picks green, orange or red. In _Temperature_ or _Humidity_ mode, the colour runs blue → green → orange across the band, dark blue below it and red above it. Colour changes fade over about a second.
+3. **Grade each metric.** A value outside its limits is _out of limits_. A value inside them but within the _warning margin_ of a limit is _near a limit_. The margin is a share of the band on each side (default 10 %), or of the limit itself when there is only one, so with CO₂ ≤ 1000 ppm, anything above 900 ppm is near the limit. The room takes the worst grade of all its metrics. Metrics without limits are not graded.
+4. **Paint.** In _Status_ mode, the grade picks green, orange or red. When colouring by a metric, the colour runs blue → green → orange across its band, dark blue below it and red above it. Colour changes fade over about a second.
 
 ## Options
 
-| Group        | Option                                           | Default     |
-| ------------ | ------------------------------------------------ | ----------- |
-| Plan drawing | Plan                                             | demo office |
-| Data         | Sensor / location / temperature / humidity field | auto        |
-| Data         | Offline after                                    | `15m`       |
-| Limits       | Temperature min / max                            | 18 / 27 °C  |
-| Limits       | Humidity min / max                               | 30 / 60 %RH |
-| Limits       | Warning margin                                   | 10 %        |
-| Display      | Colour rooms by                                  | Status      |
-| Display      | Show values in rooms, decimals, show legend      | on, 1, on   |
-| Rooms        | Auto-bind by name, sensor per room               | on, none    |
-| Room link    | URL, open in new tab                             | none, off   |
+| Group                 | Option                             | Default                         |
+| --------------------- | ---------------------------------- | ------------------------------- |
+| Plan drawing          | Plan                               | demo office                     |
+| Data                  | Sensor / location field or label   | auto                            |
+| Data                  | Metrics                            | every numeric field             |
+| Data                  | Offline after                      | `15m`                           |
+| Limits                | Warning margin                     | 10 %                            |
+| Display               | Colour rooms by                    | Status                          |
+| Display               | Show values in rooms, show legend  | on, on                          |
+| Rooms                 | Auto-bind by name, sensor per room | on, none                        |
+| Room link             | URL, open in new tab               | none, off                       |
+| Field config          | Unit, decimals, display name       | per well-known metric           |
+| Field config → Limits | Limit min / max                    | built-in for well-known metrics |
 
 ## Development
 
@@ -139,7 +160,7 @@ npm run e2e          # Playwright against the running Grafana
 Two demo dashboards are provisioned:
 
 - `provisioning/dashboards/dashboard.json` uses TestData with fixed readings, so it shows every status without any database.
-- `provisioning/dashboards/clickhouse.json` queries a ClickHouse container that `npm run server` starts alongside Grafana. `dev/clickhouse/init.sql` creates made-up sensors and a view that generates a reading per minute up to `now()`, so the plan stays live; one sensor stops reporting 90 minutes back. Grafana installs the ClickHouse data source on start, which needs access to grafana.com.
+- `provisioning/dashboards/clickhouse.json` queries a ClickHouse container that `npm run server` starts alongside Grafana. `dev/clickhouse/init.sql` creates made-up sensors and a view that generates a reading per minute up to `now()`, so the plan stays live; one sensor stops reporting 90 minutes back. It also has a CO₂ column, which the panel picks up with no configuration. Grafana installs the ClickHouse data source on start, which needs access to grafana.com.
 
 Requires Grafana 13.2 or later.
 

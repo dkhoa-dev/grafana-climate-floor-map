@@ -3,8 +3,9 @@ import { css } from '@emotion/css';
 import { dateTimeFormat, GrafanaTheme2 } from '@grafana/data';
 import { TimeZone } from '@grafana/schema';
 import { useStyles2, useTheme2 } from '@grafana/ui';
-import { Level, Limits, RoomState } from '../types';
+import { Level, MetricInfo, RoomState } from '../types';
 import { STATUS_COLOR, STATUS_LABEL } from '../data/colors';
+import { formatLimits, Formatter } from '../data/format';
 
 interface Props {
   state: RoomState;
@@ -12,7 +13,8 @@ interface Props {
   y: number;
   containerWidth: number;
   containerHeight: number;
-  decimals: number;
+  metrics: MetricInfo[];
+  formatters: Map<string, Formatter>;
   timeZone: TimeZone;
 }
 
@@ -21,7 +23,16 @@ const OFFSET = 12;
 
 const LEVEL_TEXT: Record<Level, string> = { ok: '', warning: ' (near limit)', alarm: ' (out of limits)' };
 
-export const RoomTooltip: React.FC<Props> = ({ state, x, y, containerWidth, containerHeight, decimals, timeZone }) => {
+export const RoomTooltip: React.FC<Props> = ({
+  state,
+  x,
+  y,
+  containerWidth,
+  containerHeight,
+  metrics,
+  formatters,
+  timeZone,
+}) => {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
   const { reading } = state;
@@ -30,16 +41,18 @@ export const RoomTooltip: React.FC<Props> = ({ state, x, y, containerWidth, cont
   const left = x + OFFSET + WIDTH > containerWidth ? Math.max(0, x - OFFSET - WIDTH) : x + OFFSET;
   const flipUp = y > containerHeight / 2;
 
-  const metric = (value: number | undefined, limits: Limits, unit: string, level?: Level) =>
-    value === undefined
-      ? undefined
-      : `${value.toFixed(decimals)} ${unit}${level ? LEVEL_TEXT[level] : ''} · limits ${limits.min}–${limits.max}`;
+  const metricRows: Array<[string, string]> = state.metrics.map((m) => {
+    const format = formatters.get(m.key) ?? String;
+    const name = metrics.find((info) => info.key === m.key)?.name ?? m.key;
+    const level = m.level ? LEVEL_TEXT[m.level] : '';
+    const limits = m.limits ? ` · limits ${formatLimits(m.limits, format)}` : '';
+    return [name, `${format(m.value)}${level}${limits}`];
+  });
 
   const rows: Array<[string, string | undefined]> = [
     ['Location', reading?.location],
     ['Sensor', reading?.sensor],
-    ['Temperature', metric(reading?.temperature, state.temperatureLimits, '°C', state.temperatureLevel)],
-    ['Humidity', metric(reading?.humidity, state.humidityLimits, '%RH', state.humidityLevel)],
+    ...metricRows,
     ['Updated', reading?.time !== undefined ? dateTimeFormat(reading.time, { timeZone }) : undefined],
   ];
 

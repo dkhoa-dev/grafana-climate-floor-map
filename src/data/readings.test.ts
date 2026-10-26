@@ -1,5 +1,5 @@
 import { createDataFrame, FieldType } from '@grafana/data';
-import { parseLimits, readingsFromFrames } from './readings';
+import { limitFieldOf, parseLimits, parseMetricList, readingsFromFrames } from './readings';
 
 describe('parseLimits', () => {
   it.each([
@@ -18,6 +18,28 @@ describe('parseLimits', () => {
   });
 });
 
+describe('limitFieldOf', () => {
+  it.each([
+    ['temperature_limits', { key: 'temperature', kind: 'limits' }],
+    ['CO2 max', { key: 'co2', kind: 'max' }],
+    ['pm2.5_min', { key: 'pm25', kind: 'min' }],
+    ['rh_limit', { key: 'humidity', kind: 'limits' }],
+  ])('reads %p', (name, expected) => {
+    expect(limitFieldOf(name)).toEqual(expected);
+  });
+
+  it.each(['temperature', 'max', 'limits', 'co2'])('ignores %p', (name) => {
+    expect(limitFieldOf(name)).toBeUndefined();
+  });
+});
+
+describe('parseMetricList', () => {
+  it('normalises names and resolves aliases', () => {
+    expect(parseMetricList(' Temperature, CO2 ,, PM2.5, rh ')).toEqual(['temperature', 'co2', 'pm25', 'humidity']);
+    expect(parseMetricList('')).toEqual([]);
+  });
+});
+
 describe('readingsFromFrames: table layout', () => {
   const table = createDataFrame({
     fields: [
@@ -25,70 +47,78 @@ describe('readingsFromFrames: table layout', () => {
       { name: 'Device-ID', type: FieldType.string, values: ['s1', 's1', 's2', 's2'] },
       { name: 'Place', type: FieldType.string, values: ['Lab 1', 'Lab 1', 'Office A', 'Office A'] },
       { name: 'TEMPERATURE', type: FieldType.number, values: [20, 21, 22, null] },
-      { name: 'Humidity', type: FieldType.number, values: [40, 41, 50, 55] },
+      { name: 'co2', type: FieldType.number, values: [700, 1100, 500, 520] },
       { name: 'temperature limit', type: FieldType.string, values: ['18-25', '18-25', '20-24', '20-24'] },
+      { name: 'co2_max', type: FieldType.number, values: [1000, 1000, null, null] },
     ],
   });
 
-  it('keeps the newest value of each metric per sensor', () => {
-    const readings = readingsFromFrames([table]);
+  it('turns every numeric column into a metric and keeps the newest value of each', () => {
+    const { readings, metrics } = readingsFromFrames([table]);
+    expect(metrics.map((m) => [m.key, m.name])).toEqual([
+      ['temperature', 'Temperature'],
+      ['co2', 'CO₂'],
+    ]);
     expect(readings).toEqual([
       {
         sensor: 's1',
         location: 'Lab 1',
         time: 2000,
-        temperature: 21,
-        humidity: 41,
-        temperatureLimits: { min: 18, max: 25 },
+        values: {
+          temperature: { value: 21, time: 2000, limits: { min: 18, max: 25 } },
+          co2: { value: 1100, time: 2000, limits: { max: 1000 } },
+        },
       },
-      // The newest s2 row has no temperature, so the older one is kept.
       {
         sensor: 's2',
         location: 'Office A',
         time: 3000,
-        temperature: 22,
-        humidity: 55,
-        temperatureLimits: { min: 20, max: 24 },
+        // The newest s2 row has no temperature, so the older one is kept.
+        values: {
+          temperature: { value: 22, time: 1500, limits: { min: 20, max: 24 } },
+          co2: { value: 520, time: 3000 },
+        },
       },
     ]);
   });
 
-  it('honours explicit field names', () => {
+  it('keeps only the listed metrics, in the listed order', () => {
+    const { readings, metrics } = readingsFromFrames([table], {}, ['co2']);
+    expect(metrics.map((m) => m.key)).toEqual(['co2']);
+    expect(Object.keys(readings[0].values)).toEqual(['co2']);
+    expect(readings[1].time).toBe(3000);
+  });
+
+  it('honours an explicit sensor field and ignores numeric id columns', () => {
     const frame = createDataFrame({
       fields: [
         { name: 'probe', type: FieldType.string, values: ['p1'] },
-        { name: 'airTemp', type: FieldType.number, values: [19] },
+        { name: 'id', type: FieldType.number, values: [7] },
+        { name: 'noise_db', type: FieldType.number, values: [41] },
       ],
     });
-    expect(readingsFromFrames([frame], { sensor: 'probe', temperature: 'air_temp' })).toEqual([
-      { sensor: 'p1', temperature: 19 },
-    ]);
+    const { readings, metrics } = readingsFromFrames([frame], { sensor: 'probe' });
+    expect(readings).toEqual([{ sensor: 'p1', values: { noisedb: { value: 41 } } }]);
+    expect(metrics[0]).toEqual({ key: 'noisedb', name: 'Noise db', unit: undefined, decimals: undefined });
   });
 
-  it('builds limits from separate min and max columns', () => {
+  it('takes unit, decimals, display name and limits from the field config', () => {
     const frame = createDataFrame({
       fields: [
-        { name: 'sensor', type: FieldType.string, values: ['a'] },
-        { name: 'humidity', type: FieldType.number, values: [45] },
-        { name: 'humidity_min', type: FieldType.number, values: [35] },
-        { name: 'humidity_max', type: FieldType.number, values: [55] },
-        { name: 'temperature_min', type: FieldType.number, values: [10] },
+        { name: 'sensor', type: FieldType.string, values: ['a', 'b'] },
+        {
+          name: 'voc',
+          type: FieldType.number,
+          values: [300, 900],
+          config: { unit: 'ppb', decimals: 0, displayName: 'TVOC', custom: { limitMax: 500 } },
+        },
+        { name: 'voc_max', type: FieldType.number, values: [null, 1000] },
       ],
     });
-    const [reading] = readingsFromFrames([frame]);
-    expect(reading.humidityLimits).toEqual({ min: 35, max: 55 });
-    // A lone min is not a band.
-    expect(reading.temperatureLimits).toBeUndefined();
-  });
-
-  it('drops sensors with no temperature or humidity', () => {
-    const frame = createDataFrame({
-      fields: [
-        { name: 'sensor', type: FieldType.string, values: ['a'] },
-        { name: 'battery', type: FieldType.number, values: [80] },
-      ],
-    });
-    expect(readingsFromFrames([frame])).toEqual([]);
+    const { readings, metrics } = readingsFromFrames([frame]);
+    expect(metrics).toEqual([{ key: 'voc', name: 'TVOC', unit: 'ppb', decimals: 0 }]);
+    // Limits from the data win over the field config.
+    expect(readings.map((r) => r.values.voc.limits)).toEqual([{ max: 500 }, { max: 1000 }]);
   });
 });
 
@@ -109,29 +139,33 @@ describe('readingsFromFrames: series layout', () => {
       createDataFrame({
         fields: [
           { name: '_time', type: FieldType.time, values: [1000, 2500] },
-          {
-            name: '_value',
-            type: FieldType.number,
-            values: [44, null],
-            labels: { _field: 'humidity', sensor_id: 'n1' },
-          },
+          { name: '_value', type: FieldType.number, values: [610, null], labels: { _field: 'co2', sensor_id: 'n1' } },
         ],
       }),
     ];
-    expect(readingsFromFrames(frames)).toEqual([
-      { sensor: 'n1', location: 'Lobby', time: 2000, temperature: 21.5, humidity: 44 },
+    const { readings, metrics } = readingsFromFrames(frames);
+    expect(metrics.map((m) => m.key)).toEqual(['temperature', 'co2']);
+    expect(readings).toEqual([
+      {
+        sensor: 'n1',
+        location: 'Lobby',
+        time: 2000,
+        values: { temperature: { value: 21.5, time: 2000 }, co2: { value: 610, time: 1000 } },
+      },
     ]);
   });
 
-  it('falls back to the frame name when there are no sensor labels', () => {
+  it('names a generic value field after its frame', () => {
     const frame = createDataFrame({
-      name: 'Server room',
+      name: 'pressure',
       fields: [
         { name: 'time', type: FieldType.time, values: [5] },
-        { name: 'temperature', type: FieldType.number, values: [30] },
+        { name: 'Value', type: FieldType.number, values: [1013], labels: { sensor: 'roof' } },
       ],
     });
-    expect(readingsFromFrames([frame])).toEqual([{ sensor: 'Server room', time: 5, temperature: 30 }]);
+    expect(readingsFromFrames([frame]).readings).toEqual([
+      { sensor: 'roof', time: 5, values: { pressure: { value: 1013, time: 5 } } },
+    ]);
   });
 
   it('reads the location from a place label', () => {
@@ -141,7 +175,9 @@ describe('readingsFromFrames: series layout', () => {
         { name: 'humidity', type: FieldType.number, values: [48], labels: { device: 'd7', Place: 'Archive' } },
       ],
     });
-    expect(readingsFromFrames([frame])).toEqual([{ sensor: 'd7', location: 'Archive', time: 5, humidity: 48 }]);
+    expect(readingsFromFrames([frame]).readings).toEqual([
+      { sensor: 'd7', location: 'Archive', time: 5, values: { humidity: { value: 48, time: 5 } } },
+    ]);
   });
 });
 
@@ -176,17 +212,22 @@ describe('readingsFromFrames: ClickHouse time series format', () => {
   });
 
   it('reads per-sensor limits from labels and ignores empty ones', () => {
-    expect(readingsFromFrames([frame])).toEqual([
+    expect(readingsFromFrames([frame]).readings).toEqual([
       {
         sensor: 'n-04',
         location: 'Server room',
         time: 2000,
-        temperature: 27.5,
-        humidity: 38,
-        temperatureLimits: { min: 16, max: 28 },
-        humidityLimits: { min: 20, max: 55 },
+        values: {
+          temperature: { value: 27.5, time: 2000, limits: { min: 16, max: 28 } },
+          humidity: { value: 38, time: 2000, limits: { min: 20, max: 55 } },
+        },
       },
-      { sensor: 'n-01', location: 'Office A', time: 1000, temperature: 22, humidity: 45 },
+      {
+        sensor: 'n-01',
+        location: 'Office A',
+        time: 1000,
+        values: { temperature: { value: 22, time: 1000 }, humidity: { value: 45, time: 1000 } },
+      },
     ]);
   });
 });

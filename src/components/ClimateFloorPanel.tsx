@@ -4,7 +4,8 @@ import { GrafanaTheme2, PanelProps, rangeUtil } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { ClimateFloorOptions, RoomState } from '../types';
-import { readingsFromFrames } from '../data/readings';
+import { parseMetricList, readingsFromFrames } from '../data/readings';
+import { Formatter, metricFormatter } from '../data/format';
 import { evaluateRoom } from '../data/rooms';
 import { ColorLookup, roomColor } from '../data/colors';
 import { collectRooms, ROOM_ATTR, sanitizeFloorPlan, scopeIds } from '../svg/floorPlan';
@@ -26,9 +27,6 @@ export function parseStaleAfter(value: string): number {
     return 0;
   }
 }
-
-const formatValue = (value: number | undefined, decimals: number, unit: string) =>
-  value === undefined ? undefined : `${value.toFixed(decimals)}${unit}`;
 
 /** Expands the link template with dashboard variables plus the clicked room's own values. */
 export function buildRoomLink(template: string, state: RoomState, replaceVariables: Props['replaceVariables']): string {
@@ -111,15 +109,19 @@ export const ClimateFloorPanel: React.FC<Props> = ({
     setRoomNames(Array.from(roomEls.current.keys()));
   }, [markup, id]);
 
-  const readings = useMemo(
+  const { readings, metrics } = useMemo(
     () =>
-      readingsFromFrames(data.series, {
-        sensor: options.sensorField,
-        location: options.locationField,
-        temperature: options.temperatureField,
-        humidity: options.humidityField,
-      }),
-    [data.series, options.sensorField, options.locationField, options.temperatureField, options.humidityField]
+      readingsFromFrames(
+        data.series,
+        { sensor: options.sensorField, location: options.locationField },
+        parseMetricList(options.metrics)
+      ),
+    [data.series, options.sensorField, options.locationField, options.metrics]
+  );
+
+  const formatters = useMemo(
+    () => new Map<string, Formatter>(metrics.map((m) => [m.key, metricFormatter(m, theme)])),
+    [metrics, theme]
   );
 
   const now = data.timeRange.to.valueOf();
@@ -127,8 +129,7 @@ export const ClimateFloorPanel: React.FC<Props> = ({
     const opts = {
       bindings: options.bindings ?? {},
       autoBind: options.autoBind,
-      defaultTemperature: { min: options.temperatureMin, max: options.temperatureMax },
-      defaultHumidity: { min: options.humidityMin, max: options.humidityMax },
+      metrics,
       warningMargin: options.warningMargin,
       now,
       staleAfterMs: parseStaleAfter(options.staleAfter),
@@ -137,13 +138,10 @@ export const ClimateFloorPanel: React.FC<Props> = ({
   }, [
     roomNames,
     readings,
+    metrics,
     now,
     options.bindings,
     options.autoBind,
-    options.temperatureMin,
-    options.temperatureMax,
-    options.humidityMin,
-    options.humidityMax,
     options.warningMargin,
     options.staleAfter,
   ]);
@@ -196,18 +194,22 @@ export const ClimateFloorPanel: React.FC<Props> = ({
       if (options.showValues) {
         if (state.status === 'offline') {
           lines.push('Offline');
-        } else if (state.reading) {
-          const values = [
-            formatValue(state.reading.temperature, options.decimals, ' °C'),
-            formatValue(state.reading.humidity, options.decimals, ' %'),
-          ].filter(Boolean);
-          lines.push(values.join(' · '));
+        } else {
+          // One value per line; beyond three, rooms get too crowded to read. The tooltip has the rest.
+          for (const m of state.metrics.slice(0, 3)) {
+            lines.push(formatters.get(m.key)?.(m.value) ?? String(m.value));
+          }
         }
       }
-      const fontSize = Math.max(8, Math.min(20, box.width / 9, box.height / (lines.length * 2.2)));
+      // Fit the longest line across the room (about 0.6 em per character) and every line down it.
+      const longest = Math.max(...lines.map((l) => l.length));
+      const fontSize = Math.max(
+        7,
+        Math.min(20, (box.width * 0.9) / (longest * 0.6), (box.height * 0.85) / (lines.length * 1.25))
+      );
       const text = document.createElementNS(SVG_NS, 'text');
       text.setAttribute('x', String(box.x + box.width / 2));
-      text.setAttribute('y', String(box.y + box.height / 2 - ((lines.length - 1) * fontSize * 1.2) / 2));
+      text.setAttribute('y', String(box.y + box.height / 2 - ((lines.length - 1) * fontSize * 1.15) / 2));
       text.setAttribute('text-anchor', 'middle');
       text.setAttribute('dominant-baseline', 'middle');
       text.setAttribute('font-size', String(fontSize));
@@ -219,7 +221,7 @@ export const ClimateFloorPanel: React.FC<Props> = ({
       lines.forEach((line, i) => {
         const span = document.createElementNS(SVG_NS, 'tspan');
         span.setAttribute('x', String(box.x + box.width / 2));
-        span.setAttribute('dy', i === 0 ? '0' : `${1.2}em`);
+        span.setAttribute('dy', i === 0 ? '0' : '1.15em');
         if (i === 0) {
           span.setAttribute('font-weight', String(theme.typography.fontWeightMedium));
         }
@@ -229,7 +231,7 @@ export const ClimateFloorPanel: React.FC<Props> = ({
       labels.appendChild(text);
     }
     svg.appendChild(labels);
-  }, [states, options.colorBy, options.showValues, options.decimals, lookup, clickable, theme]);
+  }, [states, options.colorBy, options.showValues, formatters, lookup, clickable, theme]);
 
   const roomAt = (target: EventTarget | null) =>
     target instanceof Element ? (target.closest(`[${ROOM_ATTR}]`)?.getAttribute(ROOM_ATTR) ?? undefined) : undefined;
@@ -290,7 +292,7 @@ export const ClimateFloorPanel: React.FC<Props> = ({
           <code>room-Name</code>.
         </div>
       )}
-      {options.showLegend && <Legend colorBy={options.colorBy} lookup={lookup} states={states} />}
+      {options.showLegend && <Legend colorBy={options.colorBy} metrics={metrics} lookup={lookup} states={states} />}
       {hover && hovered && (
         <RoomTooltip
           state={hovered}
@@ -298,7 +300,8 @@ export const ClimateFloorPanel: React.FC<Props> = ({
           y={hover.y}
           containerWidth={width}
           containerHeight={height}
-          decimals={options.decimals}
+          metrics={metrics}
+          formatters={formatters}
           timeZone={timeZone}
         />
       )}

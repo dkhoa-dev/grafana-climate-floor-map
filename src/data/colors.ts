@@ -1,5 +1,5 @@
-import { ColorBy, RoomState, RoomStatus } from '../types';
-import { bandPosition } from './rooms';
+import { RoomState, RoomStatus } from '../types';
+import { bandPosition } from './metrics';
 
 /** Resolves a Grafana palette name (e.g. `green`) to a CSS colour. */
 export type ColorLookup = (name: string) => string;
@@ -64,18 +64,16 @@ export function valueColor(position: number, lookup: ColorLookup): string {
   return lookup(VALUE_STOPS[VALUE_STOPS.length - 1][1]);
 }
 
-/** Fill for a room, or undefined when the room should stay unpainted. */
-export function roomColor(state: RoomState, colorBy: ColorBy, lookup: ColorLookup): string | undefined {
+/** Fill for a room, or undefined when the room should stay unpainted. `colorBy` is `status` or a metric key. */
+export function roomColor(state: RoomState, colorBy: string, lookup: ColorLookup): string | undefined {
   if (state.status === 'unbound') {
     return undefined;
   }
   if (state.status === 'offline' || colorBy === 'status') {
     return lookup(STATUS_COLOR[state.status]);
   }
-  const value = colorBy === 'temperature' ? state.reading?.temperature : state.reading?.humidity;
-  if (value === undefined) {
-    return lookup(STATUS_COLOR.offline);
-  }
-  const limits = colorBy === 'temperature' ? state.temperatureLimits : state.humidityLimits;
-  return valueColor(bandPosition(value, limits), lookup);
+  const metric = state.metrics.find((m) => m.key === colorBy);
+  const position = metric?.limits ? bandPosition(metric.value, metric.limits) : undefined;
+  // Without the metric, or without limits to place it against, there is nothing to show.
+  return position === undefined ? lookup(STATUS_COLOR.offline) : valueColor(position, lookup);
 }

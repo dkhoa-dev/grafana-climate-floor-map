@@ -28,7 +28,7 @@ export interface GenerateResult {
 /** A failure worth showing to the person as is. */
 export class GenerateError extends Error {}
 
-export const SYSTEM_PROMPT = `You draw floor plans as SVG for a Grafana panel that colours each room by its temperature and humidity.
+export const SYSTEM_PROMPT = `You draw floor plans as SVG for a Grafana panel that colours each room by its sensor readings (temperature, humidity, CO₂ and so on).
 
 Output format, which the panel depends on:
 - Reply with exactly one SVG document in a \`\`\`svg code block. Put any short note about assumptions after the code block, never inside the SVG.

@@ -31,7 +31,7 @@
             "uid": "clickhouse-demo"
           },
           "editorType": "sql",
-          "rawSql": "-- One row per sensor: its newest reading in the last day, so a sensor that went quiet\n-- still shows up (as offline) instead of disappearing from the plan.\nSELECT\n  sensor,\n  max(time) AS last_seen,\n  argMax(location, time) AS location,\n  argMax(temperature, time) AS temperature,\n  argMax(humidity, time) AS humidity,\n  argMax(temperature_limits, time) AS temperature_limits,\n  argMax(humidity_limits, time) AS humidity_limits\nFROM climate.readings\nWHERE time > now() - INTERVAL 1 DAY\nGROUP BY sensor",
+          "rawSql": "-- One row per sensor: its newest reading in the last day, so a sensor that went quiet\n-- still shows up (as offline) instead of disappearing from the plan.\nSELECT\n  sensor,\n  max(time) AS last_seen,\n  argMax(location, time) AS location,\n  argMax(temperature, time) AS temperature,\n  argMax(humidity, time) AS humidity,\n  argMax(co2, time) AS co2,\n  argMax(temperature_limits, time) AS temperature_limits,\n  argMax(humidity_limits, time) AS humidity_limits\nFROM climate.readings\nWHERE time > now() - INTERVAL 1 DAY\nGROUP BY sensor",
           "format": 1,
           "queryType": "table"
         }
@@ -49,10 +49,10 @@
         "y": 0
       },
       "id": 2,
-      "title": "ClickHouse, time series format",
+      "title": "ClickHouse, time series format, coloured by CO\u2082",
       "type": "dkhoa-climatefloormap-panel",
       "options": {
-        "colorBy": "temperature",
+        "colorBy": "co2",
         "showValues": true,
         "showLegend": true,
         "autoBind": true,
@@ -67,7 +67,7 @@
             "uid": "clickhouse-demo"
           },
           "editorType": "sql",
-          "rawSql": "SELECT time, sensor, location, temperature, humidity, temperature_limits, humidity_limits\nFROM climate.readings\nWHERE $__timeFilter(time)\nORDER BY time",
+          "rawSql": "SELECT time, sensor, location, temperature, humidity, co2, temperature_limits, humidity_limits\nFROM climate.readings\nWHERE $__timeFilter(time)\nORDER BY time",
           "format": 0,
           "queryType": "timeseries"
         }
