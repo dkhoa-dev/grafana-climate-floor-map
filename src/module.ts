@@ -1,5 +1,6 @@
-import { PanelPlugin } from '@grafana/data';
-import { ClimateFloorOptions } from './types';
+import { FieldConfigProperty, PanelPlugin, SelectableValue } from '@grafana/data';
+import { ClimateFieldConfig, ClimateFloorOptions } from './types';
+import { parseMetricList, readingsFromFrames } from './data/readings';
 import { ClimateFloorPanel } from './components/ClimateFloorPanel';
 import { RoomBindingsEditor } from './components/RoomBindingsEditor';
 import { FloorPlanOption } from './components/FloorPlanOption';
@@ -14,8 +15,37 @@ const LINK = ['Room link'];
 
 const autoDetect = 'Leave blank to detect it from common names.';
 
+const limitHelp = 'Limits sent with the data win. Without any, well-known metrics use built-in defaults.';
+
 export const plugin = new PanelPlugin<ClimateFloorOptions>(ClimateFloorPanel)
   .setNoPadding()
+  .useFieldConfig({
+    disableStandardOptions: [
+      FieldConfigProperty.Min,
+      FieldConfigProperty.Max,
+      FieldConfigProperty.FieldMinMax,
+      FieldConfigProperty.Thresholds,
+      FieldConfigProperty.Mappings,
+      FieldConfigProperty.Color,
+      FieldConfigProperty.Links,
+      FieldConfigProperty.Actions,
+      FieldConfigProperty.Filterable,
+    ],
+    useCustomConfig: (builder) =>
+      builder
+        .addNumberInput({
+          path: 'limitMin',
+          name: 'Limit min',
+          description: `Lowest acceptable value. Set it per metric with an override. ${limitHelp}`,
+          category: ['Limits'],
+        })
+        .addNumberInput({
+          path: 'limitMax',
+          name: 'Limit max',
+          description: `Highest acceptable value. Leave the other side blank for a one-sided limit. ${limitHelp}`,
+          category: ['Limits'],
+        }),
+  } as Parameters<PanelPlugin<ClimateFloorOptions, ClimateFieldConfig>['useFieldConfig']>[0])
   .setPanelOptions((builder) =>
     builder
       .addCustomEditor({
@@ -42,16 +72,10 @@ export const plugin = new PanelPlugin<ClimateFloorOptions>(ClimateFloorPanel)
         defaultValue: '',
       })
       .addTextInput({
-        path: 'temperatureField',
-        name: 'Temperature field',
-        description: autoDetect,
-        category: DATA,
-        defaultValue: '',
-      })
-      .addTextInput({
-        path: 'humidityField',
-        name: 'Humidity field',
-        description: autoDetect,
+        path: 'metrics',
+        name: 'Metrics',
+        description:
+          'Comma-separated names of the numeric fields to use, in this order, e.g. "temperature, humidity, co2". Blank uses every numeric field. Units, decimals and limits are set per field under Standard options and Limits, or per metric with overrides.',
         category: DATA,
         defaultValue: '',
       })
@@ -62,50 +86,41 @@ export const plugin = new PanelPlugin<ClimateFloorOptions>(ClimateFloorPanel)
         category: DATA,
         defaultValue: '15m',
       })
-      .addNumberInput({
-        path: 'temperatureMin',
-        name: 'Temperature min (°C)',
-        description: 'Used when the data carries no limits for a sensor.',
-        category: LIMITS,
-        defaultValue: 18,
-      })
-      .addNumberInput({
-        path: 'temperatureMax',
-        name: 'Temperature max (°C)',
-        category: LIMITS,
-        defaultValue: 27,
-      })
-      .addNumberInput({
-        path: 'humidityMin',
-        name: 'Humidity min (%RH)',
-        category: LIMITS,
-        defaultValue: 30,
-      })
-      .addNumberInput({
-        path: 'humidityMax',
-        name: 'Humidity max (%RH)',
-        category: LIMITS,
-        defaultValue: 60,
-      })
       .addSliderInput({
         path: 'warningMargin',
         name: 'Warning margin (%)',
-        description: 'Share of the band, on each side, where a value counts as near the limit.',
+        description:
+          'How close to a limit counts as near it: a share of the band on each side, or of the limit itself when there is only one.',
         category: LIMITS,
         defaultValue: 10,
         settings: { min: 0, max: 50, step: 1 },
       })
-      .addRadio({
+      .addSelect({
         path: 'colorBy',
         name: 'Colour rooms by',
+        description: 'Status (within, near or out of limits), or where one metric sits inside its limits.',
         category: DISPLAY,
         defaultValue: 'status',
         settings: {
-          options: [
-            { value: 'status', label: 'Status', description: 'Within, near or out of limits' },
-            { value: 'temperature', label: 'Temperature', description: 'Position of the temperature in its band' },
-            { value: 'humidity', label: 'Humidity', description: 'Position of the humidity in its band' },
-          ],
+          allowCustomValue: true,
+          options: [{ value: 'status', label: 'Status' }],
+          getOptions: async (context) => {
+            const options = context.options as ClimateFloorOptions | undefined;
+            const { metrics } = readingsFromFrames(
+              context.data ?? [],
+              { sensor: options?.sensorField, location: options?.locationField },
+              parseMetricList(options?.metrics)
+            );
+            const status: SelectableValue<string> = {
+              value: 'status',
+              label: 'Status',
+              description: 'Within, near or out of limits',
+            };
+            return [
+              status,
+              ...metrics.map((m) => ({ value: m.key, label: m.name, description: 'Position in its limits' })),
+            ];
+          },
         },
       })
       .addBooleanSwitch({
@@ -113,13 +128,6 @@ export const plugin = new PanelPlugin<ClimateFloorOptions>(ClimateFloorPanel)
         name: 'Show values in rooms',
         category: DISPLAY,
         defaultValue: true,
-      })
-      .addNumberInput({
-        path: 'decimals',
-        name: 'Decimals',
-        category: DISPLAY,
-        defaultValue: 1,
-        settings: { min: 0, max: 3, integer: true },
       })
       .addBooleanSwitch({
         path: 'showLegend',

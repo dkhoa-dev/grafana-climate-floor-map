@@ -15,6 +15,12 @@ test.describe('ClickHouse data source', () => {
     await expect(plan.locator('[data-cfm-room="Lab 1"]')).toHaveAttribute('data-status', 'alarm');
     await expect(plan.locator('[data-cfm-room="Office A"]')).toHaveAttribute('data-status', 'ok');
     await expect(plan.locator('[data-cfm-room="Server room"]')).toHaveAttribute('data-status', 'ok');
+    // A metric the panel has no option for: CO₂ above the built-in 1000 ppm limit.
+    await expect(plan.locator('[data-cfm-room="Meeting room"]')).toHaveAttribute('data-status', 'alarm');
+    await plan.locator('[data-cfm-room="Meeting room"]').hover();
+    await expect(page.getByTestId('climate-floor-tooltip')).toContainText(
+      /CO₂1[12]\d\d ppm \(out of limits\) · limits ≤ 1000 ppm/
+    );
     // The Storage sensor stopped reporting 90 minutes ago.
     await expect(plan.locator('[data-cfm-room="Storage"]')).toHaveAttribute('data-status', 'offline');
   });

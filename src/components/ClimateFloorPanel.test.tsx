@@ -15,17 +15,11 @@ const options: ClimateFloorOptions = {
   floorPlan: PLAN,
   sensorField: '',
   locationField: '',
-  temperatureField: '',
-  humidityField: '',
+  metrics: '',
   staleAfter: '15m',
-  temperatureMin: 18,
-  temperatureMax: 27,
-  humidityMin: 30,
-  humidityMax: 60,
   warningMargin: 10,
   colorBy: 'status',
   showValues: true,
-  decimals: 1,
   showLegend: true,
   bindings: { Office: 's2' },
   autoBind: true,
@@ -43,6 +37,7 @@ function setup(overrides: Partial<ClimateFloorOptions> = {}) {
       { name: 'location', type: FieldType.string, values: ['Lab 1', 'Office'] },
       { name: 'temperature', type: FieldType.number, values: [22, 24] },
       { name: 'humidity', type: FieldType.number, values: [75, 40] },
+      { name: 'co2', type: FieldType.number, values: [640, 500], config: { custom: { limitMax: 800 } } },
     ],
   });
   const replaceVariables = jest.fn((value: string) => value);
@@ -86,7 +81,9 @@ describe('ClimateFloorPanel', () => {
     const tooltip = screen.getByTestId('climate-floor-tooltip');
     expect(tooltip).toHaveTextContent('Lab 1');
     expect(tooltip).toHaveTextContent('Out of limits');
-    expect(tooltip).toHaveTextContent('75.0 %RH (out of limits)');
+    expect(tooltip).toHaveTextContent('Humidity75.0% (out of limits) · limits 30.0% – 60.0%');
+    // Unit from the well-known table, limit from the field config.
+    expect(tooltip).toHaveTextContent('CO₂640 ppm · limits ≤ 800 ppm');
     fireEvent.mouseLeave(screen.getByTestId('climate-floor-plan'));
     expect(screen.queryByTestId('climate-floor-tooltip')).toBeNull();
   });
@@ -116,9 +113,8 @@ describe('buildRoomLink', () => {
       {
         room: 'Lab 1',
         status: 'ok',
-        reading: { sensor: 's/1' },
-        temperatureLimits: { min: 0, max: 1 },
-        humidityLimits: { min: 0, max: 1 },
+        reading: { sensor: 's/1', values: {} },
+        metrics: [],
       },
       replace
     );

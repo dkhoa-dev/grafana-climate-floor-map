@@ -20,10 +20,8 @@ export const RoomBindingsEditor: React.FC<Props> = ({ value, onChange, context }
       readingsFromFrames(context.data ?? [], {
         sensor: options?.sensorField,
         location: options?.locationField,
-        temperature: options?.temperatureField,
-        humidity: options?.humidityField,
-      }),
-    [context.data, options?.sensorField, options?.locationField, options?.temperatureField, options?.humidityField]
+      }).readings,
+    [context.data, options?.sensorField, options?.locationField]
   );
 
   // Sorted by label so the list does not reshuffle as new readings arrive.

@@ -14,14 +14,12 @@ type Props = StandardEditorProps<string, unknown, ClimateFloorOptions>;
 export function useDataRooms(context: Props['context']): string[] {
   const options = context.options;
   return useMemo(() => {
-    const readings = readingsFromFrames(context.data ?? [], {
+    const { readings } = readingsFromFrames(context.data ?? [], {
       sensor: options?.sensorField,
       location: options?.locationField,
-      temperature: options?.temperatureField,
-      humidity: options?.humidityField,
     });
     return Array.from(new Set(readings.map((r) => (r.location ?? r.sensor).trim()).filter(Boolean)));
-  }, [context.data, options?.sensorField, options?.locationField, options?.temperatureField, options?.humidityField]);
+  }, [context.data, options?.sensorField, options?.locationField]);
 }
 
 export const FloorPlanOption: React.FC<Props> = ({ value, onChange, context }) => {

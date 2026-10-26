@@ -2,20 +2,21 @@ import React from 'react';
 import { css } from '@emotion/css';
 import { GrafanaTheme2 } from '@grafana/data';
 import { useStyles2 } from '@grafana/ui';
-import { ColorBy, RoomState, RoomStatus } from '../types';
+import { MetricInfo, RoomState, RoomStatus } from '../types';
 import { ColorLookup, STATUS_COLOR, STATUS_LABEL, valueColor } from '../data/colors';
 
 export const LEGEND_HEIGHT = 28;
 
 interface Props {
-  colorBy: ColorBy;
+  colorBy: string;
+  metrics: MetricInfo[];
   lookup: ColorLookup;
   states: Map<string, RoomState>;
 }
 
 const STATUSES: RoomStatus[] = ['ok', 'warning', 'alarm', 'offline'];
 
-export const Legend: React.FC<Props> = ({ colorBy, lookup, states }) => {
+export const Legend: React.FC<Props> = ({ colorBy, metrics, lookup, states }) => {
   const styles = useStyles2(getStyles);
 
   if (colorBy !== 'status') {
@@ -25,7 +26,7 @@ export const Legend: React.FC<Props> = ({ colorBy, lookup, states }) => {
         <span>Below limit</span>
         <span className={styles.bar} style={{ background: `linear-gradient(to right, ${stops.join(', ')})` }} />
         <span>Above limit</span>
-        <span className={styles.muted}>{colorBy === 'temperature' ? 'Temperature' : 'Humidity'}</span>
+        <span className={styles.muted}>{metrics.find((m) => m.key === colorBy)?.name ?? colorBy}</span>
       </div>
     );
   }

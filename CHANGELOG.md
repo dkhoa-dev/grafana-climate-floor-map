@@ -13,3 +13,4 @@ First version of Climate Floor Map.
 - AI assistant in the editor: draw a plan from a description, trace an image or PDF, or fix an SVG's format, using Claude (Anthropic API or Microsoft Foundry), an OpenAI-compatible endpoint (OpenAI, OpenRouter, DeepSeek, custom) or the Grafana LLM app.
 - ClickHouse: per-sensor limits are read from labels in the time series format, a demo ClickHouse service and dashboard, and documented queries.
 - A room whose chosen sensor is missing from the data shows as offline instead of without a sensor.
+- Any metric, not just temperature and humidity: every numeric field is a metric, with units, decimals and limits from Grafana's field config and overrides, limits from the data per sensor, one-sided limits, a Metrics option to pick and order them, and colouring by any metric. Temperature, humidity, CO₂, PM2.5 and PM10 keep built-in defaults. The temperature/humidity field, limit and decimals panel options are replaced by the field config.
