@@ -5,3 +5,14 @@ datasources:
     type: testdata
     uid: trlxrdZVk
     isDefault: true
+  - name: ClickHouse
+    type: grafana-clickhouse-datasource
+    uid: clickhouse-demo
+    jsonData:
+      host: clickhouse
+      port: 9000
+      protocol: native
+      username: grafana
+      defaultDatabase: climate
+    secureJsonData:
+      password: grafana

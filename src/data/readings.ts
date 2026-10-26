@@ -85,6 +85,15 @@ const toTime = (value: unknown): number | undefined => {
   return undefined;
 };
 
+const LIMIT_METRICS: Metric[] = [
+  'temperatureLimits',
+  'humidityLimits',
+  'temperatureMin',
+  'temperatureMax',
+  'humidityMin',
+  'humidityMax',
+];
+
 const metricOf = (name: string, names: FieldNames): Metric | undefined => {
   if (matches(name, names.temperature, CANDIDATES.temperature)) {
     return 'temperature';
@@ -92,15 +101,7 @@ const metricOf = (name: string, names: FieldNames): Metric | undefined => {
   if (matches(name, names.humidity, CANDIDATES.humidity)) {
     return 'humidity';
   }
-  const metrics: Metric[] = [
-    'temperatureLimits',
-    'humidityLimits',
-    'temperatureMin',
-    'temperatureMax',
-    'humidityMin',
-    'humidityMax',
-  ];
-  return metrics.find((m) => matches(name, undefined, CANDIDATES[m]));
+  return LIMIT_METRICS.find((m) => matches(name, undefined, CANDIDATES[m]));
 };
 
 const pickLabel = (labels: Labels | undefined, keys: string[], override?: string) => {
@@ -251,6 +252,14 @@ function samplesFromSeries(frame: DataFrame, names: FieldNames): Sample[] {
       if (value !== null && value !== undefined && value !== '') {
         const time = timeField ? toTime(timeField.values[i]) : undefined;
         samples.push({ sensor, location, time, metric, value });
+        // Some data sources (ClickHouse's time series format, for one) turn text columns into labels,
+        // so per-sensor limits can arrive as labels on the value series.
+        for (const [key, labelValue] of Object.entries(field.labels ?? {})) {
+          const limit = LIMIT_METRICS.find((m) => matches(key, undefined, CANDIDATES[m]));
+          if (limit && labelValue !== '') {
+            samples.push({ sensor, location, time, metric: limit, value: labelValue });
+          }
+        }
         break;
       }
     }

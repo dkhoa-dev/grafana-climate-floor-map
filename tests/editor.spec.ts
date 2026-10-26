@@ -143,7 +143,6 @@ test('generates a plan through an OpenAI-compatible provider', async ({
   await settings.getByRole('radio', { name: 'OpenRouter' }).click();
   await settings.getByLabel(/API key/).fill('or-test');
   await settings.getByPlaceholder('Model id').fill('some/vision-model');
-  await settings.getByPlaceholder('Model id').press('Enter');
   await ai.getByPlaceholder(/Describe the floor/).fill('Two labs side by side');
   await ai.getByText('Start from the current plan').click();
   await ai.getByRole('button', { name: 'Generate' }).click();

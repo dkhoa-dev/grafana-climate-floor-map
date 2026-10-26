@@ -144,3 +144,49 @@ describe('readingsFromFrames: series layout', () => {
     expect(readingsFromFrames([frame])).toEqual([{ sensor: 'd7', location: 'Archive', time: 5, humidity: 48 }]);
   });
 });
+
+describe('readingsFromFrames: ClickHouse time series format', () => {
+  // The shape grafana-clickhouse-datasource returns in time series format: one wide frame whose
+  // text columns (location, limits) have become labels on each value series.
+  const labels = (sensor: string, location: string, t: string, h: string) => ({
+    sensor,
+    location,
+    temperature_limits: t,
+    humidity_limits: h,
+  });
+  const frame = createDataFrame({
+    refId: 'A',
+    fields: [
+      { name: 'time', type: FieldType.time, values: [1000, 2000] },
+      {
+        name: 'temperature',
+        type: FieldType.number,
+        values: [26, 27.5],
+        labels: labels('n-04', 'Server room', '16-28', '20-55'),
+      },
+      {
+        name: 'humidity',
+        type: FieldType.number,
+        values: [37, 38],
+        labels: labels('n-04', 'Server room', '16-28', '20-55'),
+      },
+      { name: 'temperature', type: FieldType.number, values: [22, null], labels: labels('n-01', 'Office A', '', '') },
+      { name: 'humidity', type: FieldType.number, values: [45, null], labels: labels('n-01', 'Office A', '', '') },
+    ],
+  });
+
+  it('reads per-sensor limits from labels and ignores empty ones', () => {
+    expect(readingsFromFrames([frame])).toEqual([
+      {
+        sensor: 'n-04',
+        location: 'Server room',
+        time: 2000,
+        temperature: 27.5,
+        humidity: 38,
+        temperatureLimits: { min: 16, max: 28 },
+        humidityLimits: { min: 20, max: 55 },
+      },
+      { sensor: 'n-01', location: 'Office A', time: 1000, temperature: 22, humidity: 45 },
+    ]);
+  });
+});

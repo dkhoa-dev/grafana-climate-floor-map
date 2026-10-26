@@ -67,6 +67,10 @@ describe('evaluateRoom', () => {
     expect(evaluateRoom('Attic', [], base).status).toBe('unbound');
   });
 
+  it('is offline when its chosen sensor sends nothing at all', () => {
+    expect(evaluateRoom('Attic', [], { ...base, bindings: { Attic: 'n-99' } }).status).toBe('offline');
+  });
+
   it('is offline when the newest reading is too old', () => {
     const r = [{ sensor: 'Lab', time: 1_000, temperature: 22 }];
     expect(evaluateRoom('Lab', r, base).status).toBe('offline');

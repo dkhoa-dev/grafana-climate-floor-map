@@ -11,3 +11,5 @@ First version of Climate Floor Map.
 - Hover tooltip, in-room values, legend and a configurable click-through link.
 - Floor plan editor: draw and edit rectangle and polygon rooms with grid snapping and undo, or generate rooms from the sensor locations in the data.
 - AI assistant in the editor: draw a plan from a description, trace an image or PDF, or fix an SVG's format, using Claude (Anthropic API or Microsoft Foundry), an OpenAI-compatible endpoint (OpenAI, OpenRouter, DeepSeek, custom) or the Grafana LLM app.
+- ClickHouse: per-sensor limits are read from labels in the time series format, a demo ClickHouse service and dashboard, and documented queries.
+- A room whose chosen sensor is missing from the data shows as offline instead of without a sensor.

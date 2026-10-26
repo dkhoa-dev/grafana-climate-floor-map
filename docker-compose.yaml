@@ -3,3 +3,19 @@ services:
     extends:
       file: .config/docker-compose-base.yaml
       service: grafana
+    environment:
+      GF_INSTALL_PLUGINS: grafana-clickhouse-datasource
+    depends_on:
+      - clickhouse
+
+  # Demo sensor data for the ClickHouse dashboard. The readings are a view over now(), so they stay live.
+  clickhouse:
+    image: clickhouse/clickhouse-server:25.8
+    container_name: 'dkhoa-climatefloormap-clickhouse'
+    environment:
+      CLICKHOUSE_DB: climate
+      CLICKHOUSE_USER: grafana
+      CLICKHOUSE_PASSWORD: grafana
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+    volumes:
+      - ./dev/clickhouse:/docker-entrypoint-initdb.d:ro

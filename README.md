@@ -75,10 +75,36 @@ If you leave the field options blank, the panel recognises these names. Matching
 | Limits as text    | `temperature_limits`, `humidity_limits` (`min-max`, `min..max` or `min,max`) |
 | Limits as numbers | `temperature_min` / `temperature_max`, `humidity_min` / `humidity_max`       |
 
+### ClickHouse
+
+Works with the official [ClickHouse data source](https://grafana.com/grafana/plugins/grafana-clickhouse-datasource/) in both query formats.
+
+**Table format, newest reading per sensor (recommended).** One row per sensor keeps the query light. A sensor that stopped reporting still has a row, so its room shows as _offline_ instead of dropping off the plan:
+
+```sql
+SELECT
+  sensor,
+  max(time) AS last_seen,
+  argMax(location, time) AS location,
+  argMax(temperature, time) AS temperature,
+  argMax(humidity, time) AS humidity,
+  argMax(temperature_limits, time) AS temperature_limits,
+  argMax(humidity_limits, time) AS humidity_limits
+FROM readings
+WHERE time > now() - INTERVAL 1 DAY
+GROUP BY sensor
+```
+
+Alias the newest time to anything other than the source column name (`last_seen` here). Otherwise ClickHouse reads `time` inside `argMax` and `WHERE` as `max(time)` and rejects the query.
+
+**Time series format.** The data source turns text columns such as `location` and `temperature_limits` into labels on each value series. The panel reads the sensor, location and limits from those labels. With `$__timeFilter(time)`, a sensor that sent nothing inside the time range is missing from the result. Its room then shows _no sensor_, unless you chose that sensor for the room under **Rooms**, in which case it shows _offline_.
+
+![The ClickHouse demo dashboard: table format on the left, time series format on the right](docs/img/clickhouse.png)
+
 ## How a room gets its colour
 
 1. **Find the sensor.** A sensor picked under _Rooms → Sensor per room_ wins. Otherwise, with _Auto-bind by name_ on, the room uses the sensor whose location (or, failing that, id) matches the room name. A sensor bound to another room is never auto-bound.
-2. **Offline check.** The room is _offline_ when its newest reading is older than _Offline after_ (default `15m`), counted back from the end of the dashboard time range.
+2. **Offline check.** The room is _offline_ when its newest reading is older than _Offline after_ (default `15m`), counted back from the end of the dashboard time range. A room whose chosen sensor is missing from the query result entirely is offline too.
 3. **Grade each metric.** A value outside its band is _out of limits_. A value inside the band but within the _warning margin_ of either edge is _near a limit_. The margin defaults to 10 % of the band width on each side. The room takes the worse of its temperature and humidity grades.
 4. **Paint.** In _Status_ mode, the grade picks green, orange or red. In _Temperature_ or _Humidity_ mode, the colour runs blue → green → orange across the band, dark blue below it and red above it. Colour changes fade over about a second.
 
@@ -110,7 +136,10 @@ npm run lint && npm run typecheck
 npm run e2e          # Playwright against the running Grafana
 ```
 
-The demo dashboard (`provisioning/dashboards/dashboard.json`) uses TestData with fixed readings, so it shows every status without hardware.
+Two demo dashboards are provisioned:
+
+- `provisioning/dashboards/dashboard.json` uses TestData with fixed readings, so it shows every status without any database.
+- `provisioning/dashboards/clickhouse.json` queries a ClickHouse container that `npm run server` starts alongside Grafana. `dev/clickhouse/init.sql` creates made-up sensors and a view that generates a reading per minute up to `now()`, so the plan stays live; one sensor stops reporting 90 minutes back. Grafana installs the ClickHouse data source on start, which needs access to grafana.com.
 
 Requires Grafana 13.2 or later.
 
