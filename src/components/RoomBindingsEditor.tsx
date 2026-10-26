@@ -2,12 +2,12 @@ import React, { useMemo } from 'react';
 import { css } from '@emotion/css';
 import { GrafanaTheme2, StandardEditorProps } from '@grafana/data';
 import { Combobox, ComboboxOption, useStyles2 } from '@grafana/ui';
-import { ClimateFloorOptions } from '../types';
+import { SensorFloorOptions } from '../types';
 import { readingsFromFrames } from '../data/readings';
 import { findReading } from '../data/rooms';
 import { listRooms } from '../svg/floorPlan';
 
-type Props = StandardEditorProps<Record<string, string>, unknown, ClimateFloorOptions>;
+type Props = StandardEditorProps<Record<string, string>, unknown, SensorFloorOptions>;
 
 export const RoomBindingsEditor: React.FC<Props> = ({ value, onChange, context }) => {
   const styles = useStyles2(getStyles);

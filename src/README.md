@@ -1,4 +1,4 @@
-# Climate Floor Map
+# Sensor Floor Map
 
 Draws a floor plan from SVG and colours each room by its live sensor readings (temperature, humidity, CO₂ or any other metric), judged against each sensor's own limits.
 
@@ -18,4 +18,4 @@ Draws a floor plan from SVG and colours each room by its live sensor readings (t
 2. Query your sensor data. The newest reading of each sensor is used.
 3. Rooms whose name matches a sensor's location or id are bound automatically. Bind the rest under **Rooms → Sensor per room**.
 
-Full documentation: https://github.com/dkhoa-dev/grafana-climate-floor-map#readme
+Full documentation: https://github.com/dkhoa-dev/grafana-sensor-floor-map#readme

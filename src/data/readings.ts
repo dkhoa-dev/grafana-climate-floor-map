@@ -1,5 +1,5 @@
 import { DataFrame, Field, FieldType, Labels } from '@grafana/data';
-import { ClimateFieldConfig, Limits, MetricInfo, SensorReading } from '../types';
+import { SensorFieldConfig, Limits, MetricInfo, SensorReading } from '../types';
 import { compareMetricKeys, hasLimits, metricKey, metricName, normalizeName } from './metrics';
 
 export { normalizeName } from './metrics';
@@ -92,7 +92,7 @@ export function limitFieldOf(name: string): { key: string; kind: LimitKind } | u
 }
 
 const configLimits = (field: Field): Limits | undefined => {
-  const custom = field.config.custom as ClimateFieldConfig | undefined;
+  const custom = field.config.custom as SensorFieldConfig | undefined;
   const limits = { min: toNumber(custom?.limitMin), max: toNumber(custom?.limitMax) };
   return hasLimits(limits) ? limits : undefined;
 };

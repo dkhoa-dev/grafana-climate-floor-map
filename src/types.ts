@@ -1,4 +1,4 @@
-export interface ClimateFloorOptions {
+export interface SensorFloorOptions {
   /** Floor plan markup. Rooms are elements with `data-room="<name>"` or an id of `room-<name>`. */
   floorPlan: string;
 
@@ -28,7 +28,7 @@ export interface ClimateFloorOptions {
 }
 
 /** Custom per-field settings, set under the panel's field config or per metric with overrides. */
-export interface ClimateFieldConfig {
+export interface SensorFieldConfig {
   limitMin?: number;
   limitMax?: number;
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { createDataFrame, FieldType, getDefaultTimeRange, LoadingState, PanelProps } from '@grafana/data';
-import { ClimateFloorOptions } from '../types';
-import { ClimateFloorPanel, buildRoomLink, isSafeLink } from './ClimateFloorPanel';
+import { SensorFloorOptions } from '../types';
+import { SensorFloorPanel, buildRoomLink, isSafeLink } from './SensorFloorPanel';
 
 const PLAN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">
   <title>should be removed</title>
@@ -11,7 +11,7 @@ const PLAN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">
   <rect data-room="Attic" x="200" y="0" width="100" height="100"/>
 </svg>`;
 
-const options: ClimateFloorOptions = {
+const options: SensorFloorOptions = {
   floorPlan: PLAN,
   sensorField: '',
   locationField: '',
@@ -27,7 +27,7 @@ const options: ClimateFloorOptions = {
   linkNewTab: false,
 };
 
-function setup(overrides: Partial<ClimateFloorOptions> = {}) {
+function setup(overrides: Partial<SensorFloorOptions> = {}) {
   const timeRange = getDefaultTimeRange();
   const now = timeRange.to.valueOf();
   const frame = createDataFrame({
@@ -58,13 +58,13 @@ function setup(overrides: Partial<ClimateFloorOptions> = {}) {
     onFieldConfigChange: jest.fn(),
     onChangeTimeRange: jest.fn(),
     replaceVariables,
-  } as unknown as PanelProps<ClimateFloorOptions>;
-  const utils = render(<ClimateFloorPanel {...props} />);
-  const room = (name: string) => utils.container.querySelector(`[data-cfm-room="${name}"]`)!;
+  } as unknown as PanelProps<SensorFloorOptions>;
+  const utils = render(<SensorFloorPanel {...props} />);
+  const room = (name: string) => utils.container.querySelector(`[data-sfm-room="${name}"]`)!;
   return { ...utils, room, replaceVariables };
 }
 
-describe('ClimateFloorPanel', () => {
+describe('SensorFloorPanel', () => {
   it('marks each room with its status', () => {
     const { room, container } = setup();
     // Humidity 75 is above the 30-60 default band.
@@ -78,19 +78,19 @@ describe('ClimateFloorPanel', () => {
   it('shows a tooltip for the hovered room', () => {
     const { room } = setup();
     fireEvent.mouseMove(room('Lab 1'), { clientX: 10, clientY: 10 });
-    const tooltip = screen.getByTestId('climate-floor-tooltip');
+    const tooltip = screen.getByTestId('sensor-floor-tooltip');
     expect(tooltip).toHaveTextContent('Lab 1');
     expect(tooltip).toHaveTextContent('Out of limits');
     expect(tooltip).toHaveTextContent('Humidity75.0% (out of limits) · limits 30.0% – 60.0%');
     // Unit from the well-known table, limit from the field config.
     expect(tooltip).toHaveTextContent('CO₂640 ppm · limits ≤ 800 ppm');
-    fireEvent.mouseLeave(screen.getByTestId('climate-floor-plan'));
-    expect(screen.queryByTestId('climate-floor-tooltip')).toBeNull();
+    fireEvent.mouseLeave(screen.getByTestId('sensor-floor-plan'));
+    expect(screen.queryByTestId('sensor-floor-tooltip')).toBeNull();
   });
 
   it('counts rooms per status in the legend', () => {
     setup();
-    expect(screen.getByTestId('climate-floor-legend')).toHaveTextContent('Out of limits1');
+    expect(screen.getByTestId('sensor-floor-legend')).toHaveTextContent('Out of limits1');
   });
 
   it('makes bound rooms keyboard-reachable links when a URL is set', () => {

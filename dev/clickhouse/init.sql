@@ -1,5 +1,5 @@
 -- Made-up sensors for the demo office in src/svg/demoPlan.ts.
-CREATE TABLE climate.sensors
+CREATE TABLE demo.sensors
 (
     sensor String,
     location String,
@@ -24,7 +24,7 @@ ORDER BY sensor;
 -- 20-55 %, so it is only within limits when the panel reads the sensor's limits. Meeting room CO₂
 -- is above the built-in 1000 ppm limit; every other room stays well below it. Storage stopped
 -- reporting 90 minutes ago.
-INSERT INTO climate.sensors VALUES
+INSERT INTO demo.sensors VALUES
     ('n-01', 'Office A', 22.0, 45, 1.5, 4, 520, '', '', 0),
     ('n-02', 'Office B', 26.6, 48, 0.3, 4, 610, '', '', 0),
     ('n-03', 'Meeting room', 23.0, 50, 1.5, 4, 1200, '', '', 0),
@@ -35,7 +35,7 @@ INSERT INTO climate.sensors VALUES
     ('n-08', 'Storage', 20.0, 35, 1.0, 2, 430, '', '', 90);
 
 -- One reading per sensor per minute for the last 24 hours, following slow waves.
-CREATE VIEW climate.readings AS
+CREATE VIEW demo.readings AS
 SELECT
     toDateTime(intDiv(toUnixTimestamp(now()), 60) * 60 - number * 60) AS time,
     sensor,
@@ -45,6 +45,6 @@ SELECT
     round(base_co2 + 80 * sin(toUnixTimestamp(time) / 3600 + cityHash64(sensor) % 3)) AS co2,
     temperature_limits,
     humidity_limits
-FROM climate.sensors
+FROM demo.sensors
 CROSS JOIN numbers(1440) AS n
 WHERE number >= silent_for;

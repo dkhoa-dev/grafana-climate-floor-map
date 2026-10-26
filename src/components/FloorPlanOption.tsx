@@ -2,13 +2,13 @@ import React, { useMemo, useState } from 'react';
 import { css } from '@emotion/css';
 import { GrafanaTheme2, StandardEditorProps } from '@grafana/data';
 import { Button, Collapse, Modal, Stack, TextArea, useStyles2 } from '@grafana/ui';
-import { ClimateFloorOptions } from '../types';
+import { SensorFloorOptions } from '../types';
 import { readingsFromFrames } from '../data/readings';
 import { listRooms, sanitizeFloorPlan } from '../svg/floorPlan';
 import { addRoomsAsGrid, parsePlan, PlanModel, serializePlan } from '../editor/model';
 import { FloorPlanEditor } from '../editor/FloorPlanEditor';
 
-type Props = StandardEditorProps<string, unknown, ClimateFloorOptions>;
+type Props = StandardEditorProps<string, unknown, SensorFloorOptions>;
 
 /** Distinct location (or sensor id) names in the query result, used to generate rooms. */
 export function useDataRooms(context: Props['context']): string[] {

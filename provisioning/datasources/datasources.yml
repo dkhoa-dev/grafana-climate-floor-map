@@ -13,6 +13,6 @@ datasources:
       port: 9000
       protocol: native
       username: grafana
-      defaultDatabase: climate
+      defaultDatabase: demo
     secureJsonData:
       password: grafana

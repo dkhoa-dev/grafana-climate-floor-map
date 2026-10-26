@@ -3,20 +3,20 @@ import { test, expect } from '@grafana/plugin-e2e';
 test('paints rooms of the demo plan by status', async ({ gotoPanelEditPage, readProvisionedDashboard, page }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
   await gotoPanelEditPage({ dashboard, id: '1' });
-  const plan = page.getByTestId('climate-floor-plan');
+  const plan = page.getByTestId('sensor-floor-plan');
 
-  await expect(plan.locator('[data-cfm-room="Office A"]')).toHaveAttribute('data-status', 'ok');
-  await expect(plan.locator('[data-cfm-room="Server room"]')).toHaveAttribute('data-status', 'alarm');
-  await expect(plan.locator('[data-cfm-room="Storage"]')).toHaveAttribute('data-status', 'unbound');
-  await expect(page.getByTestId('climate-floor-legend')).toBeVisible();
+  await expect(plan.locator('[data-sfm-room="Office A"]')).toHaveAttribute('data-status', 'ok');
+  await expect(plan.locator('[data-sfm-room="Server room"]')).toHaveAttribute('data-status', 'alarm');
+  await expect(plan.locator('[data-sfm-room="Storage"]')).toHaveAttribute('data-status', 'unbound');
+  await expect(page.getByTestId('sensor-floor-legend')).toBeVisible();
 });
 
 test('shows a tooltip when hovering a room', async ({ gotoPanelEditPage, readProvisionedDashboard, page }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
   await gotoPanelEditPage({ dashboard, id: '1' });
 
-  await page.getByTestId('climate-floor-plan').locator('[data-cfm-room="Lab 1"]').hover();
-  await expect(page.getByTestId('climate-floor-tooltip')).toContainText('Lab 1');
+  await page.getByTestId('sensor-floor-plan').locator('[data-sfm-room="Lab 1"]').hover();
+  await expect(page.getByTestId('sensor-floor-tooltip')).toContainText('Lab 1');
 });
 
 test('binds a sensor to a room from the options pane', async ({
@@ -26,7 +26,7 @@ test('binds a sensor to a room from the options pane', async ({
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'dashboard.json' });
   const panelEditPage = await gotoPanelEditPage({ dashboard, id: '1' });
-  const storage = page.getByTestId('climate-floor-plan').locator('[data-cfm-room="Storage"]');
+  const storage = page.getByTestId('sensor-floor-plan').locator('[data-sfm-room="Storage"]');
   await expect(storage).toHaveAttribute('data-status', 'unbound');
 
   const options = panelEditPage.getCustomOptions('Rooms');
@@ -59,7 +59,7 @@ test('a pasted plan cannot make the browser load anything from outside', async (
       `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" style="background-image:image-set('https://example.invalid/a.png' 1x), \\75 rl(https://example.invalid/b.png)"><rect data-room="Probe" width="200" height="100" fill="#ccc"/></svg>`
     );
   await page.keyboard.press('Tab');
-  await expect(page.getByTestId('climate-floor-plan').locator('[data-cfm-room="Probe"]')).toBeVisible();
+  await expect(page.getByTestId('sensor-floor-plan').locator('[data-sfm-room="Probe"]')).toBeVisible();
   // Image requests start on first paint; give them time to show up.
   await page.waitForTimeout(2000);
   expect(external).toEqual([]);

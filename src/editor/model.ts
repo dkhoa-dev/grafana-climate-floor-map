@@ -45,7 +45,7 @@ export interface Bounds {
 
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 480;
-const STATIC_ATTR = 'data-cfm-static';
+const STATIC_ATTR = 'data-sfm-static';
 
 let nextId = 0;
 export const newId = () => `s${++nextId}`;

@@ -2,7 +2,7 @@
 
 ## 0.1.0 (Unreleased)
 
-First version of Climate Floor Map.
+First version of Sensor Floor Map.
 
 - SVG floor plans with rooms tagged by `data-room` or a `room-` id, sanitised before display.
 - Reads tables and labelled series (including Flux), with field auto-detection and per-sensor limits from the data.

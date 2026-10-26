@@ -67,7 +67,7 @@ export const RoomTooltip: React.FC<Props> = ({
     <div
       className={styles.tooltip}
       style={{ left, ...(flipUp ? { bottom: containerHeight - y + OFFSET } : { top: y + OFFSET }) }}
-      data-testid="climate-floor-tooltip"
+      data-testid="sensor-floor-tooltip"
     >
       <div className={styles.title}>{state.room}</div>
       <div className={styles.status}>

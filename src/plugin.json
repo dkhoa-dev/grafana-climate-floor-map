@@ -1,8 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "Climate Floor Map",
-  "id": "dkhoa-climatefloormap-panel",
+  "name": "Sensor Floor Map",
+  "id": "dkhoa-sensorfloormap-panel",
   "info": {
     "keywords": ["floor plan", "svg", "temperature", "humidity", "iot", "building"],
     "description": "Colours the rooms of an SVG floor plan by live temperature and humidity against per-sensor limits",
@@ -17,11 +17,11 @@
     "links": [
       {
         "name": "Source",
-        "url": "https://github.com/dkhoa-dev/grafana-climate-floor-map"
+        "url": "https://github.com/dkhoa-dev/grafana-sensor-floor-map"
       },
       {
         "name": "License",
-        "url": "https://github.com/dkhoa-dev/grafana-climate-floor-map/blob/main/LICENSE"
+        "url": "https://github.com/dkhoa-dev/grafana-sensor-floor-map/blob/main/LICENSE"
       }
     ],
     "screenshots": [

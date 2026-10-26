@@ -27,7 +27,7 @@ test('draws a new room in the floor plan editor and saves it to the panel', asyn
   await editor.getByTestId('floor-plan-save').click();
   await expect(editor).toBeHidden();
 
-  await expect(page.getByTestId('climate-floor-plan').locator('[data-cfm-room="Kitchen"]')).toHaveAttribute(
+  await expect(page.getByTestId('sensor-floor-plan').locator('[data-sfm-room="Kitchen"]')).toHaveAttribute(
     'data-status',
     'unbound'
   );
@@ -98,10 +98,10 @@ test('generates a plan with the AI assistant', async ({ gotoPanelEditPage, readP
   expect(JSON.stringify(request?.body)).not.toContain('current_plan');
 
   await page.getByTestId('floor-plan-save').click();
-  const plan = page.getByTestId('climate-floor-plan');
-  await expect(plan.locator('[data-cfm-room="Server room"]')).toHaveAttribute('data-status', 'alarm');
-  await expect(plan.locator('[data-cfm-room="Kitchen"]')).toHaveAttribute('data-status', 'unbound');
-  await expect(plan.locator('[data-cfm-room="Lobby"]')).toHaveCount(0);
+  const plan = page.getByTestId('sensor-floor-plan');
+  await expect(plan.locator('[data-sfm-room="Server room"]')).toHaveAttribute('data-status', 'alarm');
+  await expect(plan.locator('[data-sfm-room="Kitchen"]')).toHaveAttribute('data-status', 'unbound');
+  await expect(plan.locator('[data-sfm-room="Lobby"]')).toHaveCount(0);
 });
 
 test('generates a plan through an OpenAI-compatible provider', async ({

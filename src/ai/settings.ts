@@ -38,7 +38,7 @@ export const PROVIDERS: Array<{ value: ProviderId; label: string; description: s
   { value: 'grafana-llm', label: 'Grafana LLM', description: 'The Grafana LLM app plugin; keys stay on the server' },
 ];
 
-const STORAGE_KEY = 'climate-floor-map.ai';
+const STORAGE_KEY = 'sensor-floor-map.ai';
 
 export const defaultSettings = (): AiSettings => ({
   provider: 'anthropic',

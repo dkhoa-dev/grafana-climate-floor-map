@@ -1,7 +1,7 @@
 import { FieldConfigProperty, PanelPlugin, SelectableValue } from '@grafana/data';
-import { ClimateFieldConfig, ClimateFloorOptions } from './types';
+import { SensorFieldConfig, SensorFloorOptions } from './types';
 import { parseMetricList, readingsFromFrames } from './data/readings';
-import { ClimateFloorPanel } from './components/ClimateFloorPanel';
+import { SensorFloorPanel } from './components/SensorFloorPanel';
 import { RoomBindingsEditor } from './components/RoomBindingsEditor';
 import { FloorPlanOption } from './components/FloorPlanOption';
 import { DEMO_FLOOR_PLAN } from './svg/demoPlan';
@@ -17,7 +17,7 @@ const autoDetect = 'Leave blank to detect it from common names.';
 
 const limitHelp = 'Limits sent with the data win. Without any, well-known metrics use built-in defaults.';
 
-export const plugin = new PanelPlugin<ClimateFloorOptions>(ClimateFloorPanel)
+export const plugin = new PanelPlugin<SensorFloorOptions>(SensorFloorPanel)
   .setNoPadding()
   .useFieldConfig({
     disableStandardOptions: [
@@ -45,7 +45,7 @@ export const plugin = new PanelPlugin<ClimateFloorOptions>(ClimateFloorPanel)
           description: `Highest acceptable value. Leave the other side blank for a one-sided limit. ${limitHelp}`,
           category: ['Limits'],
         }),
-  } as Parameters<PanelPlugin<ClimateFloorOptions, ClimateFieldConfig>['useFieldConfig']>[0])
+  } as Parameters<PanelPlugin<SensorFloorOptions, SensorFieldConfig>['useFieldConfig']>[0])
   .setPanelOptions((builder) =>
     builder
       .addCustomEditor({
@@ -105,7 +105,7 @@ export const plugin = new PanelPlugin<ClimateFloorOptions>(ClimateFloorPanel)
           allowCustomValue: true,
           options: [{ value: 'status', label: 'Status' }],
           getOptions: async (context) => {
-            const options = context.options as ClimateFloorOptions | undefined;
+            const options = context.options as SensorFloorOptions | undefined;
             const { metrics } = readingsFromFrames(
               context.data ?? [],
               { sensor: options?.sensorField, location: options?.locationField },
