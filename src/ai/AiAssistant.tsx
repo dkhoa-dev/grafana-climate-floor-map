@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { css } from '@emotion/css';
 import { GrafanaTheme2 } from '@grafana/data';
 import {
   Alert,
   Button,
   Checkbox,
-  Combobox,
   Field,
   IconButton,
   Input,
@@ -51,6 +50,7 @@ interface Props {
 export const AiAssistant: React.FC<Props> = ({ plan, dataRooms, onResult }) => {
   const styles = useStyles2(getStyles);
   const fileRef = useRef<HTMLInputElement>(null);
+  const modelListId = useId();
   const abortRef = useRef<AbortController | undefined>(undefined);
   const hasPlan = plan.shapes.length > 0 || plan.staticMarkup.trim() !== '';
 
@@ -255,14 +255,18 @@ export const AiAssistant: React.FC<Props> = ({ plan, dataRooms, onResult }) => {
       {settings.provider === 'openai' && (
         <Field label="Model" description="Pick from the list or type a model id">
           <Stack gap={1}>
-            <Combobox<string>
-              options={models.map((m) => ({ value: m, label: m }))}
-              value={settings.openAiModel || null}
-              createCustomValue
+            {/* A plain input keeps whatever is typed; the loaded models are only suggestions. */}
+            <Input
+              value={settings.openAiModel}
               placeholder="Model id"
-              isClearable
-              onChange={(v) => update({ openAiModel: v?.value ?? '' })}
+              list={modelListId}
+              onChange={(e) => update({ openAiModel: e.currentTarget.value })}
             />
+            <datalist id={modelListId}>
+              {models.map((m) => (
+                <option key={m} value={m} />
+              ))}
+            </datalist>
             <IconButton name="sync" tooltip="Load the endpoint's model list" onClick={loadModels} />
           </Stack>
         </Field>

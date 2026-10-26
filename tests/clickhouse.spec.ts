@@ -14,6 +14,7 @@ test.describe('ClickHouse data source', () => {
     // Lab 1 carries its own 20-22 °C limits and the demo runs it above them.
     await expect(plan.locator('[data-cfm-room="Lab 1"]')).toHaveAttribute('data-status', 'alarm');
     await expect(plan.locator('[data-cfm-room="Office A"]')).toHaveAttribute('data-status', 'ok');
+    await expect(plan.locator('[data-cfm-room="Server room"]')).toHaveAttribute('data-status', 'ok');
     // The Storage sensor stopped reporting 90 minutes ago.
     await expect(plan.locator('[data-cfm-room="Storage"]')).toHaveAttribute('data-status', 'offline');
   });
@@ -28,7 +29,7 @@ test.describe('ClickHouse data source', () => {
     const plan = page.getByTestId('climate-floor-plan');
 
     await expect(plan.locator('[data-cfm-room="Lab 1"]')).toHaveAttribute('data-status', 'alarm');
-    // 26-27 °C would be near the panel's default 27 °C limit; the sensor's own 16-28 °C keeps it within.
+    // Its humidity (24-26 %) is below the panel's default 30 % but inside the sensor's own 20-55 %.
     await expect(plan.locator('[data-cfm-room="Server room"]')).toHaveAttribute('data-status', 'ok');
   });
 });
