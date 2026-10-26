@@ -1,45 +1,26 @@
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { css } from '@emotion/css';
 import { GrafanaTheme2 } from '@grafana/data';
 import {
   Alert,
   Button,
   Checkbox,
-  Field,
-  IconButton,
-  Input,
+  ClipboardButton,
   RadioButtonGroup,
   Stack,
   TextArea,
+  TextLink,
   useStyles2,
 } from '@grafana/ui';
 import { PlanModel, serializePlan } from '../editor/model';
-import { ACCEPTED_FILES, readAttachment } from './attachments';
-import type { Attachment } from './prompt';
-import {
-  AiSettings,
-  capabilities,
-  CLAUDE_MODEL,
-  loadSettings,
-  needsKey,
-  OPENAI_PRESETS,
-  OpenAiPreset,
-  PROVIDERS,
-  ProviderId,
-  saveSettings,
-} from './settings';
-
-// Provider clients are large, so they are only fetched when someone actually uses the assistant.
-const loadAi = () => import(/* webpackChunkName: "ai" */ './generatePlan');
+import { describeError, generatePlan, grafanaLlmStatus, isAbort } from './grafanaLlm';
+import { buildChatPrompt, GenerateRequest, resultFromReply } from './prompt';
+import { AiSettings, LlmModel, loadSettings, saveSettings } from './settings';
 
 const FIX_FORMAT =
   'Convert the current plan to the output format. Keep every room, its name and its geometry; only fix the markup.';
 
-const KEY_HELP: Partial<Record<ProviderId, string>> = {
-  anthropic: 'Sent only from this browser to api.anthropic.com.',
-  foundry: 'Sent only from this browser to your Foundry resource.',
-  openai: 'Sent only from this browser to the endpoint below.',
-};
+const LLM_APP_URL = 'https://grafana.com/grafana/plugins/grafana-llm-app/';
 
 interface Props {
   plan: PlanModel;
@@ -47,102 +28,86 @@ interface Props {
   onResult: (plan: PlanModel) => void;
 }
 
+/**
+ * Builds a prompt for any AI chat and reads back the SVG it replies with, so no provider or key is configured here.
+ * When the Grafana LLM app is set up, the same request can also be sent straight from Grafana.
+ */
 export const AiAssistant: React.FC<Props> = ({ plan, dataRooms, onResult }) => {
   const styles = useStyles2(getStyles);
-  const fileRef = useRef<HTMLInputElement>(null);
-  const modelListId = useId();
   const abortRef = useRef<AbortController | undefined>(undefined);
   const hasPlan = plan.shapes.length > 0 || plan.staticMarkup.trim() !== '';
 
-  const [settings, setSettings] = useState<AiSettings>(loadSettings);
-  const [showSettings, setShowSettings] = useState(() => {
-    const s = loadSettings();
-    return needsKey(s) && !s.keys[s.provider];
-  });
-  const [models, setModels] = useState<string[]>([]);
-  const [llmStatus, setLlmStatus] = useState<{ ok: boolean; message?: string }>();
   const [instruction, setInstruction] = useState('');
-  const [attachment, setAttachment] = useState<Attachment>();
   const [useCurrent, setUseCurrent] = useState(hasPlan);
+  const [traceAttachment, setTraceAttachment] = useState(false);
+  const [reply, setReply] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [settings, setSettings] = useState<AiSettings>(loadSettings);
+  const [llmStatus, setLlmStatus] = useState<{ ok: boolean; message?: string }>();
   const [busy, setBusy] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string>();
   const [notes, setNotes] = useState<string>();
-
-  const can = capabilities(settings);
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
   useEffect(() => {
-    if (settings.provider !== 'grafana-llm') {
-      return;
-    }
     let cancelled = false;
-    import(/* webpackChunkName: "ai-grafana-llm" */ './grafanaLlm')
-      .then((m) => m.grafanaLlmStatus())
-      .then((status) => {
-        if (!cancelled) {
-          setLlmStatus(status);
-        }
-      });
+    grafanaLlmStatus().then((status) => {
+      if (!cancelled) {
+        setLlmStatus(status);
+      }
+    });
     return () => {
       cancelled = true;
     };
-  }, [settings.provider]);
+  }, []);
 
-  const update = (change: Partial<AiSettings>) => {
-    const next = { ...settings, ...change };
-    setSettings(next);
-    saveSettings(next);
-  };
-  const setKey = (key: string) => update({ keys: { ...settings.keys, [settings.provider]: key } });
+  const fromCurrent = useCurrent && hasPlan;
+  // With nothing typed, starting from the current plan means fixing its format.
+  const text = instruction.trim() || (fromCurrent && !traceAttachment ? FIX_FORMAT : '');
+  const request = (): GenerateRequest => ({
+    instruction: text,
+    currentSvg: fromCurrent ? serializePlan(plan) : undefined,
+    traceAttachment,
+    dataRooms,
+  });
+  const canAsk = text !== '' || traceAttachment;
 
-  const loadModels = async () => {
+  const show = (result: { plan: PlanModel; notes: string }) => {
+    onResult(result.plan);
+    setNotes(result.notes || undefined);
     setError(undefined);
+  };
+
+  const applyReply = () => {
     try {
-      const { listOpenAiModels } = await import(/* webpackChunkName: "ai-openai" */ './openaiCompatible');
-      const ids = await listOpenAiModels(settings);
-      setModels(ids);
-      if (!ids.length) {
-        setError('The endpoint returned no models. Type the model id instead.');
-      }
+      show(resultFromReply(reply));
+      setReply('');
     } catch (e) {
-      setError(`Could not list models: ${e instanceof Error ? e.message : e}`);
+      setError(describeError(e));
     }
   };
 
-  const run = async (text: string, fromCurrent: boolean) => {
+  const setModel = (llmModel: LlmModel) => {
+    const next = { ...settings, llmModel };
+    setSettings(next);
+    saveSettings(next);
+  };
+
+  const generate = async () => {
     setBusy(true);
-    setProgress(0);
     setError(undefined);
     setNotes(undefined);
     const controller = new AbortController();
     abortRef.current = controller;
-    let ai: Awaited<ReturnType<typeof loadAi>> | undefined;
     try {
-      ai = await loadAi();
-      const result = await ai.generatePlan(settings, {
-        instruction: text,
-        currentSvg: fromCurrent && hasPlan ? serializePlan(plan) : undefined,
-        attachment,
-        dataRooms,
-        signal: controller.signal,
-        onProgress: setProgress,
-      });
+      const result = await generatePlan(settings.llmModel, { ...request(), signal: controller.signal });
       if (!controller.signal.aborted) {
-        onResult(result.plan);
-        setNotes(result.notes || undefined);
-        setShowSettings(false);
+        show(result);
       }
     } catch (e) {
-      if (!ai) {
-        setError(`Could not load the AI module: ${e instanceof Error ? e.message : e}`);
-      } else if (!ai.isAbort(e, controller.signal)) {
-        const message = ai.describeError(e);
-        setError(message);
-        if (/key|resource|base URL|model/i.test(message)) {
-          setShowSettings(true);
-        }
+      if (!isAbort(e, controller.signal)) {
+        setError(describeError(e));
       }
     } finally {
       setBusy(false);
@@ -150,248 +115,109 @@ export const AiAssistant: React.FC<Props> = ({ plan, dataRooms, onResult }) => {
     }
   };
 
-  const onFile = async (file: File | undefined) => {
-    if (!file) {
-      return;
-    }
-    try {
-      setAttachment(await readAttachment(file));
-      setError(undefined);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
-    }
-  };
-
-  const providerLabel = PROVIDERS.find((p) => p.value === settings.provider)?.label;
-  const customEndpoint = settings.provider === 'openai' && settings.openAiPreset === 'custom';
-  const attachmentBlocked =
-    attachment !== undefined &&
-    ((attachment.kind === 'pdf' && !can.pdf) || (attachment.kind === 'image' && !can.images));
-  const canGenerate =
-    !busy && !attachmentBlocked && (instruction.trim() !== '' || attachment !== undefined || (useCurrent && hasPlan));
-
-  const settingsForm = (
-    <div className={styles.settings} data-testid="floor-plan-ai-settings">
-      <RadioButtonGroup<ProviderId>
-        size="sm"
-        options={PROVIDERS}
-        value={settings.provider}
-        onChange={(provider) => {
-          update({ provider });
-          setModels([]);
-          setError(undefined);
-        }}
-      />
-
-      {settings.provider === 'foundry' && (
-        <Field label="Resource" description="The name before .services.ai.azure.com">
-          <Input
-            value={settings.foundryResource}
-            placeholder="my-foundry-resource"
-            onChange={(e) => update({ foundryResource: e.currentTarget.value })}
-          />
-        </Field>
-      )}
-
-      {settings.provider === 'openai' && (
-        <>
-          <RadioButtonGroup<OpenAiPreset>
-            size="sm"
-            options={Object.entries(OPENAI_PRESETS).map(([value, p]) => ({
-              value: value as OpenAiPreset,
-              label: p.label,
-            }))}
-            value={settings.openAiPreset}
-            onChange={(openAiPreset) => {
-              update({ openAiPreset });
-              setModels([]);
-            }}
-          />
-          {customEndpoint && (
-            <Field label="Base URL" description="Must allow requests from the browser (CORS)">
-              <Input
-                value={settings.openAiBaseUrl}
-                placeholder="http://localhost:11434/v1"
-                onChange={(e) => update({ openAiBaseUrl: e.currentTarget.value })}
-              />
-            </Field>
-          )}
-        </>
-      )}
-
-      {needsKey(settings) && (
-        <Field
-          label={`${providerLabel} API key${customEndpoint ? ' (if needed)' : ''}`}
-          description={`${KEY_HELP[settings.provider] ?? ''} Never saved in the dashboard.`}
-        >
-          <Input
-            type="password"
-            value={settings.keys[settings.provider] ?? ''}
-            autoComplete="off"
-            placeholder={settings.provider === 'anthropic' ? 'sk-ant-…' : 'API key'}
-            onChange={(e) => setKey(e.currentTarget.value)}
-          />
-        </Field>
-      )}
-
-      {settings.provider === 'anthropic' && (
-        <Field label="Model">
-          <Input
-            value={settings.anthropicModel}
-            placeholder={CLAUDE_MODEL}
-            onChange={(e) => update({ anthropicModel: e.currentTarget.value })}
-          />
-        </Field>
-      )}
-      {settings.provider === 'foundry' && (
-        <Field label="Model deployment">
-          <Input
-            value={settings.foundryModel}
-            placeholder={CLAUDE_MODEL}
-            onChange={(e) => update({ foundryModel: e.currentTarget.value })}
-          />
-        </Field>
-      )}
-      {settings.provider === 'openai' && (
-        <Field label="Model" description="Pick from the list or type a model id">
-          <Stack gap={1}>
-            {/* A plain input keeps whatever is typed; the loaded models are only suggestions. */}
-            <Input
-              value={settings.openAiModel}
-              placeholder="Model id"
-              list={modelListId}
-              onChange={(e) => update({ openAiModel: e.currentTarget.value })}
-            />
-            <datalist id={modelListId}>
-              {models.map((m) => (
-                <option key={m} value={m} />
-              ))}
-            </datalist>
-            <IconButton name="sync" tooltip="Load the endpoint's model list" onClick={loadModels} />
-          </Stack>
-        </Field>
-      )}
-      {settings.provider === 'grafana-llm' && (
-        <>
-          <Field label="Model size" description="Mapped to a concrete model by the LLM app's settings">
-            <RadioButtonGroup<'base' | 'large'>
-              size="sm"
-              options={[
-                { value: 'large', label: 'Large' },
-                { value: 'base', label: 'Base' },
-              ]}
-              value={settings.llmModel}
-              onChange={(llmModel) => update({ llmModel })}
-            />
-          </Field>
-          {llmStatus && !llmStatus.ok && (
-            <Alert severity="warning" title="">
-              {llmStatus.message}
-            </Alert>
-          )}
-        </>
-      )}
-
-      {needsKey(settings) && (
-        <Checkbox
-          label="Remember keys and settings in this browser"
-          value={settings.remember}
-          onChange={(e) => update({ remember: e.currentTarget.checked })}
-        />
-      )}
-    </div>
-  );
-
   return (
     <div className={styles.box} data-testid="floor-plan-ai">
-      <div className={styles.keyRow}>
-        <span>
-          {providerLabel}
-          {settings.provider === 'openai' && ` · ${OPENAI_PRESETS[settings.openAiPreset].label}`}
-        </span>
-        <Button size="sm" variant="secondary" fill="text" icon="cog" onClick={() => setShowSettings(!showSettings)}>
-          {showSettings ? 'Hide settings' : 'Settings'}
-        </Button>
-      </div>
-      {showSettings && settingsForm}
-
       <TextArea
         rows={4}
         value={instruction}
         placeholder={
-          attachment
-            ? 'Optional notes, e.g. "ignore the car park; the unlabelled room top right is the server room"'
-            : 'Describe the floor, e.g. "Open office on the left, three meeting rooms along the top, server room by the stairs, lab on the right"'
+          'Describe the floor, e.g. "Open office on the left, three meeting rooms along the top, server room by the stairs". ' +
+          'Leave empty to only fix the format of the current plan.'
         }
         onChange={(e) => setInstruction(e.currentTarget.value)}
         disabled={busy}
       />
-
-      <input
-        ref={fileRef}
-        type="file"
-        accept={ACCEPTED_FILES}
-        hidden
-        onChange={(e) => {
-          onFile(e.currentTarget.files?.[0]);
-          e.currentTarget.value = '';
-        }}
-      />
-      {attachment ? (
-        <div className={styles.attachment}>
-          <span title={attachment.name}>{attachment.name}</span>
-          <IconButton name="times" tooltip="Remove" onClick={() => setAttachment(undefined)} disabled={busy} />
-        </div>
-      ) : (
-        <Button
-          size="sm"
-          variant="secondary"
-          icon="upload"
-          onClick={() => fileRef.current?.click()}
-          disabled={busy || !can.images}
-          tooltip={can.images ? undefined : 'This provider takes text only'}
-        >
-          {can.pdf ? 'Trace an image or PDF' : 'Trace an image'}
-        </Button>
-      )}
-      {attachmentBlocked && (
-        <div className={styles.warning}>
-          {attachment?.kind === 'pdf' ? 'Only Claude can read PDFs.' : 'This provider takes text only.'} Remove the file
-          or switch provider.
-        </div>
-      )}
-
       <Checkbox
         label="Start from the current plan"
-        value={useCurrent && hasPlan}
+        value={fromCurrent}
         disabled={!hasPlan || busy}
         onChange={(e) => setUseCurrent(e.currentTarget.checked)}
       />
+      <Checkbox
+        label="I will attach an image or PDF of the floor plan"
+        value={traceAttachment}
+        disabled={busy}
+        onChange={(e) => setTraceAttachment(e.currentTarget.checked)}
+      />
 
-      {busy ? (
-        <Stack gap={1} alignItems="center">
-          <Button icon="spinner" disabled fullWidth>
-            {progress ? `Drawing… ${progress.toLocaleString()} chars` : 'Thinking…'}
-          </Button>
-          <Button variant="secondary" onClick={() => abortRef.current?.abort()}>
-            Cancel
-          </Button>
-        </Stack>
-      ) : (
-        <Stack gap={1}>
-          <Button icon="ai" disabled={!canGenerate} onClick={() => run(instruction, useCurrent)} fullWidth>
+      <div className={styles.section}>
+        <div className={styles.heading}>Any AI chat</div>
+        <ClipboardButton
+          icon="copy"
+          variant="secondary"
+          size="sm"
+          disabled={!canAsk}
+          getText={() => buildChatPrompt(request())}
+          onClipboardCopy={() => setCopied(true)}
+          data-testid="floor-plan-ai-copy"
+        >
+          Copy prompt
+        </ClipboardButton>
+        <div className={styles.hint}>
+          {copied ? 'Copied. ' : ''}Paste it into ChatGPT, Claude, Gemini, DeepSeek or another chat
+          {traceAttachment ? ', attach the floor plan,' : ''} and paste the reply below. Plain SVG markup works too.
+        </div>
+        <TextArea
+          rows={3}
+          value={reply}
+          placeholder="Paste the reply or an SVG here"
+          onChange={(e) => setReply(e.currentTarget.value)}
+          data-testid="floor-plan-ai-reply"
+        />
+        <Button size="sm" icon="check" disabled={!reply.trim()} onClick={applyReply}>
+          Apply
+        </Button>
+      </div>
+
+      <div className={styles.section}>
+        <div className={styles.modelRow}>
+          <span className={styles.heading}>Grafana LLM</span>
+          {llmStatus?.ok && (
+            <RadioButtonGroup<LlmModel>
+              size="sm"
+              options={[
+                { value: 'large', label: 'Large', description: 'More capable model, as set in the LLM app' },
+                { value: 'base', label: 'Base', description: 'Faster, cheaper model, as set in the LLM app' },
+              ]}
+              value={settings.llmModel}
+              onChange={setModel}
+              disabled={busy}
+            />
+          )}
+        </div>
+        {llmStatus && !llmStatus.ok ? (
+          <div className={styles.hint} data-testid="floor-plan-ai-llm-status">
+            {llmStatus.message} To generate without leaving Grafana, an admin can set up the{' '}
+            <TextLink href={LLM_APP_URL} external inline>
+              Grafana LLM app
+            </TextLink>
+            .
+          </div>
+        ) : busy ? (
+          <Stack gap={1} alignItems="center">
+            <Button icon="spinner" disabled fullWidth>
+              Drawing…
+            </Button>
+            <Button variant="secondary" onClick={() => abortRef.current?.abort()}>
+              Cancel
+            </Button>
+          </Stack>
+        ) : (
+          <Button
+            icon="ai"
+            disabled={!llmStatus?.ok || !canAsk || traceAttachment}
+            tooltip={
+              traceAttachment
+                ? 'The Grafana LLM app reads text only. Use the copied prompt to trace a file.'
+                : undefined
+            }
+            onClick={generate}
+            fullWidth
+          >
             Generate
           </Button>
-          <Button
-            variant="secondary"
-            disabled={!hasPlan}
-            tooltip="Rewrite the current plan into the format the panel expects, keeping rooms and shapes"
-            onClick={() => run(FIX_FORMAT, true)}
-          >
-            Fix format
-          </Button>
-        </Stack>
-      )}
+        )}
+      </div>
 
       {error && (
         <Alert severity="error" title="" onRemove={() => setError(undefined)}>
@@ -412,34 +238,24 @@ const getStyles = (theme: GrafanaTheme2) => ({
     // Checkbox labels stretch across the column otherwise, which centres their text.
     '& label:has(input[type="checkbox"])': { alignSelf: 'flex-start' },
   }),
-  settings: css({
+  section: css({
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'flex-start',
     gap: theme.spacing(1),
-    padding: theme.spacing(1),
-    border: `1px solid ${theme.colors.border.weak}`,
-    borderRadius: theme.shape.radius.default,
+    paddingTop: theme.spacing(1),
+    borderTop: `1px solid ${theme.colors.border.weak}`,
+    '& > textarea, & > div:has(textarea)': { alignSelf: 'stretch' },
   }),
-  keyRow: css({
+  heading: css({
+    fontWeight: theme.typography.fontWeightMedium,
+    color: theme.colors.text.primary,
+  }),
+  modelRow: css({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    color: theme.colors.text.secondary,
-    fontSize: theme.typography.bodySmall.fontSize,
-  }),
-  attachment: css({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: theme.spacing(1),
-    padding: theme.spacing(0.5, 1),
-    border: `1px solid ${theme.colors.border.weak}`,
-    borderRadius: theme.shape.radius.default,
-    '& > span': { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
-  }),
-  warning: css({
-    color: theme.colors.warning.text,
-    fontSize: theme.typography.bodySmall.fontSize,
+    alignSelf: 'stretch',
   }),
   notes: css({
     whiteSpace: 'pre-wrap',

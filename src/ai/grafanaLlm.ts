@@ -1,8 +1,15 @@
-import { lastValueFrom } from 'rxjs';
+import { EmptyError, fromEvent, lastValueFrom, takeUntil } from 'rxjs';
 import { getBackendSrv } from '@grafana/runtime';
-import { chatRequestBody } from './openaiCompatible';
-import { GenerateError, GenerateRequest, GenerateResult, resultFromReply, TOO_LONG } from './prompt';
-import { AiSettings } from './settings';
+import {
+  buildRequestText,
+  GenerateError,
+  GenerateRequest,
+  GenerateResult,
+  resultFromReply,
+  SYSTEM_PROMPT,
+  TOO_LONG,
+} from './prompt';
+import { LlmModel } from './settings';
 
 const PLUGIN = '/api/plugins/grafana-llm-app';
 
@@ -36,35 +43,39 @@ export async function grafanaLlmStatus(): Promise<{ ok: boolean; message?: strin
   }
 }
 
-/**
- * Asks the Grafana LLM app, which forwards to whatever provider the Grafana admin configured.
- * It takes text only, so attachments are refused before this is called.
- */
-export async function generateWithGrafanaLlm(settings: AiSettings, req: GenerateRequest): Promise<GenerateResult> {
-  if (req.attachment) {
-    throw new GenerateError('The Grafana LLM app takes text only. Switch provider to trace an image.');
-  }
-  const body = chatRequestBody(settings.llmModel, req, false);
+/** The LLM app's OpenAI-style chat request. It takes text only. */
+export function chatRequestBody(model: LlmModel, req: GenerateRequest) {
+  return {
+    model,
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: buildRequestText(req) },
+    ],
+  };
+}
+
+/** Asks the Grafana LLM app, which forwards to whatever provider the Grafana admin configured. */
+export async function generatePlan(model: LlmModel, req: GenerateRequest): Promise<GenerateResult> {
+  const request = getBackendSrv().fetch<{
+    choices?: Array<{ message?: { content?: string }; finish_reason?: string }>;
+  }>({
+    url: `${PLUGIN}/resources/llm/v1/chat/completions`,
+    method: 'POST',
+    data: chatRequestBody(model, req),
+    showErrorAlert: false,
+  });
   let response;
   try {
-    response = await lastValueFrom(
-      getBackendSrv().fetch<{
-        choices?: Array<{ message?: { content?: string }; finish_reason?: string }>;
-      }>({
-        url: `${PLUGIN}/resources/llm/v1/chat/completions`,
-        method: 'POST',
-        data: body,
-        showErrorAlert: false,
-      })
-    );
+    // Unsubscribing on abort cancels the HTTP request.
+    response = await lastValueFrom(req.signal ? request.pipe(takeUntil(fromEvent(req.signal, 'abort'))) : request);
   } catch (e) {
+    if (e instanceof EmptyError || req.signal?.aborted) {
+      throw new DOMException('Cancelled', 'AbortError');
+    }
     const err = e as { status?: number; data?: { message?: string; error?: string } };
     throw new GenerateError(
       `The Grafana LLM app returned an error${err.status ? ` (${err.status})` : ''}: ${err.data?.message ?? err.data?.error ?? 'unknown error'}`
     );
-  }
-  if (req.signal?.aborted) {
-    throw new DOMException('Cancelled', 'AbortError');
   }
   const choice = response.data.choices?.[0];
   if (choice?.finish_reason === 'length') {
@@ -72,3 +83,8 @@ export async function generateWithGrafanaLlm(settings: AiSettings, req: Generate
   }
   return resultFromReply(choice?.message?.content ?? '');
 }
+
+export const isAbort = (e: unknown, signal?: AbortSignal) =>
+  Boolean(signal?.aborted) || (e instanceof Error && e.name === 'AbortError');
+
+export const describeError = (e: unknown) => (e instanceof Error ? e.message : String(e));

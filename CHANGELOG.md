@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- The AI assistant no longer calls AI providers with an API key from the browser. Copy its prompt into any AI chat (with a floor plan image or PDF attached there, if you have one) and paste the reply back, or generate through the Grafana LLM app when it is set up. The Anthropic, Foundry and OpenAI-compatible provider settings are gone.
+
 ## 0.1.0 (2026-10-26)
 
 First version of Sensor Floor Map.
