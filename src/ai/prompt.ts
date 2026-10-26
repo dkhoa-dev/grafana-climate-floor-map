@@ -1,22 +1,14 @@
 import { parsePlan, PlanModel } from '../editor/model';
 
-export interface Attachment {
-  kind: 'image' | 'pdf';
-  mediaType: 'image/png' | 'image/jpeg' | 'image/webp' | 'image/gif' | 'application/pdf';
-  /** Base64 without the data: prefix. */
-  data: string;
-  name: string;
-}
-
 export interface GenerateRequest {
   instruction: string;
   /** Existing plan to edit or convert; omitted to draw from scratch. */
   currentSvg?: string;
-  attachment?: Attachment;
   /** Sensor locations from the query, so rooms can be named to auto-bind. */
   dataRooms: string[];
+  /** The person will attach an image or PDF of the floor plan in their own chat app. */
+  traceAttachment?: boolean;
   signal?: AbortSignal;
-  onProgress?: (generatedChars: number) => void;
 }
 
 export interface GenerateResult {
@@ -40,13 +32,12 @@ Output format, which the panel depends on:
 - Allowed elements: svg, g, rect, polygon, line, polyline, text (only for non-room labels). No scripts, event handlers, <image>, <use>, <foreignObject>, <style>, CSS classes or external references.
 - Room names are short and human-readable, such as "Lab 1" or "Server room". Each name is unique.`;
 
-/** The text part of the request; any attachment is sent alongside it by the provider. */
+/** The user message: the current plan, the sensor locations and the instructions. */
 export function buildRequestText(req: GenerateRequest): string {
   const parts: string[] = [];
-  if (req.attachment) {
+  if (req.traceAttachment) {
     parts.push(
-      `The attached ${req.attachment.kind === 'pdf' ? 'PDF' : 'image'} ("${req.attachment.name}") is a floor plan. ` +
-        'Trace its rooms in the output format, keeping their relative sizes and positions. Use the room labels you can read as names; name unlabelled rooms by their apparent use, or "Room 1", "Room 2" and so on.'
+      'The attached image or PDF is a floor plan. Trace its rooms in the output format, keeping their relative sizes and positions. Use the room labels you can read as names; name unlabelled rooms by their apparent use, or "Room 1", "Room 2" and so on.'
     );
   }
   if (req.currentSvg?.trim()) {
@@ -90,5 +81,8 @@ export function resultFromReply(text: string): GenerateResult {
   }
   return { plan, notes };
 }
+
+/** Everything to paste into a chat app: the format rules followed by the request. */
+export const buildChatPrompt = (req: GenerateRequest) => SYSTEM_PROMPT + '\n\n' + buildRequestText(req);
 
 export const TOO_LONG = 'The plan was too large to finish. Try fewer rooms or a simpler drawing.';

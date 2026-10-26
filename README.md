@@ -17,21 +17,11 @@ You do not have to write SVG by hand. Under **Plan drawing** in the panel option
 
 - **Edit floor plan** opens a drawing editor. Drag to draw rectangles, or click corners to draw a polygon. Move rooms, resize them by their corners, drag polygon vertices, and rename or duplicate rooms. Shapes snap to a grid (hold Alt to place freely). Ctrl+Z undoes, Delete removes, arrows nudge.
 - **Generate from data** creates one room for each sensor location in the query result and lays them out as a grid. Rearrange the rooms in the editor to match the building. Because the names match the sensors, they bind automatically.
-- **AI assistant** (in the editor sidebar) asks Claude to draw the plan:
-  - from a description ("open office on the left, three meeting rooms along the top…"),
-  - by tracing an image or PDF of an existing floor plan, or
-  - with **Fix format**, by rewriting a pasted SVG into the format the panel expects (rooms as `rect`/`polygon` with `data-room`, no transforms or text labels).
+- **AI assistant** (in the editor sidebar) gets an AI model to draw the plan for you, without any API key or provider set up in the plugin. Describe the floor ("open office on the left, three meeting rooms along the top…"), or tick _I will attach an image or PDF of the floor plan_ to have an existing drawing traced. Leave the description empty and keep _Start from the current plan_ ticked to only fix the format of a pasted SVG. Then:
+  - **Any AI chat.** _Copy prompt_ copies the drawing rules and your request. Paste it into ChatGPT, Claude, Gemini, DeepSeek or any other chat, attach the floor plan image or PDF there if you have one, and paste the reply back. The reply may contain other text; plain SVG markup works too. Nothing is sent from Grafana.
+  - **Grafana LLM.** If a Grafana admin has set up the [Grafana LLM app](https://grafana.com/grafana/plugins/grafana-llm-app/), _Generate_ sends the request through it with the provider and keys configured there. The app takes text only, so trace drawings through a chat instead.
 
-  The result replaces the canvas, and Ctrl+Z brings the previous plan back. Pick the provider under **Settings** in the assistant:
-
-  | Provider                    | Reads             | Notes                                                                                                                                                    |
-  | --------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | Claude (Anthropic API)      | text, images, PDF | Default, `claude-opus-5-5`. Refused requests are retried on a fallback model.                                                                            |
-  | Claude on Microsoft Foundry | text, images, PDF | Your Foundry resource name and model deployment.                                                                                                         |
-  | OpenAI-compatible           | text, images      | Presets for OpenAI, OpenRouter and DeepSeek (text only), or any custom base URL such as Ollama or LM Studio. The model list is loaded from the endpoint. |
-  | Grafana LLM app             | text              | Uses the provider your Grafana admin configured in the [Grafana LLM app](https://grafana.com/grafana/plugins/grafana-llm-app/). Keys stay on the server. |
-
-  The first three call the provider directly from your browser with your own API key. The key stays in your browser (remembered in local storage only if you tick the box) and is never written to the dashboard. The endpoint must accept browser requests (CORS), and if Grafana sets a content security policy, `connect-src` must allow it. OpenAI and OpenRouter accept browser requests. If an endpoint does not, use the Grafana LLM app.
+  The result replaces the canvas, and Ctrl+Z brings the previous plan back.
 
 - **SVG source** still accepts pasted markup.
 
