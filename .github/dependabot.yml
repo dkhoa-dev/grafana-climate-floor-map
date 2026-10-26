@@ -11,6 +11,11 @@ updates:
       exclude:
         - '@grafana/plugin-e2e'
     open-pull-requests-limit: 5
+    # eslint-plugin-react (via the Grafana scaffold's lint setup) supports eslint up to 9, so eslint 10
+    # cannot install yet. Drop this once eslint-plugin-react and @grafana/eslint-config support it.
+    ignore:
+      - dependency-name: 'eslint'
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'chore'
       include: 'scope'
